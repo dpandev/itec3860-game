@@ -2,11 +2,25 @@
 
 ## Getting Started
 
+
+### Mac OS / Linux
 1) Install JDK 21 (Temurin recommended). `java -version` should show 21.x
-2) Clone the repo: `git clone`
+2) Clone the repo: `git clone ...`
 3) Run: `./gradlew --version`  # wrapper downloads Gradle
 4) Run: `./gradlew spotlessApply clean check`  # build + tests + style checks
 5) IntelliJ: Use the Gradle wrapper and set Gradle JVM = JDK 21.
+
+### Windows OS
+1) Install Java 21 (Temurin): `winget install EclipseAdoptium.Temurin.21.JDK`. `java -version` should show 21.x
+2) Clone the repo: `git clone ...`
+3) Run: `.\gradlew.bat --version`
+4) Run: `.\gradlew.bat spotlessApply clean check`
+> Notice that for Windows, the Gradle command will differ slightly. The rest of this document uses the command for Mac/Linux.
+> If using Windows, just replace the `./gradlew` with `.\gradlew.bat` unless if using **Git Bash** (recommended) or WSL2.
+
+If using IntelliJ on Windows...
+- File → Settings → Build Tools → Gradle → Gradle JVM → set to `JDK 21`
+- EditorConfig support on (on by default)
 
 ---
 
