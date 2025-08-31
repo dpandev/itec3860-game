@@ -11,7 +11,7 @@ jobs:
               with:
                   distribution: temurin
                   java-version: '21'
-            - uses: gradle/actions/setup-gradle@v3
+            - uses: gradle/actions/setup-gradle@v4
             - run: ./gradlew clean jar --no-daemon
             - uses: softprops/action-gh-release@v2
               with:
