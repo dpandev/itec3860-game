@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main, dev ]
+  push:
+    branches: [ main, dev ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Enforce Gradle wrapper version (8.7, -all)
+        run: |
+          REQUIRED_VER="8.7"
+          REQUIRED_DIST="all"
+          FILE="gradle/wrapper/gradle-wrapper.properties"
+          URL=$(grep '^distributionUrl=' "$FILE" | cut -d'=' -f2-)
+          VER=$(echo "$URL" | sed -n 's/.*gradle-\([0-9.]*\)-.*/\1/p')
+          DIST=$(echo "$URL" | sed -n 's/.*gradle-[0-9.]*-\([a-z]*\).zip.*/\1/p')
+          echo "Detected wrapper: version=$VER dist=$DIST"
+          [ "$VER" = "$REQUIRED_VER" ] && [ "$DIST" = "$REQUIRED_DIST" ] || { echo "::error ::Wrapper mismatch"; exit 1; }
+
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Print tool versions
+        run: |
+          java -version
+          ./gradlew -v
+
+      - name: Spotless (check only)
+        run: ./gradlew spotlessCheck --no-daemon
+
+      - name: Build, test, and checks
+        run: ./gradlew clean check jacocoTestReport --no-daemon

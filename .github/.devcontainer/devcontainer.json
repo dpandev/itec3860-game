@@ -1,0 +1,21 @@
+{
+  "name": "Java 21 (Temurin)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "jdkDistro": "tem"
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "postCreateCommand": "./gradlew --version || true",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "sonarsource.sonarlint-vscode",
+        "redhat.vscode-yaml"
+      ]
+    }
+  }
+}
