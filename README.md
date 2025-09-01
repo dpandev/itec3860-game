@@ -160,3 +160,12 @@ You can always reach out to team members for troubleshooting help and questions 
 - If you're blocked by something, ask for help early (label PR/Issue `status:blocked`)
 
 ---
+
+## Tagging a release
+
+For `main` branch maintainer. Run the following to trigger the release job and attach the JAR to the `v0.1.x` release:
+```bash
+# from the commit you want to release (after merging dev into main)
+git tag -a v0.1.1 -m "v0.1.1 - notes"
+git push origin v0.1.1`
+```

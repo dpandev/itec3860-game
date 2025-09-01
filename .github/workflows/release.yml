@@ -1,18 +1,32 @@
 name: Release
+
 on:
-    push:
-        tags: [ 'v*.*.*' ]
+  push:
+    tags:
+      - 'v*.*.*'         # only run when a version tag is pushed
+
+permissions:
+  contents: write
+
 jobs:
-    release:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-java@v4
-              with:
-                  distribution: temurin
-                  java-version: '21'
-            - uses: gradle/actions/setup-gradle@v3
-            - run: ./gradlew clean jar --no-daemon
-            - uses: softprops/action-gh-release@v2
-              with:
-                  files: build/libs/*.jar
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')   # extra guard
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v3
+
+      - run: ./gradlew clean jar --no-daemon
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
+          # tag_name not needed; action uses the current tag (github.ref)
