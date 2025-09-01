@@ -40,7 +40,7 @@ To auto-format your written code + build + test, run the following command in a 
     git pull origin dev
     git checkout -b feature/<short-name>
     ```
-2. Code.
+2. Code + commit (follow commit/branch conventions detailed [further below](#commits-branches-conventions)).
 3. Before you push:
     ```
     ./gradlew spotlessApply clean check
@@ -107,23 +107,105 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
 - [ ] Brief Javadoc comments included
 - [ ] Docs updated if behavior/commands changed (`/docs` and/or README)
 - [ ] No game data in views (MVC separation)
+> To mark an item as completed/checked when filling out the PR, replace space between brackets with "x" `[x]`
 
 ---
 
 ## Git commands you'll actually use
+#### Typical Workflow
 ```bash
-# Start a feature
-git checkout dev
-git pull origin dev
+# Start a feature (example: Room Parser)
+git checkout dev && git pull
 git checkout -b feature/room-parser
 
-# Regularly sync with dev branch while you work
+# Regularly sync with dev branch while you work (in case team members have pushed updated code)
 git fetch orgin
-git rebase origin/dev   # or merge
+git rebase origin/dev   # or: git merge origin/dev
+# Resolve conflicts if any
+git push --force-with-lease   # only on your feature branch and only if you rebased (not merged)
 
-# Push your branch (feature branch)
-git push -u origin feature/room-parser
+# Commit your work, push your branch (feature branch)
+./gradlew spotlessApply clean check
+git push -u origin feature/room-parser   # then open PR to dev
 ```
+
+#### Never open PRs from `main` → `dev`. To bring `main` into `dev`:
+```bash
+git checkout dev
+git fetch origin
+git merge origin/main   # or: git rebase origin/main (then push)
+git push
+```
+<span id="commits-branches-conventions"></span>
+> **Conventional branch names** for non-feature changes → use: `chore`/`docs`/`fix`/`hot-fix / test / refactor` prefixes.
+
+- **Features**: `feature/<short-slug>`
+  - *Example*: `feature/combat-parser`
+- **Bug fixes** (normal): `fix/<tracker-id>-<short-slug>`
+  - *Examples*: `fix/trello-42-null-save`, `fix/13-map-content-loader`
+- **Hotfixes** (urgent bugs in main): `hotfix/<version>-<short-slug>`
+  - *Example*: `hotfix/1.0.1-npe-on-start`
+- **Chores / Docs / Refactors / Tests**:
+  - `chore/<slug>`, `docs/<slug>`, `refactor/<slug>`, `test/<slug>`
+
+> Use **conventional commit** messages: `fix: ...`, `feat: ...`, `chore: ...`, `docs: ...`, etc.
+
+---
+
+## Quick workflows
+
+#### Fix a bug on `dev` (example):
+```bash
+# get the latest code from the dev branch
+git checkout dev && git pull
+# create a new branch for the issue/bug/fix
+git checkout -b fix/trello-42-null-save
+# code + tests + commit your work
+# "Trello-42" would be the id of the appropriate Trello card
+git add -A && git commit -m "fix(save): handle null save slots (Trello-42)"
+git push -u origin fix/trello-42-null-save
+# then open a PR to dev
+```
+
+#### Hotfix on `main`, then back into `dev` (example):
+> In most cases, bugs will be fixed on the dev branch using the previous workflow above.
+> The workflow below is for extreme cases only will be coordinated by maintainers.
+```bash
+git checkout main && git pull
+git checkout -b hotfix/1.0.1-npe-on-start
+# code + tests + commit work
+git commit -m "fix(startup): prevent NPE on empty args"
+git push -u origin hotfix/1.0.1-npe-on-start
+# PR to main, merge, tag v1.0.1, then:
+git checkout dev && git pull
+git merge origin/main
+git push
+```
+
+---
+
+## Maintainers
+
+#### Releasing (tags trigger the release workflow)
+```bash
+# Open a PR from dev -> main in GitHub, get approvals, merge (squash)
+# After merging dev -> main
+git checkout main
+git pull
+
+# Choose next version (tag a release). Examples:
+# v0.2.0 = playable prototype, v1.0.0 = final
+git tag -a v0.2.0 -m "Playable prototype"
+git push origin v0.2.0
+```
+CI will build and attach the JAR to the tag's release.
+At the time of writing this, a baseline/skeleton "Scaffold only" exists (Pre-release, v0.1.0).
+
+#### Versioning and tags
+
+- **Patch**: `vX.Y.Z` for small fixes
+- **Minor**: bump (increment) Y for meaningful features/milestones (prototypes → feature complete).
+- **Major**: `v1.0.0` for final submission.
 
 ---
 
@@ -160,12 +242,3 @@ You can always reach out to team members for troubleshooting help and questions 
 - If you're blocked by something, ask for help early (label PR/Issue `status:blocked`)
 
 ---
-
-## Tagging a release
-
-For `main` branch maintainer. Run the following to trigger the release job and attach the JAR to the `v0.1.x` release:
-```bash
-# from the commit you want to release (after merging dev into main)
-git tag -a v0.1.1 -m "v0.1.1 - notes"
-git push origin v0.1.1`
-```
