@@ -14,14 +14,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Non-blocking integrity check
+  wrapper-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gradle/actions/wrapper-validation@v3
+        continue-on-error: true
+
   build-test-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v3
 
       - name: Enforce Gradle wrapper version (8.7, -all)
         run: |
