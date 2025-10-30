@@ -258,7 +258,7 @@ git push
 
 #### Releasing (tags trigger the release workflow)
 ```bash
-# Open a PR from dev -> main in GitHub, get approvals, merge (squash)
+# Open a PR from dev -> main in GitHub, get approvals, merge
 # After merging dev -> main
 git checkout main
 git pull
