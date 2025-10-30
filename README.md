@@ -162,6 +162,35 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
       ./gradlew spotlessApply clean check
       ```
 
+### Local Git hooks (automatic pre-commit checks)
+
+Hooks in `.githooks/` so everyone shares the same checks.
+
+**What runs on commit**
+- `pre-commit`: formats code with Spotless and runs `./gradlew clean check`.
+  The commit is blocked if checks fail.
+
+**One-time setup after cloning**
+- Mac/Linux or Git Bash:
+  ```bash
+  git config core.hooksPath .githooks
+  chmod +x .githooks/pre-commit || true
+  ```
+- Windows (Command Prompt):
+  ```bat
+  git config core.hooksPath .githooks
+  ```
+**Verify it's active**
+```bash
+  git config --get core.hooksPath   # should print .githooks
+```
+
+**Skip when needed (rare or never)**
+- One commit only:
+    ```bash
+      git commit --no-verify
+    ```
+
 ## Conflict resolution (quick guide)
 
 ```bash
@@ -252,7 +281,10 @@ At the time of writing this, a baseline/skeleton "Scaffold only" exists (Pre-rel
 
 ## Troubleshooting
 
+- **Gradle not executable:** `chmod +x gradlew` (Mac/Linux).
+  - Windows users must have `gradlew.bat` on PATH (it is in repo root).
 - **"Gradle 9 / deprecated" messages:** Make sure you run `./gradlew ...` (wrapper), not `gradle ...`
+- If pre-commit hooks don’t fire, re-run `git config core.hooksPath .githooks`
 - **Wrong Java version:** Set Project SDK/Gradle JVM to 21 in your IDE
   > `java -version` should show 21.x
 - **Formatting fails in CI:** run `./gradlew spotlessApply`, then `./gradlew clean check`, then re-commit.

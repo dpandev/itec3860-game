@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Allow skip with: SKIP_GIT_HOOKS=1 git commit -m "..."
+if [[ "${SKIP_GIT_HOOKS:-}" == "1" ]]; then
+  echo "[pre-commit] skipped"
+  exit 0
+fi
+
+# Ensure we’re at repo root
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+echo "[pre-commit] Running Spotless format…"
+./gradlew -q spotlessApply
+
+echo "[pre-commit] Running checks…"
+./gradlew -q clean check
+
+echo "[pre-commit] OK"
