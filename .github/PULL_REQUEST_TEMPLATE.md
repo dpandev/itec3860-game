@@ -17,3 +17,4 @@
 - [ ] Docs updated if behavior/commands changed (`/docs` and/or README)
 - [ ] No game data in views (MVC separation)
 - [ ] Linked Issue / Milestone
+- [ ] Base is `dev`. Will use **Merge** (not Squash/Rebase).
