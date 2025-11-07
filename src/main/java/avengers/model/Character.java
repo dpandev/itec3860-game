@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/** * Represents a character in the game with attributes. */
+/** Represents a character in the game with attributes. */
 abstract class Character {
   final UUID id = UUID.randomUUID();
   String name;
@@ -19,7 +19,7 @@ abstract class Character {
   final List<StatusInstance> effects = new ArrayList<>();
 
   /**
-   * * Constructor for Character.
+   * Constructor for Character.
    *
    * @param name The name of the character.
    * @param description A description of the character.
@@ -27,9 +27,29 @@ abstract class Character {
    * @param maxHp The maximum health points of the character.
    * @param baseDamage The base damage the character can deal.
    * @param defense The defense value of the character.
+   * @throws IllegalArgumentException if any validation fails
    */
   public Character(
       String name, String description, int hp, int maxHp, int baseDamage, int defense) {
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("Name cannot be null or empty");
+    }
+    if (maxHp <= 0) {
+      throw new IllegalArgumentException("Maximum HP must be positive");
+    }
+    if (hp < 0) {
+      throw new IllegalArgumentException("HP cannot be negative");
+    }
+    if (hp > maxHp) {
+      throw new IllegalArgumentException("HP cannot be greater than maximum HP");
+    }
+    if (baseDamage < 0) {
+      throw new IllegalArgumentException("Base damage cannot be negative");
+    }
+    if (defense < 0) {
+      throw new IllegalArgumentException("Defense cannot be negative");
+    }
+
     this.name = name;
     this.description = description;
     this.hp = hp;
@@ -71,7 +91,7 @@ abstract class Character {
   }
 
   public List<StatusInstance> getEffects() {
-    return effects;
+    return List.copyOf(effects);
   }
 
   public void setElement(Element element) {
