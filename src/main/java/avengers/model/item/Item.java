@@ -40,6 +40,9 @@ public final class Item {
       Element element,
       List<Effect> effects,
       boolean passiveWhileInInventory) {
+    if (type == null) {
+      throw new IllegalArgumentException("Type cannot be null");
+    }
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be null or empty");
     }
