@@ -46,7 +46,9 @@ To auto-format your written code + build + test, run the following command in a 
     ./gradlew spotlessApply clean check
     ```
 4. Open a PR (Pull Request) → `dev`. Fill the PR template. Fix any CI failures.
-5. Reviewer approves → squash-merge to `dev`.
+   - `./gradlew spotlessApply`
+   - `./gradlew clean check`
+5. Reviewer approves → merges to `dev`.
 > Maintainers will periodically raise a PR from `dev` → `main` for release/tags.
 ---
 
@@ -73,7 +75,7 @@ To auto-format your written code + build + test, run the following command in a 
   - Auto-format: `./gradlew spotlessApply` (run this before every commit)
   - Check only: `./gradlew spotlessCheck`
 - Checkstyle (Google checks) catches naming/Javadoc/import rules that formatters don't.
-  - Full pipeline: `./gradlew clean check`
+  - Full pipeline: `./gradlew spotlessApply clean check`
   - Reports (output):
     - Tests → `build/reports/tests/test/index.html`
     - Checkstyle → `build/reports/checkstyle/main.html`
@@ -111,33 +113,101 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
 
 ---
 
-## Git commands you'll actually use
-#### Typical Workflow
+## Git workflow
+
+- Branches
+    - `main` – release-only, protected.
+    - `dev` – integration branch. All feature/fix PRs target `dev`.
+
+- Merge policy
+    - Use **Merge** commits. No rebase. No squash on protected branches.
+    - Linear history is **not** required.
+
+- Daily flow
+    1. Sync `dev`
+       ```bash
+       git switch dev
+       git pull origin dev
+       ```
+    2. Start work
+       ```bash
+       git switch -c feat/<topic>   # or fix/<topic>
+       ```
+    3. Commit small changes
+       ```bash
+       git add -A
+       git commit -m "feat: <what> <why>"
+       ```
+    4. Push and open PR → base=`dev`
+       ```bash
+       git push -u origin HEAD
+       ```
+    5. Keep your branch up to date using **merge**
+       ```bash
+       git fetch origin
+       git merge origin/dev   # resolve conflicts, commit, push
+       ```
+    6. After approval and green CI, click **Merge** in GitHub. Delete the branch.
+
+- Release flow
+    1. Open PR `dev` → `main` when stable.
+    2. Ensure CHANGELOG or Release Notes are updated.
+    3. Click **Merge**. CI must pass.
+
+- Commit and PR rules
+    - Link issues: “Fixes #123”.
+    - Keep PRs focused. Prefer < ~500 lines changed.
+    - Run CI locally before pushing:
+      ```bash
+      ./gradlew spotlessApply clean check
+      ```
+
+### Local Git hooks (automatic pre-commit checks)
+
+Hooks in `.githooks/` so everyone shares the same checks.
+
+**What runs on commit**
+- `pre-commit`: formats code with Spotless and runs `./gradlew clean check`.
+  The commit is blocked if checks fail.
+
+**One-time setup after cloning**
+- Mac/Linux or Git Bash:
+  ```bash
+  git config core.hooksPath .githooks
+  chmod +x .githooks/pre-commit || true
+  ```
+- Windows (Command Prompt):
+  ```bat
+  git config core.hooksPath .githooks
+  ```
+**Verify it's active**
 ```bash
-# Start a feature (example: Room Parser)
-git checkout dev && git pull
-git checkout -b feature/room-parser
-
-# Regularly sync with dev branch while you work (in case team members have pushed updated code)
-git fetch orgin
-git rebase origin/dev   # or: git merge origin/dev
-# Resolve conflicts if any
-git push --force-with-lease   # only on your feature branch and only if you rebased (not merged)
-
-# Commit your work, push your branch (feature branch)
-./gradlew spotlessApply clean check
-git push -u origin feature/room-parser   # then open PR to dev
+  git config --get core.hooksPath   # should print .githooks
 ```
 
-#### Never open PRs from `main` → `dev`. To bring `main` into `dev`:
+**Skip when needed (rare or never)**
+- One commit only:
+    ```bash
+      git commit --no-verify
+    ```
+
+## Conflict resolution (quick guide)
+
 ```bash
-git checkout dev
-git fetch origin
-git merge origin/main   # or: git rebase origin/main (then push)
+git merge origin/dev
+# edit files to resolve conflicts
+git add <resolved files>
+git commit # completes the merge
 git push
 ```
+
+---
+
+#### Never open PRs from `main` → `dev`.
+- Edit PR → change base to `dev`
+
 <span id="commits-branches-conventions"></span>
-> **Conventional branch names** for non-feature changes → use: `chore`/`docs`/`fix`/`hot-fix / test / refactor` prefixes.
+> **Conventional branch names** for non-feature changes → use: `chore`/`docs`/`fix`/`hot-fix` / `test` / `refactor` prefixes.
 
 - **Features**: `feature/<short-slug>`
   - *Example*: `feature/combat-parser`
@@ -169,7 +239,7 @@ git push -u origin fix/trello-42-null-save
 
 #### Hotfix on `main`, then back into `dev` (example):
 > In most cases, bugs will be fixed on the dev branch using the previous workflow above.
-> The workflow below is for extreme cases only will be coordinated by maintainers.
+> The workflow below is for extreme cases only and will be coordinated by maintainers.
 ```bash
 git checkout main && git pull
 git checkout -b hotfix/1.0.1-npe-on-start
@@ -188,7 +258,7 @@ git push
 
 #### Releasing (tags trigger the release workflow)
 ```bash
-# Open a PR from dev -> main in GitHub, get approvals, merge (squash)
+# Open a PR from dev -> main in GitHub, get approvals, merge
 # After merging dev -> main
 git checkout main
 git pull
@@ -211,10 +281,13 @@ At the time of writing this, a baseline/skeleton "Scaffold only" exists (Pre-rel
 
 ## Troubleshooting
 
+- **Gradle not executable:** `chmod +x gradlew` (Mac/Linux).
+  - Windows users must have `gradlew.bat` on PATH (it is in repo root).
 - **"Gradle 9 / deprecated" messages:** Make sure you run `./gradlew ...` (wrapper), not `gradle ...`
+- If pre-commit hooks don’t fire, re-run `git config core.hooksPath .githooks`
 - **Wrong Java version:** Set Project SDK/Gradle JVM to 21 in your IDE
   > `java -version` should show 21.x
-- **Formatting fails in CI:** run `./gradlew spotlessApply`, then re-commit.
+- **Formatting fails in CI:** run `./gradlew spotlessApply`, then `./gradlew clean check`, then re-commit.
 - **Checkstyle errors:** open `build/report/checkstyle/main.html` to see the exact rule and file/line.
 - **Still having issues?** Kill the running daemons and try again:
     ```bash
@@ -222,6 +295,10 @@ At the time of writing this, a baseline/skeleton "Scaffold only" exists (Pre-rel
     rm -rf build .gradle
     ./gradlew clean check
     ```
+- **Undo local changes:** `git checkout -- .` (warning: discards uncommitted changes)
+- **Delete local branch:** `git branch -D <branch-name>`
+- **Sync local branch with remote:** `git fetch origin` then `git reset --hard origin/<branch-name>` (warning: discards uncommitted changes)
+- **Undo last commit but keep changes staged:** `git reset --soft HEAD~1` (useful if you forgot to run `spotlessApply` before committing or want to change commit message)
 You can always reach out to team members for troubleshooting help and questions via our Discord server (any channel, will update this when appropriate/specific channels are completely set up).
 
 **Any and all questions/requests welcomed**.

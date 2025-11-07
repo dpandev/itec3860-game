@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Allow skip with: SKIP_GIT_HOOKS=1 git commit -m "..."
+if [[ "${SKIP_GIT_HOOKS:-}" == "1" ]]; then
+  echo "[pre-commit] skipped"
+  exit 0
+fi
+
+# Ensure we’re at repo root
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Capture originally staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+echo "[pre-commit] Running Spotless format…"
+./gradlew -q spotlessApply
+
+echo "[pre-commit] Running checks…"
+./gradlew -q clean check
+
+# Re-add only the originally staged files
+if [[ -n "$STAGED_FILES" ]]; then
+  echo "[pre-commit] Re-staging originally staged files…"
+  echo "$STAGED_FILES" | xargs git add
+fi
+
+echo "[pre-commit] OK"

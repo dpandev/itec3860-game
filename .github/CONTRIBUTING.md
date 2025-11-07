@@ -3,8 +3,8 @@
 Thanks for helping! Please read this before opening Issues or PRs.
 
 ## Branching & PRs
-- Branch from `main`: `feature/<short-name>` or `fix/<short-name>`.
-- Keep PRs small and focused; squash merge.
+- Branch from `dev`: `feature/<short-name>` or `fix/<short-name>`. Merge commits only.
+- Keep PRs small and focused.
 - Link the related Issue and Milestone.
 
 ## Code style & quality
@@ -16,19 +16,19 @@ This runs compile, tests, Checkstyle, PMD, and JaCoCo.
 - Style: see `.editorconfig` and `config/checkstyle/checkstyle.xml`.
 - Public classes and methods should have brief Javadoc.
 
-## Branching model  
+## Branching model
 - Create branches from `dev`: `feature/<short-name>` / `fix/<short-name>`.
 - Open PRs into `dev`. CI (./gradlew clean check) must pass.
 - Maintainers periodically PR `dev` -> `main` for releases.
 
-## Build & Test  
+## Build & Test
 - Use the Gradle wrapper with JDK 21:
-  `./gradlew clean` check
+  `./gradlew spotlessApply clean check`
 
 
-## Tests
-- Use JUnit 5. Add/extend tests for new behavior.
-- For bugs, add a failing test first when practical.
+## ~~Tests~~
+- ~~Use JUnit 5. Add/extend tests for new behavior.~~
+- ~~For bugs, add a failing test first when practical.~~
 
 ## Docs
 - Update `/docs` and `README.md` when behavior or commands change.
