@@ -29,6 +29,7 @@ public final class Item {
    * @param element The elemental attribute of the item.
    * @param effects A list of effects that the item has.
    * @param passiveWhileInInventory Whether the item's effects are passive while in inventory.
+   * @throws IllegalArgumentException if any validation fails
    */
   public Item(
       ItemType type,
@@ -39,6 +40,13 @@ public final class Item {
       Element element,
       List<Effect> effects,
       boolean passiveWhileInInventory) {
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("Name cannot be null or empty");
+    }
+    if (effects == null) {
+      throw new IllegalArgumentException("Effects list cannot be null");
+    }
+
     this.type = type;
     this.name = name;
     this.description = description;
