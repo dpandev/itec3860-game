@@ -1,6 +1,8 @@
 package avengers.model;
 
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Random;
 
 /** Represents a monster character in the game. */
@@ -56,8 +58,8 @@ public final class Monster extends Character {
     return monarchClass;
   }
 
-  public EnumMap<Element, Double> getResistances() {
-    return resistances;
+  public Map<Element, Double> getResistances() {
+    return Collections.unmodifiableMap(resistances);
   }
 
   /**
