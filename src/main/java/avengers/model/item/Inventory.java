@@ -8,7 +8,7 @@ public final class Inventory {
   private final List<Item> items = new ArrayList<>();
   private final int capacity = 20;
 
-  /** * Constructor for Inventory. */
+  /** Constructor for Inventory. */
   public Inventory() {}
 
   /**

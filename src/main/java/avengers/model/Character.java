@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/** * Represents a character in the game with attributes. */
+/** Represents a character in the game with attributes. */
 abstract class Character {
   final UUID id = UUID.randomUUID();
   String name;
@@ -19,7 +19,7 @@ abstract class Character {
   final List<StatusInstance> effects = new ArrayList<>();
 
   /**
-   * * Constructor for Character.
+   * Constructor for Character.
    *
    * @param name The name of the character.
    * @param description A description of the character.
