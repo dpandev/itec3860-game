@@ -35,8 +35,12 @@ public final class SaveManager {
     if (currentTimeMs - lastAutoSaveMs < AUTO_SAVE_COOLDOWN_MS) {
       return false;
     }
-    lastAutoSaveMs = currentTimeMs;
     return true;
+  }
+
+  /** Marks the current time as the last auto-save time. */
+  public void markAutoSaved() {
+    lastAutoSaveMs = System.currentTimeMillis();
   }
 
   /**
@@ -92,6 +96,7 @@ public final class SaveManager {
     if (!canSaveNow(inCombat, inPuzzle)) {
       return;
     }
+    markAutoSaved();
     // fileManager.saveToFile(0, data); // 0 for auto-save slot
     // TODO: implement saveToFile in FileManager
   }
