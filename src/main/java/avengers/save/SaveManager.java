@@ -6,6 +6,7 @@ import java.util.Optional;
 
 /** Manages saving and loading of game data. */
 public final class SaveManager {
+  private static final long AUTO_SAVE_COOLDOWN_MS = 180_000;
   private final FileManager fileManager;
   private final int maxSlots = 3;
   private long lastAutoSaveMs = 0;
@@ -31,7 +32,7 @@ public final class SaveManager {
     if (inCombat || inPuzzle) {
       return false;
     }
-    if (currentTimeMs - lastAutoSaveMs < 180000) { // 3 minutes
+    if (currentTimeMs - lastAutoSaveMs < AUTO_SAVE_COOLDOWN_MS) {
       return false;
     }
     lastAutoSaveMs = currentTimeMs;
