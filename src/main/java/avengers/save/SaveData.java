@@ -22,7 +22,7 @@ public final class SaveData {
   public SaveData(Player player, UUID currentRoomId, Set<UUID> visitedRooms, long timePlayedMs) {
     this.player = player;
     this.currentRoomId = currentRoomId;
-    this.visitedRooms = visitedRooms;
+    this.visitedRooms = Set.copyOf(visitedRooms);
     this.timePlayedMs = timePlayedMs;
   }
 }
