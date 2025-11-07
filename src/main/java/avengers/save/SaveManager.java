@@ -7,8 +7,8 @@ import java.util.Optional;
 /** Manages saving and loading of game data. */
 public final class SaveManager {
   private static final long AUTO_SAVE_COOLDOWN_MS = 180_000;
+  private static final int MAX_SLOTS = 3;
   private final FileManager fileManager;
-  private final int maxSlots = 3;
   private long lastAutoSaveMs = 0;
 
   /**
@@ -51,7 +51,7 @@ public final class SaveManager {
    * @return true if the save was successful, false otherwise.
    */
   public boolean save(int slot, SaveData data) {
-    if (slot < 1 || slot > maxSlots) {
+    if (slot < 1 || slot > MAX_SLOTS) {
       return false;
     }
     // return fileManager.saveToFile(slot, data);
@@ -66,7 +66,7 @@ public final class SaveManager {
    * @return An Optional containing the SaveData if found, or empty if not found.
    */
   public Optional<SaveData> load(int slot) {
-    if (slot < 1 || slot > maxSlots) {
+    if (slot < 1 || slot > MAX_SLOTS) {
       return Optional.empty();
     }
     // return fileManager.loadFromFile(slot);
@@ -80,7 +80,7 @@ public final class SaveManager {
    * @return A list of SaveSummary objects representing the saves.
    */
   public List<SaveSummary> list() {
-    // return fileManager.listSaves(maxSlots);
+    // return fileManager.listSaves(MAX_SLOTS);
     // TODO: implement listSaves in FileManager
     return List.of();
   }
