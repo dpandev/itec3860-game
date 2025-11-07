@@ -1,11 +1,13 @@
 package avengers.model;
 
-/** * Represents the player character in the game. */
+import java.util.UUID;
+
+/** Represents the player character in the game. */
 public final class Player extends Character {
-  private String currentRoomId;
+  private UUID currentRoomId;
 
   /**
-   * * Constructor for Player.
+   * Constructor for Player.
    *
    * @param name The name of the player.
    * @param description The description of the player.
@@ -19,20 +21,20 @@ public final class Player extends Character {
     this.currentRoomId = null;
   }
 
-  public String getCurrentRoomId() {
+  public UUID getCurrentRoomId() {
     return currentRoomId;
   }
 
   /**
-   * * Method to move the player to a different room.
+   * Method to move the player to a different room.
    *
    * @param roomId The ID of the room to move to.
    */
-  public void moveToRoom(String roomId) {
+  public void moveToRoom(UUID roomId) {
     this.currentRoomId = roomId;
   }
 
-  /** * Method to handle losing critical key items. */
+  /** Method to handle losing critical key items. */
   public void loseCritialKeyItems() {
     // TODO: implement logic to lose critical key items
   }
