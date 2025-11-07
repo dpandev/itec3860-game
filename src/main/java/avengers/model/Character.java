@@ -91,7 +91,7 @@ abstract class Character {
   }
 
   public List<StatusInstance> getEffects() {
-    return effects;
+    return List.copyOf(effects);
   }
 
   public void setElement(Element element) {
