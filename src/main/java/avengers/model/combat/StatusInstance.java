@@ -1,13 +1,13 @@
 package avengers.model.combat;
 
-/** * Represents an instance of a status effect applied to a character in combat. */
+/** Represents an instance of a status effect applied to a character in combat. */
 public final class StatusInstance {
   private final StatusType type;
   private int remainingTurns;
   private int effectAmount;
 
   /**
-   * * Constructor for StatusInstance.
+   * Constructor for StatusInstance.
    *
    * @param type The type of the status effect.
    * @param remainingTurns The number of turns the status effect will last.
@@ -20,7 +20,7 @@ public final class StatusInstance {
   }
 
   /**
-   * * Applies the status effect to the target character.
+   * Applies the status effect to the target character.
    *
    * @param target The character to which the status effect is applied.
    */
