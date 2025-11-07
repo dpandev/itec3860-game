@@ -20,6 +20,33 @@ public final class StatusInstance {
   }
 
   /**
+   * Returns the type of the status effect.
+   *
+   * @return the status effect type
+   */
+  public StatusType getType() {
+    return type;
+  }
+
+  /**
+   * Returns the number of remaining turns for this status effect.
+   *
+   * @return the number of remaining turns
+   */
+  public int getRemainingTurns() {
+    return remainingTurns;
+  }
+
+  /**
+   * Returns the magnitude of the status effect.
+   *
+   * @return the effect amount
+   */
+  public int getEffectAmount() {
+    return effectAmount;
+  }
+
+  /**
    * Applies the status effect to the target character.
    *
    * @param target The character to which the status effect is applied.
