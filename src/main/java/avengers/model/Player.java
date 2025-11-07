@@ -35,7 +35,7 @@ public final class Player extends Character {
   }
 
   /** Method to handle losing critical key items. */
-  public void loseCritialKeyItems() {
+  public void loseCriticalKeyItems() {
     // TODO: implement logic to lose critical key items
   }
 }
