@@ -1,5 +1,8 @@
 # itec3860-game
 
+## UML Diagram
+![UML Diagram](docs/images/Avengers%20UML%20Class%20Diagram.svg)
+
 ## Getting Started
 
 
