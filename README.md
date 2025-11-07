@@ -295,6 +295,10 @@ At the time of writing this, a baseline/skeleton "Scaffold only" exists (Pre-rel
     rm -rf build .gradle
     ./gradlew clean check
     ```
+- **Undo local changes:** `git checkout -- .` (warning: discards uncommitted changes)
+- **Delete local branch:** `git branch -D <branch-name>`
+- **Sync local branch with remote:** `git fetch origin` then `git reset --hard origin/<branch-name>` (warning: discards uncommitted changes)
+- **Undo last commit but keep changes staged:** `git reset --soft HEAD~1` (useful if you forgot to run `spotlessApply` before committing or want to change commit message)
 You can always reach out to team members for troubleshooting help and questions via our Discord server (any channel, will update this when appropriate/specific channels are completely set up).
 
 **Any and all questions/requests welcomed**.
