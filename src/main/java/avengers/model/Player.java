@@ -1,8 +1,10 @@
 package avengers.model;
 
+import java.util.UUID;
+
 /** * Represents the player character in the game. */
 public final class Player extends Character {
-  private String currentRoomId;
+  private UUID currentRoomId;
 
   /**
    * * Constructor for Player.
@@ -19,7 +21,7 @@ public final class Player extends Character {
     this.currentRoomId = null;
   }
 
-  public String getCurrentRoomId() {
+  public UUID getCurrentRoomId() {
     return currentRoomId;
   }
 
@@ -28,7 +30,7 @@ public final class Player extends Character {
    *
    * @param roomId The ID of the room to move to.
    */
-  public void moveToRoom(String roomId) {
+  public void moveToRoom(UUID roomId) {
     this.currentRoomId = roomId;
   }
 
