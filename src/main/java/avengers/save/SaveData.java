@@ -26,30 +26,22 @@ public final class SaveData {
     this.timePlayedMs = timePlayedMs;
   }
 
-  /**
-   * Returns the player object representing the player's state.
-   */
+  /** Returns the player object representing the player's state. */
   public Player getPlayer() {
     return player;
   }
 
-  /**
-   * Returns the UUID of the current room the player is in.
-   */
+  /** Returns the UUID of the current room the player is in. */
   public UUID getCurrentRoomId() {
     return currentRoomId;
   }
 
-  /**
-   * Returns a set of UUIDs representing rooms the player has visited.
-   */
+  /** Returns a set of UUIDs representing rooms the player has visited. */
   public Set<UUID> getVisitedRooms() {
     return visitedRooms;
   }
 
-  /**
-   * Returns the total time played in milliseconds.
-   */
+  /** Returns the total time played in milliseconds. */
   public long getTimePlayedMs() {
     return timePlayedMs;
   }
