@@ -8,7 +8,7 @@ public final class SaveSummary {
   private final int hp;
 
   /**
-   * Constructor for SaveSummary
+   * Constructor for SaveSummary.
    *
    * @param slot The save slot number
    * @param timestamp The timestamp of the save

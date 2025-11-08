@@ -12,7 +12,7 @@ public final class SaveData {
   private final long timePlayedMs;
 
   /**
-   * Constructor for SaveData
+   * Constructor for SaveData.
    *
    * @param player The player object representing the player's state
    * @param currentRoomId The UUID of the current room the player is in

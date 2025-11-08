@@ -8,7 +8,7 @@ public final class FileManager {
   private final Path path;
 
   /**
-   * Constructor for FileManager
+   * Constructor for FileManager.
    *
    * @param path The base path for file operations
    */

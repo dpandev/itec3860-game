@@ -12,7 +12,7 @@ public final class SaveManager {
   private long lastAutoSaveMs = 0;
 
   /**
-   * Constructor for SaveManager
+   * Constructor for SaveManager.
    *
    * @param fileManager The FileManager instance to handle file operations
    */

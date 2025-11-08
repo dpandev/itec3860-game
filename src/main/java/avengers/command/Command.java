@@ -1,0 +1,37 @@
+package avengers.command;
+
+/** Enum representing various commands available in the game. */
+public enum Command {
+  EXPLORE,
+  GO,
+  MAP,
+  ATTACK,
+  DEFEND,
+  RUN,
+  USE,
+  EQUIP,
+  UNEQUIP,
+  PICKUP,
+  DROP,
+  ACTIVATE,
+  INVENTORY,
+  SAVE,
+  LOAD,
+  RESPAWN,
+  HELP,
+  INSPECT,
+  SOLVE,
+  HINT,
+  SAY_ARISE,
+  PLACE_SIGIL,
+  ANSWER,
+  KNEEL,
+  JUMP,
+  ACTIVATE_PILLAR,
+  STRIKE_RUNE,
+  COLLECT_FEATHER,
+  STEP_RUNE,
+  CHOOSE_SWORD,
+  EMBRACE_SHADOWS,
+  RESIST_SHADOWS
+}
