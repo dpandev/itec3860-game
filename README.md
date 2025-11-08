@@ -98,6 +98,8 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
     `./gradlew clean check`
 - Tests only:
     `./gradlew test`
+- Run the game:
+    `./gradlew run`
 
 ---
 
