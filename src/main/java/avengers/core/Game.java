@@ -1,7 +1,16 @@
 package avengers.core;
 
+import avengers.controller.GameController;
+
 /** Main game class to run the Avengers game. */
 public final class Game {
+
+  private final GameController controller;
+
+  /** Creates a new Game instance with a GameController. */
+  public Game() {
+    this.controller = new GameController();
+  }
 
   /**
    * Entry point of the application.
@@ -22,5 +31,6 @@ public final class Game {
   /** Processes a single loop iteration with the given input. */
   public void loopOnce(String input) {
     System.out.println("Processing input: " + input);
+    controller.route(input);
   }
 }
