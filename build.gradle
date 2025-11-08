@@ -4,7 +4,7 @@ plugins {
     id 'pmd'
     id 'jacoco'
     id 'com.diffplug.spotless' version '8.0.0'
-//    id 'application' // uncomment if you want `gradle run`
+    id 'application'
 }
 
 java {
@@ -83,7 +83,6 @@ jacocoTestReport {
 
 check.dependsOn jacocoTestReport
 
-// Uncomment and set your main class if you want `gradle run`
-// application {
-//     mainClass = 'com.yourorg.game.Main'
-// }
+ application {
+     mainClass = 'avengers.core.Game'
+ }
