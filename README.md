@@ -122,6 +122,7 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
 - [ ] Brief Javadoc comments included
 - [ ] Docs updated if behavior/commands changed (`/docs` and/or README)
 - [ ] No game data in views (MVC separation)
+- [ ] Linked issues / milestone (e.g., "Fixes #123")
 > To mark an item as completed/checked when filling out the PR, replace space between brackets with "x" `[x]`
 
 ---
@@ -146,21 +147,31 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
        ```bash
        git switch -c feat/<topic>   # or fix/<topic>
        ```
+       If creating a branch based on an issue, you can copy/paste the issue from github using the "create branch" button available on the issue page (but add `feat` / `chore` / `fix` / `etc.` before the copied text). Example:
+       ```bash
+       git switch -c feat/19-implement-core-game-loop
+        ```
     3. Commit small changes
        ```bash
-       git add -A
+       git add -A # adds all local changes
        git commit -m "feat: <what> <why>"
        ```
     4. Push and open PR → base=`dev`
        ```bash
-       git push -u origin HEAD
+       git push origin feat/19-implement-core-game-loop
        ```
     5. Keep your branch up to date using **merge**
        ```bash
        git fetch origin
        git merge origin/dev   # resolve conflicts, commit, push
        ```
-    6. After approval and green CI, click **Merge** in GitHub. Delete the branch.
+    6. After approval and green CI, click **Merge** in GitHub. Branch will automatically be deleted.
+
+    7. Then switch back to `dev` and pull latest changes:
+       ```bash
+       git switch dev
+       git pull origin dev
+       ```
 
 - Release flow
     1. Open PR `dev` → `main` when stable.
@@ -329,6 +340,6 @@ You can always reach out to team members for troubleshooting help and questions 
 ## Expectations
 - Keep PRs small (easy to review)
 - Address PR review comments.
-- If you're blocked by something, ask for help early (label PR/Issue `status:blocked`)
+- If you're blocked by something, ask for help early (label PR/Issue `status:blocked`, add comments, ping on Discord).
 
 ---
