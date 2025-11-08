@@ -98,6 +98,14 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
     `./gradlew clean check`
 - Tests only:
     `./gradlew test`
+- Run tests + generate coverage report:
+    `./gradlew test jacocoTestReport`
+- View coverage report:
+    Open `build/reports/jacoco/test/html/index.html` in a browser.
+- Run specific test class:
+    `./gradlew test --tests "com.example.MyTestClass"`
+- Run specific test method:
+    `./gradlew test --tests "com.example.MyTestClass.myTestMethod"`
 - Run the game:
     `./gradlew run`
 
