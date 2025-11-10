@@ -14,7 +14,9 @@ class EffectTest {
 
   @BeforeEach
   void setUp() {
-    player = new Player("TestPlayer", "A test player", 100, 100, 20, 10);
+    player =
+        new Player(
+            "TestPlayer", "A test player", "A strong player with flame power", 100, 100, 20, 10);
   }
 
   @Test
