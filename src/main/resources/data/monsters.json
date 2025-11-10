@@ -1,0 +1,313 @@
+{
+  "monsters": [
+    {
+      "id": "MON-01",
+      "name": "Iron-Fanged Lycan",
+      "roomLocation": "RM-02",
+      "description": "A wolf-type beast with razor fangs, one of Jinwoo's earliest trials.",
+      "hp": 200,
+      "maxHp": 200,
+      "damage": 20,
+      "specialEffects": [
+        "Fast Bite (quick consecutive attacks)"
+      ],
+      "itemDrops": [
+        "Minor Healing Potion"
+      ]
+    },
+    {
+      "id": "MON-02",
+      "name": "Giant Statue",
+      "roomLocation": "RM-04, RM-06",
+      "description": "Colossal stone guardians from the Double Dungeon, capable of crushing hunters instantly.",
+      "hp": 500,
+      "maxHp": 500,
+      "damage": 50,
+      "specialEffects": [
+        "Stone Smash (instant kill if puzzle failed)"
+      ],
+      "itemDrops": []
+    },
+    {
+      "id": "MON-03",
+      "name": "Orc Warrior",
+      "roomLocation": "RM-09",
+      "description": "Brutal foot soldiers armed with crude weapons.",
+      "hp": 300,
+      "maxHp": 300,
+      "damage": 30,
+      "specialEffects": [
+        "Berserk Rage (+10 damage when HP < 100)"
+      ],
+      "itemDrops": [
+        "Orc Axe"
+      ]
+    },
+    {
+      "id": "MON-04",
+      "name": "High Orc Chief",
+      "roomLocation": "RM-25",
+      "description": "A powerful chieftain commanding orc clans.",
+      "hp": 700,
+      "maxHp": 700,
+      "damage": 60,
+      "specialEffects": [
+        "War Cry (reduces player defense by 20%)"
+      ],
+      "itemDrops": [
+        "High Orc Club",
+        "Steel Plate Mail"
+      ]
+    },
+    {
+      "id": "MON-05",
+      "name": "Kasaka (Blue Venom-Fanged Snake)",
+      "roomLocation": "RM-05",
+      "description": "A giant venomous serpent that ambushes players in ruined areas.",
+      "hp": 400,
+      "maxHp": 400,
+      "damage": 35,
+      "specialEffects": [
+        "Venom Bite (poison damage over 3 turns)"
+      ],
+      "itemDrops": [
+        "Kasaka's Venom Fang (dagger weapon)"
+      ]
+    },
+    {
+      "id": "MON-06",
+      "name": "Pyros, Infernal Sentinel",
+      "roomLocation": "RM-10",
+      "description": "Elemental Fire Boss clad in molten armor, wields devastating flame attacks.",
+      "hp": 1200,
+      "maxHp": 1200,
+      "damage": 100,
+      "specialEffects": [
+        "Fire Breath (burn for 5-10 seconds)",
+        "Lava Geyser (AoE damage)"
+      ],
+      "itemDrops": [
+        "Fire Sigil"
+      ]
+    },
+    {
+      "id": "MON-07",
+      "name": "Neressa, Tidebinder",
+      "roomLocation": "RM-11",
+      "description": "Elemental Water Boss, cloaked in streams and illusions.",
+      "hp": 1200,
+      "maxHp": 1200,
+      "damage": 90,
+      "specialEffects": [
+        "Drowning Currents (damage over time)",
+        "Clone Summon (creates water illusions)"
+      ],
+      "itemDrops": [
+        "Water Sigil"
+      ]
+    },
+    {
+      "id": "MON-08",
+      "name": "Gravemaw, Stone Colossus",
+      "roomLocation": "RM-12",
+      "description": "Elemental Earth Boss, a titan that crushes everything in its path.",
+      "hp": 1300,
+      "maxHp": 1300,
+      "damage": 110,
+      "specialEffects": [
+        "Earthquake (stuns for 2 turns)",
+        "Boulder Crash"
+      ],
+      "itemDrops": [
+        "Earth Sigil"
+      ]
+    },
+    {
+      "id": "MON-09",
+      "name": "Zephyra, Storm Matron",
+      "roomLocation": "RM-13",
+      "description": "Elemental Air Boss, commanding winds and lightning.",
+      "hp": 1250,
+      "maxHp": 1250,
+      "damage": 95,
+      "specialEffects": [
+        "Cyclone Push (knockback)",
+        "Lightning Strike (high burst damage)"
+      ],
+      "itemDrops": [
+        "Air Sigil"
+      ]
+    },
+    {
+      "id": "MON-10",
+      "name": "Cerberus",
+      "roomLocation": "RM-15",
+      "description": "A massive three-headed hound that guards the inner chambers.",
+      "hp": 1400,
+      "maxHp": 1400,
+      "damage": 120,
+      "specialEffects": [
+        "Triple Bite (3 consecutive attacks in one turn)"
+      ],
+      "itemDrops": [
+        "Cerberus Fang"
+      ]
+    },
+    {
+      "id": "MON-11",
+      "name": "Baruka",
+      "roomLocation": "RM-15",
+      "description": "A Demon Castle general wielding dark magic and blades.",
+      "hp": 1000,
+      "maxHp": 1000,
+      "damage": 85,
+      "specialEffects": [
+        "Shadow Slash (high crit chance)"
+      ],
+      "itemDrops": [
+        "Baruka's Twin Blades"
+      ]
+    },
+    {
+      "id": "MON-12",
+      "name": "Baran, Demon King",
+      "roomLocation": "RM-16",
+      "description": "Demon King, one of the overlords of the Demon Castle.",
+      "hp": 1500,
+      "maxHp": 1500,
+      "damage": 130,
+      "specialEffects": [
+        "Lightning Storm (multi-target AoE)",
+        "Dark Roar"
+      ],
+      "itemDrops": [
+        "Demon King's Crown"
+      ]
+    },
+    {
+      "id": "MON-13",
+      "name": "Arch Lich",
+      "roomLocation": "RM-15, RM-16",
+      "description": "Powerful undead mages controlling skeleton armies.",
+      "hp": 900,
+      "maxHp": 900,
+      "damage": 70,
+      "specialEffects": [
+        "Dark Bolt",
+        "Summon Skeletons (adds minions)"
+      ],
+      "itemDrops": [
+        "Lich's Staff"
+      ]
+    },
+    {
+      "id": "MON-14",
+      "name": "Kandiaru, the System's Architect",
+      "roomLocation": "RM-17",
+      "description": "The Architect of the System, testing hunters with deadly illusions.",
+      "hp": 1600,
+      "maxHp": 1600,
+      "damage": 100,
+      "specialEffects": [
+        "Reality Warp (randomized debuffs, illusions)"
+      ],
+      "itemDrops": [
+        "Architect's Core"
+      ]
+    },
+    {
+      "id": "MON-15",
+      "name": "Ant King",
+      "roomLocation": "RM-20",
+      "description": "The apex predator of Jeju Island, feared even by S-rank hunters.",
+      "hp": 1800,
+      "maxHp": 1800,
+      "damage": 140,
+      "specialEffects": [
+        "Frenzied Slash",
+        "Poison Claw (HP degeneration over time)"
+      ],
+      "itemDrops": [
+        "Ant King's Carapace",
+        "Dragonbone Armor"
+      ]
+    },
+    {
+      "id": "MON-16",
+      "name": "Frost Monarch",
+      "roomLocation": "RM-18",
+      "description": "A powerful Monarch who commands ice storms and frost beasts.",
+      "hp": 1700,
+      "maxHp": 1700,
+      "damage": 130,
+      "specialEffects": [
+        "Ice Prison (immobilize 2 turns)",
+        "Frost Aura (lingering freeze effect)"
+      ],
+      "itemDrops": [
+        "Frost Sigil"
+      ]
+    },
+    {
+      "id": "MON-17",
+      "name": "Hwang Dong-soo",
+      "roomLocation": "RM-21",
+      "description": "A rogue human hunter antagonizing Jinwoo and others.",
+      "hp": 800,
+      "maxHp": 800,
+      "damage": 70,
+      "specialEffects": [
+        "Brutal Slash (high damage crit)"
+      ],
+      "itemDrops": []
+    },
+    {
+      "id": "MON-18",
+      "name": "Kang Taeshik",
+      "roomLocation": "RM-22",
+      "description": "A corrupt hunter who betrays his comrades.",
+      "hp": 700,
+      "maxHp": 700,
+      "damage": 60,
+      "specialEffects": [
+        "Backstab Critical (bonus damage from behind)"
+      ],
+      "itemDrops": []
+    },
+    {
+      "id": "MON-19",
+      "name": "Architect Guardian",
+      "roomLocation": "RM-23",
+      "description": "A hidden boss who manipulates dungeon structures and players.",
+      "hp": 1500,
+      "maxHp": 1500,
+      "damage": 120,
+      "specialEffects": [
+        "Summon Constructs",
+        "Energy Beam (piercing attack)"
+      ],
+      "itemDrops": [
+        "Architect's Relic"
+      ]
+    },
+    {
+      "id": "MON-20",
+      "name": "Antares, Monarch of Destruction",
+      "roomLocation": "RM-30",
+      "description": "The King of Dragons, Monarch of Destruction, the final antagonist.",
+      "hp": 2000,
+      "maxHp": 2000,
+      "damage": 150,
+      "specialEffects": [
+        "Fire Breath (burn for 10s)",
+        "Dragon Roar (stuns 3 turns)",
+        "Shadow Dominion (summons shadows)"
+      ],
+      "itemDrops": [
+        "Dragon's Fang Sword",
+        "Shadow Crystal",
+        "Shadow Monarch's Armor (optional)"
+      ]
+    }
+  ]
+}
