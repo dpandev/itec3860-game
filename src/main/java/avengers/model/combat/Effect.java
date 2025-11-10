@@ -1,7 +1,7 @@
 package avengers.model.combat;
+
 import avengers.model.Character;
 import avengers.model.Element;
-
 import java.util.Objects;
 
 /** Represents an effect that can be applied during combat. */
@@ -26,18 +26,18 @@ public final class Effect {
 
   /** Constructor for Effect. */
   public Effect(
-    EffectKind kind,
-    EffectTiming timing,
-    int value,
-    StatusType statusType,
-    int statusDuration,
-    Element element) {
-      this.kind = kind;
-      this.timing = timing;
-      this.value = value;
-      this.statusType = statusType;
-      this.statusDuration = statusDuration;
-      this.element = element;
+      EffectKind kind,
+      EffectTiming timing,
+      int value,
+      StatusType statusType,
+      int statusDuration,
+      Element element) {
+    this.kind = kind;
+    this.timing = timing;
+    this.value = value;
+    this.statusType = statusType;
+    this.statusDuration = statusDuration;
+    this.element = element;
   }
 
   /**
@@ -50,7 +50,7 @@ public final class Effect {
    * @return A new Effect instance.
    */
   public static Effect applyStatus(
-    EffectTiming timing, StatusType statusType, int duration, int amount) {
+      EffectTiming timing, StatusType statusType, int duration, int amount) {
     return new Effect(EffectKind.APPLY_STATUS, timing, amount, statusType, duration, null);
   }
 
@@ -206,11 +206,11 @@ public final class Effect {
     if (o == null || getClass() != o.getClass()) return false;
     Effect effect = (Effect) o;
     return value == effect.value
-      && statusDuration == effect.statusDuration
-      && kind == effect.kind
-      && timing == effect.timing
-      && statusType == effect.statusType
-      && element == effect.element;
+        && statusDuration == effect.statusDuration
+        && kind == effect.kind
+        && timing == effect.timing
+        && statusType == effect.statusType
+        && element == effect.element;
   }
 
   @Override
@@ -221,18 +221,18 @@ public final class Effect {
   @Override
   public String toString() {
     return "Effect{"
-      + "kind="
-      + kind
-      + ", timing="
-      + timing
-      + ", value="
-      + value
-      + ", statusType="
-      + statusType
-      + ", statusDuration="
-      + statusDuration
-      + ", element="
-      + element
-      + '}';
+        + "kind="
+        + kind
+        + ", timing="
+        + timing
+        + ", value="
+        + value
+        + ", statusType="
+        + statusType
+        + ", statusDuration="
+        + statusDuration
+        + ", element="
+        + element
+        + '}';
   }
 }
