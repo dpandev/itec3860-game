@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 /** Represents a character in the game with attributes. */
-abstract class Character {
+public abstract class Character {
   final UUID id = UUID.randomUUID();
   String name;
   String description;
@@ -98,19 +98,59 @@ abstract class Character {
     this.element = element;
   }
 
+  /**
+   * Applies damage to this character.
+   *
+   * @param amount The amount of damage to take.
+   * @param src The source of the damage (for future elemental interactions).
+   */
   public void takeDamage(int amount, DamageSource src) {
-    // TODO: implement damage calculation considering defense and effects
+    this.hp = Math.max(0, this.hp - amount);
   }
 
+  /**
+   * Heals the character.
+   *
+   * @param amount The amount of HP to restore.
+   */
   public void heal(int amount) {
     this.hp = Math.min(this.maxHp, this.hp + amount);
   }
 
+  /**
+   * Checks if the character is dead.
+   *
+   * @return true if HP is 0 or less, false otherwise.
+   */
   public boolean isDead() {
     return this.hp <= 0;
   }
 
+  /**
+   * Adds a status effect to this character.
+   *
+   * @param effect The status effect to add.
+   */
   public void addStatus(StatusInstance effect) {
     this.effects.add(effect);
+  }
+
+  /**
+   * Removes a status effect from this character.
+   *
+   * @param effect The status effect to remove.
+   */
+  public void removeStatus(StatusInstance effect) {
+    this.effects.remove(effect);
+  }
+
+  /**
+   * Gets the elemental resistances for this character. Default implementation returns empty map (no
+   * resistances). Monsters override this to provide their resistance values.
+   *
+   * @return Map of element to resistance values.
+   */
+  public java.util.Map<Element, Double> getResistances() {
+    return java.util.Map.of();
   }
 }
