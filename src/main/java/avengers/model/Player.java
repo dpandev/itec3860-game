@@ -1,14 +1,13 @@
 package avengers.model;
 
-import java.util.UUID;
-
 /** Represents the player character in the game. */
 public final class Player extends Character {
-  private UUID currentRoomId;
+  private String currentRoomId;
 
   /**
    * Constructor for Player.
    *
+   * @param id The unique identifier for the player.
    * @param name The name of the player.
    * @param description The description of the player.
    * @param hp The current health points of the player.
@@ -16,12 +15,13 @@ public final class Player extends Character {
    * @param baseDamage The base damage the player can deal.
    * @param defense The defense value of the player.
    */
-  public Player(String name, String description, int hp, int maxHp, int baseDamage, int defense) {
-    super(name, description, hp, maxHp, baseDamage, defense);
+  public Player(
+      String id, String name, String description, int hp, int maxHp, int baseDamage, int defense) {
+    super(id, name, description, hp, maxHp, baseDamage, defense);
     this.currentRoomId = null;
   }
 
-  public UUID getCurrentRoomId() {
+  public String getCurrentRoomId() {
     return currentRoomId;
   }
 
@@ -30,7 +30,7 @@ public final class Player extends Character {
    *
    * @param roomId The ID of the room to move to.
    */
-  public void moveToRoom(UUID roomId) {
+  public void moveToRoom(String roomId) {
     this.currentRoomId = roomId;
   }
 
