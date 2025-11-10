@@ -7,6 +7,7 @@ public final class Ally extends Character {
   /**
    * Constructor for Ally.
    *
+   * @param id The unique identifier for the ally.
    * @param name The name of the ally.
    * @param description A description of the ally.
    * @param hp The current health points.
@@ -17,6 +18,7 @@ public final class Ally extends Character {
    * @param remainingTurns Number of turns this ally will remain active.
    */
   public Ally(
+      String id,
       String name,
       String description,
       int hp,
@@ -25,7 +27,7 @@ public final class Ally extends Character {
       int defense,
       Element element,
       int remainingTurns) {
-    super(name, description, hp, maxHp, baseDamage, defense);
+    super(id, name, description, hp, maxHp, baseDamage, defense);
     this.element = element;
     this.remainingTurns = remainingTurns;
   }

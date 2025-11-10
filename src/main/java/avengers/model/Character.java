@@ -4,11 +4,10 @@ import avengers.model.combat.DamageSource;
 import avengers.model.combat.StatusInstance;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /** Represents a character in the game with attributes. */
 public abstract class Character {
-  final UUID id = UUID.randomUUID();
+  final String id;
   String name;
   String description;
   int hp;
@@ -21,6 +20,7 @@ public abstract class Character {
   /**
    * Constructor for Character.
    *
+   * @param id The unique identifier for the character.
    * @param name The name of the character.
    * @param description A description of the character.
    * @param hp The current health points of the character.
@@ -30,7 +30,10 @@ public abstract class Character {
    * @throws IllegalArgumentException if any validation fails
    */
   public Character(
-      String name, String description, int hp, int maxHp, int baseDamage, int defense) {
+      String id, String name, String description, int hp, int maxHp, int baseDamage, int defense) {
+    if (id == null || id.trim().isEmpty()) {
+      throw new IllegalArgumentException("ID cannot be null or empty");
+    }
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be null or empty");
     }
@@ -50,6 +53,7 @@ public abstract class Character {
       throw new IllegalArgumentException("Defense cannot be negative");
     }
 
+    this.id = id;
     this.name = name;
     this.description = description;
     this.hp = hp;
@@ -58,7 +62,7 @@ public abstract class Character {
     this.defense = defense;
   }
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 

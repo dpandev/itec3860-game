@@ -4,11 +4,10 @@ import avengers.model.Element;
 import avengers.model.Player;
 import avengers.model.combat.Effect;
 import java.util.List;
-import java.util.UUID;
 
 /** Represents an item in the game with various attributes and effects. */
 public final class Item {
-  private final UUID id = UUID.randomUUID();
+  private final String id;
   private final ItemType type;
   private final String name;
   private final String description;
@@ -21,6 +20,7 @@ public final class Item {
   /**
    * Constructor for Item.
    *
+   * @param id The unique identifier for the item.
    * @param type The type of the item.
    * @param name The name of the item.
    * @param description A description of the item.
@@ -32,6 +32,7 @@ public final class Item {
    * @throws IllegalArgumentException if any validation fails
    */
   public Item(
+      String id,
       ItemType type,
       String name,
       String description,
@@ -40,6 +41,9 @@ public final class Item {
       Element element,
       List<Effect> effects,
       boolean passiveWhileInInventory) {
+    if (id == null || id.trim().isEmpty()) {
+      throw new IllegalArgumentException("ID cannot be null or empty");
+    }
     if (type == null) {
       throw new IllegalArgumentException("Type cannot be null");
     }
@@ -50,6 +54,7 @@ public final class Item {
       throw new IllegalArgumentException("Effects list cannot be null");
     }
 
+    this.id = id;
     this.type = type;
     this.name = name;
     this.description = description;
@@ -60,7 +65,7 @@ public final class Item {
     this.passiveWhileInInventory = passiveWhileInInventory;
   }
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 

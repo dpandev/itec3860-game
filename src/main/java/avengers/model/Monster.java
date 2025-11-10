@@ -15,6 +15,7 @@ public final class Monster extends Character {
   /**
    * Constructor for the Monster class.
    *
+   * @param id The unique identifier for the monster.
    * @param name The name of the monster.
    * @param description A description of the monster.
    * @param hp The current health points.
@@ -26,6 +27,7 @@ public final class Monster extends Character {
    * @param critThreshold The critical hit threshold of the monster.
    */
   public Monster(
+      String id,
       String name,
       String description,
       int hp,
@@ -35,7 +37,7 @@ public final class Monster extends Character {
       BossType bossType,
       boolean monarchClass,
       double critThreshold) {
-    super(name, description, hp, maxHp, baseDamage, defense);
+    super(id, name, description, hp, maxHp, baseDamage, defense);
     this.bossType = bossType;
     this.monarchClass = monarchClass;
     this.critThreshold = critThreshold;
