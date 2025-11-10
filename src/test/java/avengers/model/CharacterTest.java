@@ -10,8 +10,9 @@ import org.junit.jupiter.api.Test;
 class CharacterTest {
   @Test
   void testValidCharacterCreation() {
-    Player player = new Player("TestPlayer", "A test player", 100, 100, 10, 5);
+    Player player = new Player("player1", "TestPlayer", "A test player", 100, 100, 10, 5);
     assertNotNull(player);
+    assertEquals("player1", player.getId());
     assertEquals("TestPlayer", player.getName());
     assertEquals("A test player", player.getDescription());
     assertEquals(100, player.getHp());
@@ -21,10 +22,38 @@ class CharacterTest {
   }
 
   @Test
+  void testNullIdThrowsException() {
+    Exception exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new Player(null, "name", "description", 100, 100, 10, 5));
+    assertEquals("ID cannot be null or empty", exception.getMessage());
+  }
+
+  @Test
+  void testEmptyIdThrowsException() {
+    Exception exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new Player("", "name", "description", 100, 100, 10, 5));
+    assertEquals("ID cannot be null or empty", exception.getMessage());
+  }
+
+  @Test
+  void testWhitespaceIdThrowsException() {
+    Exception exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new Player("   ", "name", "description", 100, 100, 10, 5));
+    assertEquals("ID cannot be null or empty", exception.getMessage());
+  }
+
+  @Test
   void testNullNameThrowsException() {
     Exception exception =
         assertThrows(
-            IllegalArgumentException.class, () -> new Player(null, "description", 100, 100, 10, 5));
+            IllegalArgumentException.class,
+            () -> new Player("player1", null, "description", 100, 100, 10, 5));
     assertEquals("Name cannot be null or empty", exception.getMessage());
   }
 
@@ -32,7 +61,8 @@ class CharacterTest {
   void testEmptyNameThrowsException() {
     Exception exception =
         assertThrows(
-            IllegalArgumentException.class, () -> new Player("", "description", 100, 100, 10, 5));
+            IllegalArgumentException.class,
+            () -> new Player("player1", "", "description", 100, 100, 10, 5));
     assertEquals("Name cannot be null or empty", exception.getMessage());
   }
 
@@ -41,7 +71,7 @@ class CharacterTest {
     Exception exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Player("   ", "description", 100, 100, 10, 5));
+            () -> new Player("player1", "   ", "description", 100, 100, 10, 5));
     assertEquals("Name cannot be null or empty", exception.getMessage());
   }
 
@@ -50,7 +80,7 @@ class CharacterTest {
     Exception exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Player("name", "description", 50, -100, 10, 5));
+            () -> new Player("player1", "name", "description", 50, -100, 10, 5));
     assertEquals("Maximum HP must be positive", exception.getMessage());
   }
 
@@ -58,7 +88,8 @@ class CharacterTest {
   void testZeroMaxHpThrowsException() {
     Exception exception =
         assertThrows(
-            IllegalArgumentException.class, () -> new Player("name", "description", 0, 0, 10, 5));
+            IllegalArgumentException.class,
+            () -> new Player("player1", "name", "description", 0, 0, 10, 5));
     assertEquals("Maximum HP must be positive", exception.getMessage());
   }
 
@@ -67,7 +98,7 @@ class CharacterTest {
     Exception exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Player("name", "description", -10, 100, 10, 5));
+            () -> new Player("player1", "name", "description", -10, 100, 10, 5));
     assertEquals("HP cannot be negative", exception.getMessage());
   }
 
@@ -76,7 +107,7 @@ class CharacterTest {
     Exception exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Player("name", "description", 150, 100, 10, 5));
+            () -> new Player("player1", "name", "description", 150, 100, 10, 5));
     assertEquals("HP cannot be greater than maximum HP", exception.getMessage());
   }
 
@@ -85,7 +116,7 @@ class CharacterTest {
     Exception exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Player("name", "description", 100, 100, -10, 5));
+            () -> new Player("player1", "name", "description", 100, 100, -10, 5));
     assertEquals("Base damage cannot be negative", exception.getMessage());
   }
 
@@ -94,14 +125,14 @@ class CharacterTest {
     Exception exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Player("name", "description", 100, 100, 10, -5));
+            () -> new Player("player1", "name", "description", 100, 100, 10, -5));
     assertEquals("Defense cannot be negative", exception.getMessage());
   }
 
   @Test
   void testZeroValuesAreValid() {
     // Zero HP is valid (character can start dead)
-    Player deadPlayer = new Player("Dead", "description", 0, 100, 0, 0);
+    Player deadPlayer = new Player("player1", "Dead", "description", 0, 100, 0, 0);
     assertNotNull(deadPlayer);
     assertEquals(0, deadPlayer.getHp());
     assertEquals(0, deadPlayer.getBaseDamage());
@@ -110,7 +141,7 @@ class CharacterTest {
 
   @Test
   void testHpEqualToMaxHpIsValid() {
-    Player player = new Player("name", "description", 100, 100, 10, 5);
+    Player player = new Player("player1", "name", "description", 100, 100, 10, 5);
     assertNotNull(player);
     assertEquals(100, player.getHp());
     assertEquals(100, player.getMaxHp());
