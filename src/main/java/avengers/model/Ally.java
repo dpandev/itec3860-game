@@ -17,14 +17,14 @@ public final class Ally extends Character {
    * @param remainingTurns Number of turns this ally will remain active.
    */
   public Ally(
-    String name,
-    String description,
-    int hp,
-    int maxHp,
-    int baseDamage,
-    int defense,
-    Element element,
-    int remainingTurns) {
+      String name,
+      String description,
+      int hp,
+      int maxHp,
+      int baseDamage,
+      int defense,
+      Element element,
+      int remainingTurns) {
     super(name, description, hp, maxHp, baseDamage, defense);
     this.element = element;
     this.remainingTurns = remainingTurns;

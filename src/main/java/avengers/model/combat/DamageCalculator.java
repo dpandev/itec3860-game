@@ -8,12 +8,12 @@ import java.util.Map;
 public final class DamageCalculator {
 
   private static final Map<Element, Map<Element, Double>> ELEMENT_MULTIPLIERS =
-    Map.of(
-      Element.FIRE, Map.of(Element.WATER, 0.5, Element.EARTH, 1.5),
-      Element.WATER, Map.of(Element.FIRE, 1.5, Element.EARTH, 0.5),
-      Element.EARTH, Map.of(Element.AIR, 1.5, Element.WATER, 1.5),
-      Element.AIR, Map.of(Element.EARTH, 0.5, Element.FIRE, 1.0),
-      Element.SHADOW, Map.of(Element.SHADOW, 0.8));
+      Map.of(
+          Element.FIRE, Map.of(Element.WATER, 0.5, Element.EARTH, 1.5),
+          Element.WATER, Map.of(Element.FIRE, 1.5, Element.EARTH, 0.5),
+          Element.EARTH, Map.of(Element.AIR, 1.5, Element.WATER, 1.5),
+          Element.AIR, Map.of(Element.EARTH, 0.5, Element.FIRE, 1.0),
+          Element.SHADOW, Map.of(Element.SHADOW, 0.8));
 
   private DamageCalculator() {}
 
@@ -28,11 +28,11 @@ public final class DamageCalculator {
    * @return The final damage value.
    */
   public static int calculateDamage(
-    int baseDamage,
-    Element attackerElement,
-    Element defenderElement,
-    Map<Element, Double> defenderResistances,
-    boolean isCritical) {
+      int baseDamage,
+      Element attackerElement,
+      Element defenderElement,
+      Map<Element, Double> defenderResistances,
+      boolean isCritical) {
 
     double damage = baseDamage;
 

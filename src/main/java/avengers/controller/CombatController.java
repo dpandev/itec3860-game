@@ -13,9 +13,7 @@ public final class CombatController {
   private CombatSession activeSession;
   private final Random random;
 
-  /**
-   * Constructor for CombatController.
-   */
+  /** Constructor for CombatController. */
   public CombatController() {
     this.random = new Random();
     this.activeSession = null;
@@ -79,8 +77,7 @@ public final class CombatController {
     }
 
     List<CombatSession.CombatEvent> events = activeSession.processPlayerAction(action);
-    List<String> messages =
-      events.stream().map(CombatSession.CombatEvent::getMessage).toList();
+    List<String> messages = events.stream().map(CombatSession.CombatEvent::getMessage).toList();
 
     // Clean up if combat ended
     if (activeSession.getState() == CombatState.ENDED) {
@@ -117,9 +114,7 @@ public final class CombatController {
     return executeAction(CombatAction.RUN);
   }
 
-  /**
-   * Ends the current combat session forcefully.
-   */
+  /** Ends the current combat session forcefully. */
   public void endCombat() {
     if (activeSession != null) {
       activeSession.end();

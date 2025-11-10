@@ -30,7 +30,7 @@ public abstract class Character {
    * @throws IllegalArgumentException if any validation fails
    */
   public Character(
-    String name, String description, int hp, int maxHp, int baseDamage, int defense) {
+      String name, String description, int hp, int maxHp, int baseDamage, int defense) {
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be null or empty");
     }
@@ -145,9 +145,8 @@ public abstract class Character {
   }
 
   /**
-   * Gets the elemental resistances for this character.
-   * Default implementation returns empty map (no resistances).
-   * Monsters override this to provide their resistance values.
+   * Gets the elemental resistances for this character. Default implementation returns empty map (no
+   * resistances). Monsters override this to provide their resistance values.
    *
    * @return Map of element to resistance values.
    */

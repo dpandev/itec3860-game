@@ -35,18 +35,14 @@ public final class CombatSession {
     this.lastFleeAttemptTime = 0;
   }
 
-  /**
-   * Starts the combat session.
-   */
+  /** Starts the combat session. */
   public void start() {
     if (state == CombatState.IDLE) {
       state = CombatState.ACTIVE;
     }
   }
 
-  /**
-   * Ends the combat session.
-   */
+  /** Ends the combat session. */
   public void end() {
     state = CombatState.ENDED;
   }
@@ -146,8 +142,8 @@ public final class CombatSession {
     boolean isCrit = random.nextDouble() < 0.15; // 15% crit chance
 
     int finalDamage =
-      DamageCalculator.calculateDamage(
-        damage, player.getElement(), monster.getElement(), monster.getResistances(), isCrit);
+        DamageCalculator.calculateDamage(
+            damage, player.getElement(), monster.getElement(), monster.getResistances(), isCrit);
 
     finalDamage = DamageCalculator.applyDefense(finalDamage, monster.getDefense());
 
@@ -156,14 +152,14 @@ public final class CombatSession {
 
     String critText = isCrit ? " (CRITICAL HIT!)" : "";
     events.add(
-      new CombatEvent(
-        player.getName()
-          + " attacks "
-          + monster.getName()
-          + " for "
-          + finalDamage
-          + " damage!"
-          + critText));
+        new CombatEvent(
+            player.getName()
+                + " attacks "
+                + monster.getName()
+                + " for "
+                + finalDamage
+                + " damage!"
+                + critText));
 
     if (monster.isDead()) {
       events.add(new CombatEvent(monster.getName() + " has been defeated!"));
@@ -240,8 +236,8 @@ public final class CombatSession {
         boolean isCrit = random.nextDouble() < 0.1;
 
         int finalDamage =
-          DamageCalculator.calculateDamage(
-            damage, ally.getElement(), monster.getElement(), monster.getResistances(), isCrit);
+            DamageCalculator.calculateDamage(
+                damage, ally.getElement(), monster.getElement(), monster.getResistances(), isCrit);
 
         finalDamage = DamageCalculator.applyDefense(finalDamage, monster.getDefense());
 
@@ -250,14 +246,14 @@ public final class CombatSession {
 
         String critText = isCrit ? " (CRITICAL!)" : "";
         events.add(
-          new CombatEvent(
-            ally.getName()
-              + " attacks "
-              + monster.getName()
-              + " for "
-              + finalDamage
-              + " damage!"
-              + critText));
+            new CombatEvent(
+                ally.getName()
+                    + " attacks "
+                    + monster.getName()
+                    + " for "
+                    + finalDamage
+                    + " damage!"
+                    + critText));
 
         ally.decrementTurns();
         if (ally.isExpired()) {
@@ -299,8 +295,8 @@ public final class CombatSession {
     boolean isCrit = random.nextDouble() < monster.getCritThreshold();
 
     int finalDamage =
-      DamageCalculator.calculateDamage(
-        damage, monster.getElement(), player.getElement(), player.getResistances(), isCrit);
+        DamageCalculator.calculateDamage(
+            damage, monster.getElement(), player.getElement(), player.getResistances(), isCrit);
 
     // Apply defense (doubled if defending)
     int effectiveDefense = playerDefending ? player.getDefense() * 2 : player.getDefense();
@@ -312,15 +308,15 @@ public final class CombatSession {
     String critText = isCrit ? " (CRITICAL HIT!)" : "";
     String defendText = playerDefending ? " (reduced by defense)" : "";
     events.add(
-      new CombatEvent(
-        monster.getName()
-          + " attacks "
-          + player.getName()
-          + " for "
-          + finalDamage
-          + " damage!"
-          + critText
-          + defendText));
+        new CombatEvent(
+            monster.getName()
+                + " attacks "
+                + player.getName()
+                + " for "
+                + finalDamage
+                + " damage!"
+                + critText
+                + defendText));
 
     if (player.isDead()) {
       events.add(new CombatEvent(player.getName() + " has fallen in combat!"));
@@ -344,12 +340,12 @@ public final class CombatSession {
       if (effect.getRemainingTurns() > 0) {
         effect.apply(character);
         events.add(
-          new CombatEvent(
-            character.getName()
-              + " takes "
-              + effect.getEffectAmount()
-              + " damage from "
-              + effect.getType()));
+            new CombatEvent(
+                character.getName()
+                    + " takes "
+                    + effect.getEffectAmount()
+                    + " damage from "
+                    + effect.getType()));
       }
     }
 
@@ -370,9 +366,7 @@ public final class CombatSession {
     return events;
   }
 
-  /**
-   * Inner class representing a combat event message.
-   */
+  /** Inner class representing a combat event message. */
   public static final class CombatEvent {
     private final String message;
 

@@ -26,15 +26,15 @@ public final class Monster extends Character {
    * @param critThreshold The critical hit threshold of the monster.
    */
   public Monster(
-    String name,
-    String description,
-    int hp,
-    int maxHp,
-    int baseDamage,
-    int defense,
-    BossType bossType,
-    boolean monarchClass,
-    double critThreshold) {
+      String name,
+      String description,
+      int hp,
+      int maxHp,
+      int baseDamage,
+      int defense,
+      BossType bossType,
+      boolean monarchClass,
+      double critThreshold) {
     super(name, description, hp, maxHp, baseDamage, defense);
     this.bossType = bossType;
     this.monarchClass = monarchClass;
