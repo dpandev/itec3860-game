@@ -1,5 +1,7 @@
 package avengers.model.combat;
 
+import java.util.Objects;
+
 /**
  * Represents an effect that can be applied during combat. Effects can be immediate (damage, heal,
  * stat boost) or apply status conditions.
@@ -39,7 +41,7 @@ public final class Effect {
   public Effect(EffectTiming timing, StatusType statusType, int statusDuration, int statusAmount) {
     this.kind = EffectKind.APPLY_STATUS;
     this.timing = timing;
-    this.value = 0;
+    this.value = statusAmount;
     this.statusType = statusType;
     this.statusDuration = statusDuration;
     this.statusAmount = statusAmount;
@@ -106,5 +108,41 @@ public final class Effect {
    */
   public boolean isStatusEffect() {
     return kind == EffectKind.APPLY_STATUS && statusType != null;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Effect effect = (Effect) obj;
+    return Double.compare(effect.value, value) == 0
+        && statusDuration == effect.statusDuration
+        && statusAmount == effect.statusAmount
+        && kind == effect.kind
+        && timing == effect.timing
+        && statusType == effect.statusType;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(kind, timing, value, statusType, statusDuration, statusAmount);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Effect{kind=").append(kind);
+    sb.append(", timing=").append(timing);
+    sb.append(", value=").append(value);
+    if (statusType != null) {
+      sb.append(", statusType=").append(statusType);
+      sb.append(", duration=").append(statusDuration);
+    }
+    sb.append("}");
+    return sb.toString();
   }
 }
