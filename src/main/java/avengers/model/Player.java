@@ -1,6 +1,6 @@
 package avengers.model;
 
-//  import avengers.model.item.Equipment;
+import avengers.model.item.Equipment;
 import avengers.model.item.Inventory;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /** Represents the player character in the game. */
 public final class Player extends Character {
   private final Inventory inventory;
-  //  private final Equipment equipment;
+  private final Equipment equipment;
   private String currentRoomId;
   private final List<Ally> allies;
 
@@ -27,7 +27,7 @@ public final class Player extends Character {
       String id, String name, String description, int hp, int maxHp, int baseDamage, int defense) {
     super(id, name, description, hp, maxHp, baseDamage, defense);
     this.inventory = new Inventory();
-    //    this.equipment = new Equipment();
+    this.equipment = new Equipment();
     this.currentRoomId = null;
     this.allies = new ArrayList<>();
   }
@@ -40,9 +40,9 @@ public final class Player extends Character {
     return inventory;
   }
 
-  //  public Equipment getEquipment() {
-  //    return equipment;
-  //  }
+  public Equipment getEquipment() {
+    return equipment;
+  }
 
   public List<Ally> getAllies() {
     return List.copyOf(allies);

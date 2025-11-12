@@ -15,3 +15,6 @@ out/
 # OS
 .DS_Store
 Thumbs.db
+
+# Save Files (player data - should not be committed)
+!saves/.gitkeep
