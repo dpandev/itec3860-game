@@ -65,24 +65,62 @@ public final class StatusInstance {
       case BURN:
       case POISON:
       case DROWN:
-        // Damage over time effects
         DamageSource source = new DamageSource(getElementForStatus(type), false);
         target.takeDamage(effectAmount, source);
         break;
       case FREEZE:
       case STUNNED:
-        // These would skip the character's turn (handled in combat logic)
         break;
-      case FEAR:
-        // Reduces damage output (handled in combat logic)
+      case DEFENSE_REDUCED:
         break;
-      case SLOW:
-        // Reduces action priority (handled in combat logic)
+      default:
+        // Unknown status type - no effect
         break;
     }
 
-    // Decrement remaining turns
     remainingTurns--;
+  }
+
+  /**
+   * Checks if this is a damage-over-time status effect.
+   *
+   * @return true if this status causes damage each turn.
+   */
+  public boolean isDamageOverTime() {
+    return type == StatusType.BLEED
+        || type == StatusType.BURN
+        || type == StatusType.POISON
+        || type == StatusType.DROWN;
+  }
+
+  /**
+   * Checks if this is a control effect that prevents actions.
+   *
+   * @return true if this status prevents the character from acting.
+   */
+  public boolean isControlEffect() {
+    return type == StatusType.FREEZE || type == StatusType.STUNNED;
+  }
+
+  /**
+   * Checks if this is a debuff that modifies stats.
+   *
+   * @return true if this status modifies character stats.
+   */
+  public boolean isDebuff() {
+    return type == StatusType.DEFENSE_REDUCED;
+  }
+
+  /**
+   * Gets the defense modifier from this status (if applicable).
+   *
+   * @return The defense multiplier (e.g., 0.8 for 20% reduction).
+   */
+  public double getDefenseModifier() {
+    if (type == StatusType.DEFENSE_REDUCED) {
+      return 1.0 - (effectAmount / 100.0);
+    }
+    return 1.0;
   }
 
   /**
