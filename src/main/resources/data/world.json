@@ -1,0 +1,365 @@
+{
+  "rooms": [
+    {
+      "id": "RM-01",
+      "name": "Hunters Guild Hall",
+      "description": "The bustling headquarters where hunters gather before raids. Wooden notice boards overflow with dungeon postings. Hunters brag loudly while sharpening weapons. The air reeks of mana and ambition.",
+      "exits": {
+        "NORTH": "RM-02",
+        "EAST": "RM-03"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-02",
+      "name": "Tutorial Dungeon Entrance",
+      "description": "A damp stone stairwell descends into shadow. Strange markings crawl across the walls, pulsing faint blue. The air is heavy — almost warning you not to enter.",
+      "exits": {
+        "SOUTH": "RM-01",
+        "NORTH": "RM-04"
+      },
+      "monsters": ["MON-01"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-03",
+      "name": "Dungeon Lobby",
+      "description": "A circular chamber lined with glowing crystals. Adventurers use this as a staging ground. The silence beyond the sealed doors chills the bones.",
+      "exits": {
+        "WEST": "RM-01",
+        "EAST": "RM-05"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-04",
+      "name": "Statue Chamber",
+      "description": "Gigantic godlike statues loom in eternal judgment. Their stone eyes follow your every move. The silence here is suffocating, broken only by the distant scrape of stone.",
+      "exits": {
+        "SOUTH": "RM-02",
+        "NORTH": "RM-06"
+      },
+      "monsters": ["MON-02"],
+      "items": [],
+      "puzzles": ["PUZ-01"]
+    },
+    {
+      "id": "RM-05",
+      "name": "Ruined City Street",
+      "description": "Shattered skyscrapers pierce the sky like jagged teeth. Cars lie rusting, abandoned mid-flight from disaster. Shadows dart across broken glass.",
+      "exits": {
+        "WEST": "RM-03",
+        "EAST": "RM-07"
+      },
+      "monsters": ["MON-05"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-06",
+      "name": "Double Dungeon Altar",
+      "description": "A massive altar engraved with runes. Dried blood stains the floor. The rules of survival are etched in stone: \"Worship the gods.\"",
+      "exits": {
+        "SOUTH": "RM-04",
+        "NORTH": "RM-08"
+      },
+      "monsters": ["MON-02"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-07",
+      "name": "Gate Plaza",
+      "description": "A glowing rift shimmers in the air. Hunters mill nervously nearby, checking gear before stepping into the unknown. Beyond the light is chaos.",
+      "exits": {
+        "WEST": "RM-05",
+        "EAST": "RM-09"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-08",
+      "name": "Cursed Statue Throne",
+      "description": "A towering statue sits upon a throne, holding a severed head. Its gaze demands obedience. The air hums with divine hostility.",
+      "exits": {
+        "SOUTH": "RM-06",
+        "NORTH": "RM-10"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-09",
+      "name": "Orc Encampment",
+      "description": "Fires burn in cracked barrels. The stench of roasted meat and unwashed bodies fills the night. Orcs snarl and argue, their crude weapons gleaming.",
+      "exits": {
+        "WEST": "RM-07",
+        "EAST": "RM-11"
+      },
+      "monsters": ["MON-03"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-10",
+      "name": "Fire Chamber",
+      "description": "A cavern of lava rivers and scorched stone. Pyros towers here, molten cracks glowing across his armor. He hurls fireballs at stepping stones, summons geysers, and turns the air into firestorms. Weakness: water. Hint: \"Only the endless flow quenches the flame...\"",
+      "exits": {
+        "SOUTH": "RM-08",
+        "NORTH": "RM-11"
+      },
+      "monsters": ["MON-06"],
+      "items": [],
+      "puzzles": ["PUZ-02"]
+    },
+    {
+      "id": "RM-11",
+      "name": "Water Cavern",
+      "description": "A shimmering cave of coral and flooding chambers. Neressa rises, cloaked in flowing water. She raises currents, drowning traps, and watery clones. Weakness: earth. Hint: \"Stone alone withstands the tide...\"",
+      "exits": {
+        "SOUTH": "RM-10",
+        "NORTH": "RM-12"
+      },
+      "monsters": ["MON-07"],
+      "items": [],
+      "puzzles": ["PUZ-03"]
+    },
+    {
+      "id": "RM-12",
+      "name": "Earth Fortress",
+      "description": "A titanic stone hall with shifting walls. Gravemaw stomps, creating earthquakes and stone spikes while boulders crash overhead. Weakness: wind. Hint: \"Only the wind wears away the mountain...\"",
+      "exits": {
+        "SOUTH": "RM-11",
+        "NORTH": "RM-13"
+      },
+      "monsters": ["MON-08"],
+      "items": [],
+      "puzzles": ["PUZ-04"]
+    },
+    {
+      "id": "RM-13",
+      "name": "Air Spire",
+      "description": "A tower of sky bridges and roaring winds. Zephyra floats above, summoning cyclones and lightning strikes, pushing hunters into the void. Weakness: fire. Hint: \"Flames rise to consume the sky once more...\"",
+      "exits": {
+        "SOUTH": "RM-12",
+        "NORTH": "RM-14"
+      },
+      "monsters": ["MON-09"],
+      "items": [],
+      "puzzles": ["PUZ-05"]
+    },
+    {
+      "id": "RM-14",
+      "name": "Demon Castle Foyer",
+      "description": "Immense gates open into a crimson-lit hall. Demonic runes glow on towering pillars. Every step feels like blasphemy.",
+      "exits": {
+        "SOUTH": "RM-13",
+        "NORTH": "RM-15"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-15",
+      "name": "Demon Castle Library",
+      "description": "Thousands of cursed tomes float mid-air, pages turning by themselves. Whispers seep into your mind, urging you to read forbidden knowledge.",
+      "exits": {
+        "SOUTH": "RM-14",
+        "NORTH": "RM-16"
+      },
+      "monsters": ["MON-10", "MON-11", "MON-13"],
+      "items": [],
+      "puzzles": ["PUZ-06"]
+    },
+    {
+      "id": "RM-16",
+      "name": "Demon Castle Throne Room",
+      "description": "A long red carpet leads to a massive black throne. Claws have shredded the walls. Demonic energy radiates like a heartbeat.",
+      "exits": {
+        "SOUTH": "RM-15",
+        "NORTH": "RM-17"
+      },
+      "monsters": ["MON-12", "MON-13"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-17",
+      "name": "Monarch's Chamber",
+      "description": "The oppressive presence of a Monarch fills the room. Cracks of black lightning scorch the marble floor. The air vibrates with raw dominion.",
+      "exits": {
+        "SOUTH": "RM-16",
+        "NORTH": "RM-18"
+      },
+      "monsters": ["MON-14"],
+      "items": [],
+      "puzzles": ["PUZ-11"]
+    },
+    {
+      "id": "RM-18",
+      "name": "Dimensional Rift",
+      "description": "A swirling vortex of space and time. Gravity bends oddly here. Your reflection flickers in the void, smiling back differently.",
+      "exits": {
+        "SOUTH": "RM-17",
+        "NORTH": "RM-19"
+      },
+      "monsters": ["MON-16"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-19",
+      "name": "Hunters Association Office",
+      "description": "Suits and uniforms bustle about, papers stacked high. Giant holographic maps of gates flicker overhead. This is the heart of strategy.",
+      "exits": {
+        "SOUTH": "RM-18",
+        "NORTH": "RM-20"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-20",
+      "name": "Eternal Battlefield",
+      "description": "Swords and shields from countless ages litter the field. Spirits of warriors wander aimlessly, reliving endless war.",
+      "exits": {
+        "SOUTH": "RM-19",
+        "NORTH": "RM-21"
+      },
+      "monsters": ["MON-15"],
+      "items": [],
+      "puzzles": ["PUZ-07"]
+    },
+    {
+      "id": "RM-21",
+      "name": "Hospital Ward",
+      "description": "Rows of hunters lie unconscious. Nurses rush between beds, mana stones glowing faintly in medical equipment. A sense of fragility lingers.",
+      "exits": {
+        "SOUTH": "RM-20",
+        "NORTH": "RM-22"
+      },
+      "monsters": ["MON-17"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-22",
+      "name": "Hunter Exam Arena",
+      "description": "Stone coliseum seats tower overhead. Spectators roar as new hunters prove themselves. Mana signatures burst like fireworks in the air.",
+      "exits": {
+        "SOUTH": "RM-21",
+        "NORTH": "RM-23"
+      },
+      "monsters": ["MON-18"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-23",
+      "name": "Dungeon Boss Chamber",
+      "description": "Bones crunch underfoot. A monstrous roar echoes. The boss lurks just beyond the shadows, its breath shaking the walls.",
+      "exits": {
+        "SOUTH": "RM-22",
+        "NORTH": "RM-24"
+      },
+      "monsters": ["MON-19"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-24",
+      "name": "Shadow Army Plains",
+      "description": "Rolling plains stretch endlessly. A black mist rises from the soil. The whispers of fallen shadows gather around you, waiting for command.",
+      "exits": {
+        "SOUTH": "RM-23",
+        "NORTH": "RM-25"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": ["PUZ-08"]
+    },
+    {
+      "id": "RM-25",
+      "name": "High Orc Fortress",
+      "description": "Heavy wooden gates bar the path. Drums thunder inside, announcing your arrival. The stench of sweat and iron fills the air.",
+      "exits": {
+        "SOUTH": "RM-24",
+        "NORTH": "RM-26"
+      },
+      "monsters": ["MON-04"],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-26",
+      "name": "Hunters' Cafeteria",
+      "description": "A surprisingly normal room. Hunters chat over coffee and ramen. Laughter briefly masks the dread of their next raid.",
+      "exits": {
+        "SOUTH": "RM-25",
+        "NORTH": "RM-27"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-27",
+      "name": "Blacksmith's Forge",
+      "description": "Sparks fly as weapons are reforged. The smell of molten metal and mana crystals fusing fills the room. Each strike resonates with power.",
+      "exits": {
+        "SOUTH": "RM-26",
+        "NORTH": "RM-28"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-28",
+      "name": "Monarch's Throne",
+      "description": "The throne of destruction towers, larger than life. The Monarch of Shadows gazes upon the battlefield with infinite weight.",
+      "exits": {
+        "SOUTH": "RM-27",
+        "NORTH": "RM-29"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": ["PUZ-09", "PUZ-12"]
+    },
+    {
+      "id": "RM-29",
+      "name": "Monarch's Throne of Darkness",
+      "description": "Darkness itself gathers like liquid. The shadows bow to you here. Every whisper feels like a promise of more power.",
+      "exits": {
+        "SOUTH": "RM-28",
+        "NORTH": "RM-30"
+      },
+      "monsters": [],
+      "items": [],
+      "puzzles": []
+    },
+    {
+      "id": "RM-30",
+      "name": "Final Gate",
+      "description": "A colossal rift glowing brighter than the sun. Beyond it lies the endgame — the fate of hunters, Monarchs, and the world itself.",
+      "exits": {
+        "SOUTH": "RM-29"
+      },
+      "monsters": ["MON-20"],
+      "items": [],
+      "puzzles": ["PUZ-10"]
+    }
+  ],
+  "startingRoomId": "RM-01"
+}
+

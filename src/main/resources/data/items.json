@@ -1,0 +1,197 @@
+{
+  "items": [
+    {
+      "id": "IT-01",
+      "name": "Minor Healing Potion",
+      "description": "A simple potion brewed from low-tier herbs. Restores small vitality.",
+      "category": "Consumable",
+      "effect": "+20 HP",
+      "specialEffect": "None"
+    },
+    {
+      "id": "IT-02",
+      "name": "Greater Healing Potion",
+      "description": "A stronger potion infused with mana crystals.",
+      "category": "Consumable",
+      "effect": "+50 HP",
+      "specialEffect": "None"
+    },
+    {
+      "id": "IT-03",
+      "name": "Orc Axe",
+      "description": "A crude axe dropped by Orc Warriors.",
+      "category": "Weapon",
+      "effect": "+25 Damage",
+      "specialEffect": "Increases critical hit chance slightly."
+    },
+    {
+      "id": "IT-04",
+      "name": "High Orc Club",
+      "description": "A massive club wielded by Orc Chiefs.",
+      "category": "Weapon",
+      "effect": "+40 Damage",
+      "specialEffect": "Reduces enemy defense slightly on hit."
+    },
+    {
+      "id": "IT-05",
+      "name": "Kasaka's Venom Fang",
+      "description": "A dagger carved from Kasaka's fangs.",
+      "category": "Weapon",
+      "effect": "+35 Damage",
+      "specialEffect": "Applies poison (5 dmg/turn for 3 turns)."
+    },
+    {
+      "id": "IT-06",
+      "name": "Fire Sigil",
+      "description": "A glowing sigil infused with Pyros' essence.",
+      "category": "Key Item",
+      "effect": "",
+      "specialEffect": "Required for PUZ-10 Final Gate Seal."
+    },
+    {
+      "id": "IT-07",
+      "name": "Water Sigil",
+      "description": "A sigil pulsing with Neressa's aquatic energy.",
+      "category": "Key Item",
+      "effect": "",
+      "specialEffect": "Required for PUZ-10 Final Gate Seal."
+    },
+    {
+      "id": "IT-08",
+      "name": "Earth Sigil",
+      "description": "A heavy stone sigil infused with Gravemaw's power.",
+      "category": "Key Item",
+      "effect": "",
+      "specialEffect": "Required for PUZ-10 Final Gate Seal."
+    },
+    {
+      "id": "IT-09",
+      "name": "Air Sigil",
+      "description": "A feathered sigil infused with Zephyra's storm essence.",
+      "category": "Key Item",
+      "effect": "",
+      "specialEffect": "Required for PUZ-10 Final Gate Seal."
+    },
+    {
+      "id": "IT-10",
+      "name": "Cerberus Fang",
+      "description": "One of Cerberus's fangs, crackling with infernal energy.",
+      "category": "Weapon",
+      "effect": "+60 Damage",
+      "specialEffect": "10% chance to cause \"Bleed\" (HP loss/turn)."
+    },
+    {
+      "id": "IT-11",
+      "name": "Baruka's Twin Blades",
+      "description": "Dual cursed blades that hum with dark energy.",
+      "category": "Weapon",
+      "effect": "+70 Damage",
+      "specialEffect": "Can strike twice in one turn."
+    },
+    {
+      "id": "IT-12",
+      "name": "Demon King's Crown",
+      "description": "A crown radiating demonic authority.",
+      "category": "Artifact",
+      "effect": "",
+      "specialEffect": "Boosts overall stats by 15%."
+    },
+    {
+      "id": "IT-13",
+      "name": "Lich's Staff",
+      "description": "A staff dripping with necrotic energy.",
+      "category": "Weapon",
+      "effect": "+80 Damage",
+      "specialEffect": "Summons 2 skeletons to assist in combat."
+    },
+    {
+      "id": "IT-14",
+      "name": "Architect's Core",
+      "description": "A crystalline shard of Kandiaru's code.",
+      "category": "Artifact",
+      "effect": "",
+      "specialEffect": "Grants access to hidden PUZ-11 (Architect's Test)."
+    },
+    {
+      "id": "IT-15",
+      "name": "Ant King's Carapace",
+      "description": "A hardened shell fragment from the Ant King.",
+      "category": "Armor",
+      "effect": "",
+      "specialEffect": "Reduces incoming damage by 20%."
+    },
+    {
+      "id": "IT-16",
+      "name": "Frost Sigil",
+      "description": "A frozen sigil of the Frost Monarch.",
+      "category": "Key Item",
+      "effect": "",
+      "specialEffect": "Unlocks frost abilities."
+    },
+    {
+      "id": "IT-17",
+      "name": "Dragon's Fang Sword",
+      "description": "A legendary blade forged from Antares' fang.",
+      "category": "Weapon",
+      "effect": "+150 Damage",
+      "specialEffect": "Deals bonus damage to Monarch-class enemies."
+    },
+    {
+      "id": "IT-18",
+      "name": "Shadow Monarch's Cloak",
+      "description": "A cloak forged from shadows themselves.",
+      "category": "Artifact",
+      "effect": "",
+      "specialEffect": "Boosts Shadow Army size by +20%."
+    },
+    {
+      "id": "IT-19",
+      "name": "Rusted Trial Sword",
+      "description": "A faintly glowing sword from PUZ-07.",
+      "category": "Key Item",
+      "effect": "+10 Damage",
+      "specialEffect": "Required to break Final Gate."
+    },
+    {
+      "id": "IT-20",
+      "name": "System Blessing",
+      "description": "A permanent buff gained from PUZ-11.",
+      "category": "Artifact",
+      "effect": "+50 Max HP",
+      "specialEffect": "Cannot be removed; permanently increases HP."
+    },
+    {
+      "id": "IT-21",
+      "name": "Hunter's Leather Armor",
+      "description": "Basic armor crafted for new hunters.",
+      "category": "Armor",
+      "effect": "",
+      "specialEffect": "Increases Max HP from 100 → 150."
+    },
+    {
+      "id": "IT-22",
+      "name": "Steel Plate Mail",
+      "description": "Heavy defensive armor dropped by High Orc Chief.",
+      "category": "Armor",
+      "effect": "",
+      "specialEffect": "Increases Max HP from 150 → 200."
+    },
+    {
+      "id": "IT-23",
+      "name": "Dragonbone Armor",
+      "description": "Forged from fallen dragon remains.",
+      "category": "Armor",
+      "effect": "",
+      "specialEffect": "Increases Max HP from 200 → 250. Also reduces fire damage by 10%."
+    },
+    {
+      "id": "IT-24",
+      "name": "Shadow Monarch's Armor (optional)",
+      "description": "Legendary armor imbued with shadow energy, endgame gear.",
+      "category": "Armor",
+      "effect": "",
+      "specialEffect": "Increases Max HP cap permanently to 300. Stacks with System Blessing."
+    }
+  ]
+}
+
