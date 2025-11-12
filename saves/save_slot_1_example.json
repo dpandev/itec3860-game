@@ -1,0 +1,34 @@
+{
+  "player": {
+    "id": "player_1",
+    "name": "Mr. Anderson",
+    "description": "A formidable opponent.",
+    "hp": 85,
+    "maxHp": 100,
+    "baseDamage": 25,
+    "defense": 15,
+    "element": "COSMIC",
+    "currentRoomId": "training_room",
+    "inventory": {
+      "items": [
+        "health_potion",
+        "iron_sword"
+      ],
+      "capacity": 20
+    },
+    "equipment": {
+      "weapon": "iron_sword",
+      "armor": null,
+      "artifact": null
+    },
+    "allies": []
+  },
+  "currentRoom": "training_room",
+  "visited": [
+    "start_room",
+    "training_room",
+    "armory"
+  ],
+  "timePlayedMs": 1800000
+}
+

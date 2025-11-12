@@ -18,6 +18,9 @@ repositories {
 }
 
 dependencies {
+    // Gson for JSON serialization
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     // JUnit 5 (Jupiter): API + Engine
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
