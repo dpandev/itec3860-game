@@ -1,4 +1,4 @@
-# itec3860-game
+# Solo Leveling - Text-Based Adventure Game
 
 ## UML Diagram
 ![UML Diagram](docs/images/Avengers%20UML%20Class%20Diagram.svg)
