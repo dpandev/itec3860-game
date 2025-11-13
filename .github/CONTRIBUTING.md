@@ -3,8 +3,8 @@
 Thanks for helping! Please read this before opening Issues or PRs.
 
 ## Branching & PRs
-- Branch from `dev`: `feature/<short-name>` or `fix/<short-name>`. Merge commits only.`
-- Keep PRs small and focused; squash merge.
+- Branch from `dev`: `feature/<short-name>` or `fix/<short-name>`. Merge commits only.
+- Keep PRs small and focused.
 - Link the related Issue and Milestone.
 
 ## Code style & quality

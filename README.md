@@ -1,5 +1,8 @@
 # itec3860-game
 
+## UML Diagram
+![UML Diagram](/docs/)
+
 ## Getting Started
 
 
@@ -95,6 +98,16 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
     `./gradlew clean check`
 - Tests only:
     `./gradlew test`
+- Run tests + generate coverage report:
+    `./gradlew test jacocoTestReport`
+- View coverage report:
+    Open `build/reports/jacoco/test/html/index.html` in a browser.
+- Run specific test class:
+    `./gradlew test --tests "com.example.MyTestClass"`
+- Run specific test method:
+    `./gradlew test --tests "com.example.MyTestClass.myTestMethod"`
+- Run the game:
+    `./gradlew run`
 
 ---
 
@@ -109,6 +122,7 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
 - [ ] Brief Javadoc comments included
 - [ ] Docs updated if behavior/commands changed (`/docs` and/or README)
 - [ ] No game data in views (MVC separation)
+- [ ] Linked issues / milestone (e.g., "Fixes #123")
 > To mark an item as completed/checked when filling out the PR, replace space between brackets with "x" `[x]`
 
 ---
@@ -133,21 +147,31 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
        ```bash
        git switch -c feat/<topic>   # or fix/<topic>
        ```
+       If creating a branch based on an issue, you can copy/paste the issue from github using the "create branch" button available on the issue page (but add `feat` / `chore` / `fix` / `etc.` before the copied text). Example:
+       ```bash
+       git switch -c feat/19-implement-core-game-loop
+        ```
     3. Commit small changes
        ```bash
-       git add -A
+       git add -A # adds all local changes
        git commit -m "feat: <what> <why>"
        ```
     4. Push and open PR → base=`dev`
        ```bash
-       git push -u origin HEAD
+       git push origin feat/19-implement-core-game-loop
        ```
     5. Keep your branch up to date using **merge**
        ```bash
        git fetch origin
        git merge origin/dev   # resolve conflicts, commit, push
        ```
-    6. After approval and green CI, click **Merge** in GitHub. Delete the branch.
+    6. After approval and green CI, click **Merge** in GitHub. Branch will automatically be deleted.
+
+    7. Then switch back to `dev` and pull latest changes:
+       ```bash
+       git switch dev
+       git pull origin dev
+       ```
 
 - Release flow
     1. Open PR `dev` → `main` when stable.
@@ -258,7 +282,7 @@ git push
 
 #### Releasing (tags trigger the release workflow)
 ```bash
-# Open a PR from dev -> main in GitHub, get approvals, merge (squash)
+# Open a PR from dev -> main in GitHub, get approvals, merge
 # After merging dev -> main
 git checkout main
 git pull
@@ -295,6 +319,10 @@ At the time of writing this, a baseline/skeleton "Scaffold only" exists (Pre-rel
     rm -rf build .gradle
     ./gradlew clean check
     ```
+- **Undo local changes:** `git checkout -- .` (warning: discards uncommitted changes)
+- **Delete local branch:** `git branch -D <branch-name>`
+- **Sync local branch with remote:** `git fetch origin` then `git reset --hard origin/<branch-name>` (warning: discards uncommitted changes)
+- **Undo last commit but keep changes staged:** `git reset --soft HEAD~1` (useful if you forgot to run `spotlessApply` before committing or want to change commit message)
 You can always reach out to team members for troubleshooting help and questions via our Discord server (any channel, will update this when appropriate/specific channels are completely set up).
 
 **Any and all questions/requests welcomed**.
@@ -312,6 +340,6 @@ You can always reach out to team members for troubleshooting help and questions 
 ## Expectations
 - Keep PRs small (easy to review)
 - Address PR review comments.
-- If you're blocked by something, ask for help early (label PR/Issue `status:blocked`)
+- If you're blocked by something, ask for help early (label PR/Issue `status:blocked`, add comments, ping on Discord).
 
 ---
