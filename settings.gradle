@@ -1,1 +1,5 @@
 rootProject.name = 'itec3860-game'
+
+// Single module with organized packages
+include 'game'
+

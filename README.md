@@ -1,7 +1,31 @@
-# itec3860-game
+# Solo Leveling - Text-Based Adventure Game
 
 ## UML Diagram
-![UML Diagram](/docs/)
+![UML Diagram](docs/)
+
+---
+
+### Project Structure
+```
+game (parent module)
+├── domain        - Core business entities and models
+│   ├── model     - Domain model classes
+│   └── util      - Utility classes and helpers
+├── service       - Business logic and application services
+└── client        - User interface and presentation layer
+    ├── command   - Command pattern implementations
+    ├── controller - Controllers for application flow
+    ├── runtime   - Runtime and game loop
+    └── view      - UI/View components
+```
+
+### Module Dependencies
+
+- **domain**: No dependencies on other game modules (foundation layer)
+- **service**: Depends on domain
+- **client**: Depends on service and domain
+
+---
 
 ## Getting Started
 
@@ -37,10 +61,10 @@ To auto-format your written code + build + test, run the following command in a 
 ---
 
 ## Daily Workflow
-1. Sync and branch from `dev`:
+1. Sync and branch from `development`:
     ```
-    git checkout dev
-    git pull origin dev
+    git checkout development
+    git pull origin development
     git checkout -b feature/<short-name>
     ```
 2. Code + commit (follow commit/branch conventions detailed [further below](#commits-branches-conventions)).
@@ -48,21 +72,21 @@ To auto-format your written code + build + test, run the following command in a 
     ```
     ./gradlew spotlessApply clean check
     ```
-4. Open a PR (Pull Request) → `dev`. Fill the PR template. Fix any CI failures.
+4. Open a PR (Pull Request) → `development`. Fill the PR template. Fix any CI failures.
    - `./gradlew spotlessApply`
    - `./gradlew clean check`
-5. Reviewer approves → merges to `dev`.
-> Maintainers will periodically raise a PR from `dev` → `main` for release/tags.
+5. Reviewer approves → merges to `development`.
+> Maintainers will periodically raise a PR from `development` → `main` for release/tags.
 ---
 
 ## Branch & PR rules
 
 - Branches:
   - `main` = always green, release-ready
-  - `dev` = integration branch
-  - `feature/<short-name>` from `dev`
+  - `development` = integration branch
+  - `feature/<short-name>` from `development`
 - PRs:
-    - Target `dev`
+    - Target `development`
     - Must pass CI (`spotlessCheck`, tests, Checkstyle)
     - Must be approved
     - Squash merge only
@@ -115,7 +139,7 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
 (what PR reviewers expect)
 
 > Also in tandem with PR template: `.github/workflows/PULL_REQUEST_TEMPLATE.md`
-- [ ] Branch from `dev`, PR to `dev`
+- [ ] Branch from `development`, PR to `development`
 - [ ] Ran `./gradlew spotlessApply` (auto-formatter)
 - [ ] `./gradlew clean check` passes locally
 - [ ] Tests added/updated for new behavior
@@ -131,14 +155,14 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
 
 - Branches
     - `main` – release-only, protected.
-    - `dev` – integration branch. All feature/fix PRs target `dev`.
+    - `development` – integration branch. All feature/fix PRs target `development`.
 
 - Merge policy
     - Use **Merge** commits. No rebase. No squash on protected branches.
     - Linear history is **not** required.
 
 - Daily flow
-    1. Sync `dev`
+    1. Sync `development`
        ```bash
        git switch dev
        git pull origin dev
@@ -156,7 +180,7 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
        git add -A # adds all local changes
        git commit -m "feat: <what> <why>"
        ```
-    4. Push and open PR → base=`dev`
+    4. Push and open PR → base=`development`
        ```bash
        git push origin feat/19-implement-core-game-loop
        ```
@@ -167,14 +191,14 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
        ```
     6. After approval and green CI, click **Merge** in GitHub. Branch will automatically be deleted.
 
-    7. Then switch back to `dev` and pull latest changes:
+    7. Then switch back to `development` and pull latest changes:
        ```bash
        git switch dev
        git pull origin dev
        ```
 
 - Release flow
-    1. Open PR `dev` → `main` when stable.
+    1. Open PR `development` → `main` when stable.
     2. Ensure CHANGELOG or Release Notes are updated.
     3. Click **Merge**. CI must pass.
 
@@ -227,8 +251,8 @@ git push
 
 ---
 
-#### Never open PRs from `main` → `dev`.
-- Edit PR → change base to `dev`
+#### Never open PRs from `main` → `development`.
+- Edit PR → change base to `development`
 
 <span id="commits-branches-conventions"></span>
 > **Conventional branch names** for non-feature changes → use: `chore`/`docs`/`fix`/`hot-fix` / `test` / `refactor` prefixes.
@@ -248,7 +272,7 @@ git push
 
 ## Quick workflows
 
-#### Fix a bug on `dev` (example):
+#### Fix a bug on `development` (example):
 ```bash
 # get the latest code from the dev branch
 git checkout dev && git pull
@@ -261,7 +285,7 @@ git push -u origin fix/trello-42-null-save
 # then open a PR to dev
 ```
 
-#### Hotfix on `main`, then back into `dev` (example):
+#### Hotfix on `main`, then back into `development` (example):
 > In most cases, bugs will be fixed on the dev branch using the previous workflow above.
 > The workflow below is for extreme cases only and will be coordinated by maintainers.
 ```bash
