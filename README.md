@@ -1,7 +1,37 @@
-# itec3860-game
+# Solo Leveling - Text-Based Adventure Game
 
 ## UML Diagram
-![UML Diagram](/docs/)
+![UML Diagram](docs/)
+
+---
+
+### Project Structure
+```
+game (parent module)
+├── domain        - Core business entities and models
+│   ├── model     - Domain model classes
+│   └── util      - Utility classes and helpers
+├── service       - Business logic and application services
+└── client        - User interface and presentation layer
+    ├── command   - Command pattern implementations
+    ├── controller - Controllers for application flow
+    ├── runtime   - Runtime and game loop
+    └── view      - UI/View components
+```
+
+### Module Dependencies
+
+- **domain**: No dependencies on other game modules (foundation layer)
+- **service**: Depends on domain
+- **client**: Depends on service and domain
+
+### Package Structure
+
+- Each module follows standard Java/Gradle structure:
+    - `src/main/java` - Production code
+    - `src/test/java` - Test code
+
+---
 
 ## Getting Started
 

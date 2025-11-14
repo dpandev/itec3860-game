@@ -2,7 +2,7 @@
   <configuration default="false" name="RunGame" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="temurin-21" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="MAIN_CLASS_NAME" value="avengers.core.Game" />
+    <option name="MAIN_CLASS_NAME" value="avengers.client.runtime.ClientApp" />
     <module name="itec3860-game.main" />
     <method v="2">
       <option name="Make" enabled="true" />
