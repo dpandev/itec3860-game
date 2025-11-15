@@ -3,6 +3,7 @@ package avengers.domain.utils;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Represents the saved data of a player's game state.
@@ -22,7 +23,7 @@ import java.util.Map;
  * @param savedAt the timestamp when the game was saved
  */
 public record SaveData(
-    String playerId,
+    UUID playerId,
     String playerName,
     String roomId,
     List<String> itemIds,

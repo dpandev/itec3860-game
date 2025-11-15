@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Represents a player in the game with attributes such as name, current room, inventory items,
  * puzzles solved, and rooms visited.
  */
 public final class Player extends Character {
-  private final String id;
+  private final UUID id;
   private String roomId;
   private final List<String> inventoryItems;
   private List<String> puzzlesSolved;
@@ -34,7 +35,7 @@ public final class Player extends Character {
    */
   public Player(String name, String startingRoomId) {
     super(name, 100);
-    this.id = "PLAYER-" + name.replaceAll("\\s+", "-").toUpperCase();
+    this.id = UUID.randomUUID();
     this.roomId = startingRoomId;
     this.allies = new ArrayList<String>();
     this.inventoryItems = new ArrayList<String>();
@@ -49,7 +50,7 @@ public final class Player extends Character {
    *
    * @return The player ID.
    */
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
