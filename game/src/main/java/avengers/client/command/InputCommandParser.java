@@ -35,6 +35,7 @@ public class InputCommandParser implements CommandParser {
     verbMap.put("help", Verb.HELP);
     verbMap.put("?", Verb.HELP);
     verbMap.put("map", Verb.MAP);
+    verbMap.put("explore", Verb.EXPLORE);
     verbMap.put("inspect", Verb.INSPECT);
     verbMap.put("go", Verb.GO);
     verbMap.put("pickup", Verb.PICKUP);
