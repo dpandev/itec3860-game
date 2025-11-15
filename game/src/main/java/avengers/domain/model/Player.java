@@ -10,6 +10,7 @@ import java.util.Map;
  * puzzles solved, and rooms visited.
  */
 public final class Player extends Character {
+  private final String id;
   private String roomId;
   private final List<String> inventoryItems;
   private List<String> puzzlesSolved;
@@ -33,6 +34,7 @@ public final class Player extends Character {
    */
   public Player(String name, String startingRoomId) {
     super(name, 100);
+    this.id = "PLAYER-" + name.replaceAll("\\s+", "-").toUpperCase();
     this.roomId = startingRoomId;
     this.allies = new ArrayList<String>();
     this.inventoryItems = new ArrayList<String>();
@@ -40,6 +42,15 @@ public final class Player extends Character {
     this.roomsVisited = new ArrayList<String>();
     increaseBaseAttack(10);
     increaseBaseDefense(0);
+  }
+
+  /**
+   * Gets the unique identifier of this player.
+   *
+   * @return The player ID.
+   */
+  public String getId() {
+    return id;
   }
 
   /**

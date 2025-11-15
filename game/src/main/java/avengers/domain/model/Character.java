@@ -1,10 +1,7 @@
 package avengers.domain.model;
 
-import java.util.UUID;
-
 /** Represents a character in the game with attributes. */
 public abstract class Character {
-  private final UUID id = UUID.randomUUID();
   private String name;
   private int maxHealth;
   private int currentHealth;
@@ -21,10 +18,6 @@ public abstract class Character {
     this.name = name;
     this.maxHealth = maxHealth;
     this.currentHealth = maxHealth;
-  }
-
-  public UUID getId() {
-    return id;
   }
 
   public String getName() {
