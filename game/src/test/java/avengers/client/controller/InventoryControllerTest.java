@@ -39,8 +39,8 @@ class InventoryControllerTest {
   }
 
   @Test
-  void testDoesNotSupportInteractVerb() {
-    assertFalse(controller.supports(Verb.INTERACT));
+  void testDoesNotSupportActivateVerb() {
+    assertFalse(controller.supports(Verb.ACTIVATE));
   }
 
   @Test

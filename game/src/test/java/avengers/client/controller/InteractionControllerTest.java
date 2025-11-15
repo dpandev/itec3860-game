@@ -29,8 +29,8 @@ class InteractionControllerTest {
   }
 
   @Test
-  void testSupportsInteractVerb() {
-    assertTrue(controller.supports(Verb.INTERACT));
+  void testSupportsActivateVerb() {
+    assertTrue(controller.supports(Verb.ACTIVATE));
   }
 
   @Test
@@ -50,7 +50,7 @@ class InteractionControllerTest {
 
   @Test
   void testHandleReturnsSuccess() {
-    CommandToken cmd = new CommandToken("interact", "object");
+    CommandToken cmd = new CommandToken("activate", "object");
 
     CommandResult result = controller.handle(cmd, context);
 
@@ -60,7 +60,7 @@ class InteractionControllerTest {
 
   @Test
   void testHandleReturnsCorrectMessage() {
-    CommandToken cmd = new CommandToken("interact", "door");
+    CommandToken cmd = new CommandToken("activate", "door");
 
     CommandResult result = controller.handle(cmd, context);
 

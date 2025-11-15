@@ -9,7 +9,7 @@ import avengers.service.CommandResult;
 public class InteractionController implements CommandController {
   @Override
   public boolean supports(Verb verb) {
-    return verb == Verb.INTERACT;
+    return verb == Verb.ACTIVATE;
   }
 
   @Override

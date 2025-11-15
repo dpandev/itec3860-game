@@ -34,8 +34,8 @@ class VerbCategoryTest {
   }
 
   @Test
-  void testOfWithInteract() {
-    assertEquals(VerbCategory.INTERACTION, VerbCategory.of(Verb.INTERACT));
+  void testOfWithActivate() {
+    assertEquals(VerbCategory.INTERACTION, VerbCategory.of(Verb.ACTIVATE));
   }
 
   @Test
