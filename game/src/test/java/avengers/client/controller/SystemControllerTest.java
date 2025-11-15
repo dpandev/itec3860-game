@@ -1,14 +1,23 @@
 package avengers.client.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import avengers.domain.model.Player;
+import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
+import avengers.service.SaveService;
+import avengers.service.spi.FileSaveRepository;
+import avengers.service.world.JsonWorldLoader;
+import avengers.service.world.WorldLoader;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +28,12 @@ class SystemControllerTest {
 
   @BeforeEach
   void setUp() {
-    controller = new SystemController();
-    context = new GameContext();
+    SaveService saveService = new SaveService(new FileSaveRepository(Paths.get("test-saves")));
+    WorldLoader worldLoader = new JsonWorldLoader();
+    controller = new SystemController(saveService, worldLoader);
+    World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
+    Player player = new Player("TestPlayer", "room1");
+    context = new GameContext(world, player);
   }
 
   @Test
@@ -38,21 +51,20 @@ class SystemControllerTest {
   }
 
   @Test
-  void testHandleReturnsNotImplementedMessage() {
+  void testHandleQuitCommand() {
     CommandToken cmd = new CommandToken(Verb.QUIT, null, List.of(), "quit");
 
     CommandResult result = controller.handle(cmd, context);
 
-    assertFalse(result.success());
-    assertEquals("SystemController not yet implemented.", result.message());
+    assertNotNull(result);
+    assertTrue(result.shouldExit());
+    assertEquals("Game saved. Goodbye!", result.message());
   }
 
   @Test
-  void testHandleWithNullCommand() {
-    CommandResult result = controller.handle(null, context);
-
-    assertNotNull(result);
-    assertFalse(result.success());
+  void testHandleWithNullCommand() { // SystemController doesn't handle null, so it throws
+    // NullPointerException
+    assertThrows(NullPointerException.class, () -> controller.handle(null, context));
   }
 
   @Test

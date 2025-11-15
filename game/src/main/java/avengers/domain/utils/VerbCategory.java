@@ -23,7 +23,7 @@ public enum VerbCategory {
       case INVENTORY, PICKUP, DROP, EQUIP, UNEQUIP, USE -> INVENTORY;
       case ACTIVATE, INSPECT, SOLVE, HINT -> INTERACTION;
       case ATTACK, DEFEND, IGNORE -> COMBAT;
-      case HELP, QUIT, SAVE, LOAD, UNKNOWN -> SYSTEM;
+      case HELP, QUIT, SAVE, LOAD, NEW_GAME, UNKNOWN -> SYSTEM;
     };
   }
 }

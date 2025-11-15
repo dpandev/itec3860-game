@@ -1,22 +1,57 @@
 package avengers.client.runtime;
 
-/** Example runtime/game loop class. Replace with actual game loop implementation. */
-public class GameLoop {
-  private boolean running;
+import avengers.client.command.CommandParser;
+import avengers.client.controller.GameController;
+import avengers.client.view.ConsoleView;
+import avengers.domain.utils.CommandResult;
+import avengers.domain.utils.CommandToken;
+import avengers.domain.utils.GameContext;
 
-  /** Starts the game loop. */
+/** Main game loop for handling user input and game progression. */
+public final class GameLoop {
+  private final ConsoleView view;
+  private final CommandParser parser;
+  private final GameController gameController;
+  private final GameContext ctx;
+
+  /** Constructor for GameLoop. */
+  public GameLoop(
+      ConsoleView view, CommandParser parser, GameController gameController, GameContext ctx) {
+    this.view = view;
+    this.parser = parser;
+    this.gameController = gameController;
+    this.ctx = ctx;
+  }
+
+  /** Starts the main game loop. */
   public void start() {
-    running = true;
-    System.out.println("Game loop started");
-  }
+    view.println("Welcome to Solo Leveling");
+    view.println("Type 'help' for commands, 'quit' to exit.");
+    view.println("");
 
-  /** Stops the game loop. */
-  public void stop() {
-    running = false;
-    System.out.println("Game loop stopped");
-  }
+    // show initial room desc
+    // here
 
-  public boolean isRunning() {
-    return running;
+    while (true) {
+      view.printf("> ");
+      String line;
+      try {
+        line = view.readLine();
+      } catch (Exception e) {
+        view.println("Error reading input. Exiting.");
+        return;
+      }
+
+      CommandToken cmd = parser.parse(line);
+      CommandResult result = gameController.handle(cmd, ctx);
+      if (result != null && !result.message().isBlank()) {
+        view.println(result.message());
+      }
+
+      // check if the command is for game exit/quit
+      if (result != null && result.shouldExit()) {
+        return;
+      }
+    }
   }
 }

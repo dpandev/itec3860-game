@@ -5,11 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import avengers.domain.model.Player;
+import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +24,9 @@ class InventoryControllerTest {
   @BeforeEach
   void setUp() {
     controller = new InventoryController();
-    context = new GameContext();
+    World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
+    Player player = new Player("TestPlayer", "room1");
+    context = new GameContext(world, player);
   }
 
   @Test
