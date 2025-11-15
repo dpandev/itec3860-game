@@ -1,13 +1,17 @@
 package avengers.client.controller;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
+import avengers.domain.utils.Verb;
 import avengers.domain.utils.VerbCategory;
-import avengers.service.CommandResult;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,13 +48,8 @@ class GameControllerTest {
   }
 
   @Test
-  void testHandleInput() {
-    assertDoesNotThrow(() -> controller.handleInput("move north"));
-  }
-
-  @Test
   void testHandleCommandToken() {
-    CommandToken cmd = new CommandToken("help", null);
+    CommandToken cmd = new CommandToken(Verb.HELP, null, List.of(), "help");
 
     CommandResult result = controller.handle(cmd, context);
 
@@ -62,11 +61,12 @@ class GameControllerTest {
     CommandResult result = controller.handle(null, context);
 
     assertNotNull(result);
+    assertFalse(result.success());
   }
 
   @Test
   void testHandleWithNullContext() {
-    CommandToken cmd = new CommandToken("test", "command");
+    CommandToken cmd = new CommandToken(Verb.HELP, null, List.of(), "help");
 
     CommandResult result = controller.handle(cmd, null);
 
@@ -74,12 +74,33 @@ class GameControllerTest {
   }
 
   @Test
-  void testHandleInputWithEmptyString() {
-    assertDoesNotThrow(() -> controller.handleInput(""));
+  void testHandleInventoryCommand() {
+    CommandToken cmd = new CommandToken(Verb.INVENTORY, null, List.of(), "inventory");
+
+    CommandResult result = controller.handle(cmd, context);
+
+    assertNotNull(result);
+    assertTrue(result.success());
   }
 
   @Test
-  void testHandleInputWithNull() {
-    assertDoesNotThrow(() -> controller.handleInput(null));
+  void testHandleUnknownCommand() {
+    CommandToken cmd = new CommandToken(Verb.UNKNOWN, null, List.of(), "dance");
+
+    CommandResult result = controller.handle(cmd, context);
+
+    assertNotNull(result);
+    assertFalse(result.success());
+  }
+
+  @Test
+  void testHandleActivateCommand() {
+    CommandToken cmd = new CommandToken(Verb.ACTIVATE, "lever", List.of("lever"), "activate lever");
+
+    CommandResult result = controller.handle(cmd, context);
+
+    assertNotNull(result);
+    assertTrue(result.success());
+    assertEquals("Interaction handled.", result.message());
   }
 }

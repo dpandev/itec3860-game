@@ -3,9 +3,11 @@ package avengers.client.controller;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
-import avengers.service.CommandResult;
+import avengers.domain.utils.Verb;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +29,7 @@ class MovementControllerTest {
 
   @Test
   void testHandleReturnsNull() {
-    CommandToken cmd = new CommandToken("go", "north");
+    CommandToken cmd = new CommandToken(Verb.GO, "north", List.of("north"), "go north");
 
     CommandResult result = controller.handle(cmd, context);
 
@@ -37,10 +39,10 @@ class MovementControllerTest {
 
   @Test
   void testHandleWithDifferentDirections() {
-    CommandToken cmdNorth = new CommandToken("go", "north");
-    CommandToken cmdSouth = new CommandToken("go", "south");
-    CommandToken cmdEast = new CommandToken("go", "east");
-    CommandToken cmdWest = new CommandToken("go", "west");
+    CommandToken cmdNorth = new CommandToken(Verb.GO, "north", List.of("north"), "go north");
+    CommandToken cmdSouth = new CommandToken(Verb.GO, "south", List.of("south"), "go south");
+    CommandToken cmdEast = new CommandToken(Verb.GO, "east", List.of("east"), "go east");
+    CommandToken cmdWest = new CommandToken(Verb.GO, "west", List.of("west"), "go west");
 
     // All currently return null (placeholder implementation)
     assertNull(controller.handle(cmdNorth, context));
@@ -59,7 +61,7 @@ class MovementControllerTest {
 
   @Test
   void testHandleWithNullContext() {
-    CommandToken cmd = new CommandToken("go", "up");
+    CommandToken cmd = new CommandToken(Verb.GO, "up", List.of("up"), "go up");
 
     CommandResult result = controller.handle(cmd, null);
 

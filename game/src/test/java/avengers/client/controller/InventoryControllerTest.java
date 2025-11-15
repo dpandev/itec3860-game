@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
-import avengers.service.CommandResult;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,8 +40,8 @@ class InventoryControllerTest {
   }
 
   @Test
-  void testDoesNotSupportInteractVerb() {
-    assertFalse(controller.supports(Verb.INTERACT));
+  void testDoesNotSupportActivateVerb() {
+    assertFalse(controller.supports(Verb.ACTIVATE));
   }
 
   @Test
@@ -50,7 +51,7 @@ class InventoryControllerTest {
 
   @Test
   void testHandleReturnsSuccess() {
-    CommandToken cmd = new CommandToken("inventory", null);
+    CommandToken cmd = new CommandToken(Verb.INVENTORY, null, List.of(), "inventory");
 
     CommandResult result = controller.handle(cmd, context);
 
@@ -60,7 +61,7 @@ class InventoryControllerTest {
 
   @Test
   void testHandleReturnsCorrectMessage() {
-    CommandToken cmd = new CommandToken("inventory", "");
+    CommandToken cmd = new CommandToken(Verb.INVENTORY, null, List.of(), "inventory");
 
     CommandResult result = controller.handle(cmd, context);
 

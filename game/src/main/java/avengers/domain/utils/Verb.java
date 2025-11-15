@@ -3,9 +3,24 @@ package avengers.domain.utils;
 /** Enumeration of possible command verbs. */
 public enum Verb {
   GO,
+  EXPLORE,
+  MAP,
   INVENTORY,
-  INTERACT,
+  PICKUP,
+  DROP,
+  EQUIP,
+  UNEQUIP,
+  USE,
+  INSPECT,
+  SOLVE,
+  HINT,
+  ACTIVATE,
+  ATTACK,
+  DEFEND,
+  IGNORE,
   HELP,
+  SAVE,
+  LOAD,
   QUIT,
   UNKNOWN
 }

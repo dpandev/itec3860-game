@@ -11,7 +11,7 @@ class VerbTest {
   void testVerbValues() {
     Verb[] verbs = Verb.values();
 
-    assertEquals(6, verbs.length);
+    assertEquals(21, verbs.length);
   }
 
   @Test
@@ -25,8 +25,8 @@ class VerbTest {
   }
 
   @Test
-  void testVerbInteract() {
-    assertEquals("INTERACT", Verb.INTERACT.name());
+  void testVerbActivate() {
+    assertEquals("ACTIVATE", Verb.ACTIVATE.name());
   }
 
   @Test
@@ -48,7 +48,7 @@ class VerbTest {
   void testValueOf() {
     assertEquals(Verb.GO, Verb.valueOf("GO"));
     assertEquals(Verb.INVENTORY, Verb.valueOf("INVENTORY"));
-    assertEquals(Verb.INTERACT, Verb.valueOf("INTERACT"));
+    assertEquals(Verb.ACTIVATE, Verb.valueOf("ACTIVATE"));
     assertEquals(Verb.HELP, Verb.valueOf("HELP"));
     assertEquals(Verb.QUIT, Verb.valueOf("QUIT"));
     assertEquals(Verb.UNKNOWN, Verb.valueOf("UNKNOWN"));

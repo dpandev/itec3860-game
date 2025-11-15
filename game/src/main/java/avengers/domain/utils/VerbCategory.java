@@ -19,10 +19,11 @@ public enum VerbCategory {
       return SYSTEM;
     }
     return switch (v) {
-      case GO -> MOVEMENT;
-      case INVENTORY -> INVENTORY;
-      case INTERACT -> INTERACTION;
-      case HELP, QUIT, UNKNOWN -> SYSTEM;
+      case GO, EXPLORE, MAP -> MOVEMENT;
+      case INVENTORY, PICKUP, DROP, EQUIP, UNEQUIP, USE -> INVENTORY;
+      case ACTIVATE, INSPECT, SOLVE, HINT -> INTERACTION;
+      case ATTACK, DEFEND, IGNORE -> COMBAT;
+      case HELP, QUIT, SAVE, LOAD, UNKNOWN -> SYSTEM;
     };
   }
 }

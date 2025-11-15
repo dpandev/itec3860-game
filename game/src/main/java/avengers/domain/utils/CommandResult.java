@@ -1,4 +1,4 @@
-package avengers.service;
+package avengers.domain.utils;
 
 /**
  * Represents the result of executing a command in the Adventure Time game.

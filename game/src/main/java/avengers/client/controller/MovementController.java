@@ -1,8 +1,8 @@
 package avengers.client.controller;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
-import avengers.service.CommandResult;
 
 /** Controller to handle movement-related commands such as GO. */
 public class MovementController implements CommandController {

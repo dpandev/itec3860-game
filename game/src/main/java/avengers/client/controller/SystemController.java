@@ -1,8 +1,8 @@
 package avengers.client.controller;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
-import avengers.service.CommandResult;
 
 /** Controller to handle system-related commands such as HELP and QUIT. */
 public class SystemController implements CommandController {
