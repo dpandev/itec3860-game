@@ -1,9 +1,9 @@
 package avengers.client.controller;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
-import avengers.service.CommandResult;
 
 /**
  * Interface for handling commands in the Avengers game. Implementations should specify which verbs
