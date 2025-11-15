@@ -1,6 +1,5 @@
 package avengers.client.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,6 +39,21 @@ class InventoryControllerTest {
   }
 
   @Test
+  void testSupportsPickupVerb() {
+    assertTrue(controller.supports(Verb.PICKUP));
+  }
+
+  @Test
+  void testSupportsDropVerb() {
+    assertTrue(controller.supports(Verb.DROP));
+  }
+
+  @Test
+  void testSupportsInspectVerb() {
+    assertTrue(controller.supports(Verb.INSPECT));
+  }
+
+  @Test
   void testDoesNotSupportGoVerb() {
     assertFalse(controller.supports(Verb.GO));
   }
@@ -47,11 +61,6 @@ class InventoryControllerTest {
   @Test
   void testDoesNotSupportActivateVerb() {
     assertFalse(controller.supports(Verb.ACTIVATE));
-  }
-
-  @Test
-  void testDoesNotSupportHelpVerb() {
-    assertFalse(controller.supports(Verb.HELP));
   }
 
   @Test
@@ -65,18 +74,45 @@ class InventoryControllerTest {
   }
 
   @Test
-  void testHandleReturnsCorrectMessage() {
+  void testHandleInventoryReturnsCorrectMessage() {
     CommandToken cmd = new CommandToken(Verb.INVENTORY, null, List.of(), "inventory");
 
     CommandResult result = controller.handle(cmd, context);
 
-    assertEquals("Inventory displayed.", result.message());
+    assertTrue(result.message().contains("INVENTORY"));
+    assertTrue(result.message().contains("Your inventory is empty"));
   }
 
   @Test
-  void testHandleWithNullCommand() {
-    CommandResult result = controller.handle(null, context);
+  void testHandlePickupWithoutArgs() {
+    CommandToken cmd = new CommandToken(Verb.PICKUP, null, List.of(), "pickup");
+
+    CommandResult result = controller.handle(cmd, context);
 
     assertNotNull(result);
+    assertFalse(result.success());
+    assertTrue(result.message().contains("What do you want to pick up?"));
+  }
+
+  @Test
+  void testHandleDropWithoutArgs() {
+    CommandToken cmd = new CommandToken(Verb.DROP, null, List.of(), "drop");
+
+    CommandResult result = controller.handle(cmd, context);
+
+    assertNotNull(result);
+    assertFalse(result.success());
+    assertTrue(result.message().contains("What do you want to drop?"));
+  }
+
+  @Test
+  void testHandleInspectWithoutArgs() {
+    CommandToken cmd = new CommandToken(Verb.INSPECT, null, List.of(), "inspect");
+
+    CommandResult result = controller.handle(cmd, context);
+
+    assertNotNull(result);
+    assertFalse(result.success());
+    assertTrue(result.message().contains("What do you want to inspect?"));
   }
 }
