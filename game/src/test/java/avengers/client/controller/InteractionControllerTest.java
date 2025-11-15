@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
-import avengers.service.CommandResult;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +51,8 @@ class InteractionControllerTest {
 
   @Test
   void testHandleReturnsSuccess() {
-    CommandToken cmd = new CommandToken("activate", "object");
+    CommandToken cmd =
+        new CommandToken(Verb.ACTIVATE, "object", List.of("object"), "activate object");
 
     CommandResult result = controller.handle(cmd, context);
 
@@ -60,7 +62,7 @@ class InteractionControllerTest {
 
   @Test
   void testHandleReturnsCorrectMessage() {
-    CommandToken cmd = new CommandToken("activate", "door");
+    CommandToken cmd = new CommandToken(Verb.ACTIVATE, "door", List.of("door"), "activate door");
 
     CommandResult result = controller.handle(cmd, context);
 

@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
-import avengers.service.CommandResult;
+import avengers.domain.utils.Verb;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +30,7 @@ class SystemControllerTest {
 
   @Test
   void testHandleReturnsResult() {
-    CommandToken cmd = new CommandToken("help", null);
+    CommandToken cmd = new CommandToken(Verb.HELP, null, List.of(), "help");
 
     CommandResult result = controller.handle(cmd, context);
 
@@ -37,7 +39,7 @@ class SystemControllerTest {
 
   @Test
   void testHandleReturnsNotImplementedMessage() {
-    CommandToken cmd = new CommandToken("quit", null);
+    CommandToken cmd = new CommandToken(Verb.QUIT, null, List.of(), "quit");
 
     CommandResult result = controller.handle(cmd, context);
 
@@ -55,7 +57,7 @@ class SystemControllerTest {
 
   @Test
   void testHandleWithNullContext() {
-    CommandToken cmd = new CommandToken("help", null);
+    CommandToken cmd = new CommandToken(Verb.HELP, null, List.of(), "help");
 
     CommandResult result = controller.handle(cmd, null);
 
