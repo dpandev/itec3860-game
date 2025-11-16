@@ -10,22 +10,21 @@ import org.junit.jupiter.api.Test;
 class RoomTest {
 
   @Test
-  void builder_validRoom_createsSuccessfully() {
-    Room room =
-        Room.builder()
-            .id("RM-01")
-            .name("Test Room")
-            .description("A test room for unit testing")
-            .exits(Map.of(Direction.NORTH, "RM-02"))
-            .itemIds(List.of("IT-01", "IT-02"))
-            .monsterIds(List.of("MON-01"))
-            .puzzleIds(List.of("PUZ-01"))
-            .build();
+  void constructor_validRoom_createsSuccessfully() {
+    Room room = new Room(
+        "RM-01",
+        "Test Room", 
+        "A test room for unit testing",
+        List.of("IT-01", "IT-02"),
+        List.of("MON-01"),
+        Map.of("north", "RM-02"),
+        List.of("PUZ-01"),
+        false);
 
     assertEquals("RM-01", room.getId());
     assertEquals("Test Room", room.getName());
     assertEquals("A test room for unit testing", room.getDescription());
-    assertEquals(Map.of(Direction.NORTH, "RM-02"), room.getExits());
+    assertEquals(Map.of("north", "RM-02"), room.getExits());
     assertEquals(List.of("IT-01", "IT-02"), room.getItemIds());
     assertEquals(List.of("MON-01"), room.getMonsterIds());
     assertEquals(List.of("PUZ-01"), room.getPuzzleIds());

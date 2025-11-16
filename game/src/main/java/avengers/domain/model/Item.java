@@ -14,8 +14,6 @@ public final class Item {
   private final String category;
   private final String effect;
   private final String specialEffect;
-  private final boolean isKeyItem;
-  private final boolean isRemovable;
 
   /**
    * Constructs a new Item with the specified properties.
@@ -35,16 +33,16 @@ public final class Item {
       String category,
       String effect,
       String specialEffect) {
-    if (id == null || id.isBlank()) {
-      throw new IllegalArgumentException("Item id cannot be null or blank");
+    if (id == null || id.trim().isEmpty()) {
+      throw new IllegalArgumentException("Item ID cannot be null or blank");
     }
-    if (name == null || name.isBlank()) {
+    if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Item name cannot be null or blank");
     }
-    if (description == null || description.isBlank()) {
-      throw new IllegalArgumentException("Item description cannot be null or blank");
+    if (description == null) {
+      throw new IllegalArgumentException("Item description cannot be null");
     }
-    if (category == null || category.isBlank()) {
+    if (category == null || category.trim().isEmpty()) {
       throw new IllegalArgumentException("Item category cannot be null or blank");
     }
     if (name.length() > 100) {
@@ -60,71 +58,98 @@ public final class Item {
     this.category = category;
     this.effect = effect != null ? effect : "";
     this.specialEffect = specialEffect != null ? specialEffect : "";
-
-    // Determine if this is a key item based on category
-    this.isKeyItem = "Key Item".equals(category);
-
-    // Determine if this item can be removed
-    // Key Items and System Blessing (IT-20) cannot be removed
-    this.isRemovable =
-        !isKeyItem
-            && !"IT-20".equals(id)
-            && (specialEffect == null
-                || !specialEffect.toLowerCase().contains("cannot be removed"));
   }
 
   /**
    * Gets the unique identifier of this item.
    *
-   * @return the item ID
+   * @return the item's ID
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Gets the display name of this item.
+   * Gets the name of this item.
    *
-   * @return the item name
+   * @return the item's name
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Gets the description of this item.
+   * Gets the description of the item.
    *
-   * @return the item description
+   * @return the item's description
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Gets the category of this item.
+   * Gets the category of the item.
    *
-   * @return the item category
+   * @return the item's category
    */
   public String getCategory() {
     return category;
   }
 
   /**
-   * Gets the mechanical effect of this item.
+   * Gets the primary effect of the item.
    *
-   * @return the item effect
+   * @return the item's effect
    */
   public String getEffect() {
     return effect;
   }
 
   /**
-   * Gets any special effects or restrictions of this item.
+   * Gets the special effect of the item.
    *
-   * @return the special effect description
+   * @return the item's special effect
    */
   public String getSpecialEffect() {
     return specialEffect;
+  }
+
+  /**
+   * Checks if the item has any effect.
+   *
+   * @return true if the item has a non-empty effect, false otherwise
+   */
+  public boolean hasEffect() {
+    return effect != null && !effect.trim().isEmpty();
+  }
+
+  /**
+   * Checks if the item has any special effect.
+   *
+   * @return true if the item has a non-empty special effect, false otherwise
+   */
+  public boolean hasSpecialEffect() {
+    return specialEffect != null && !specialEffect.trim().isEmpty();
+  }
+
+  /**
+   * Checks if the item is equippable based on its category.
+   *
+   * @return true if the item can be equipped, false otherwise
+   */
+  public boolean isEquippable() {
+    return "Weapon".equalsIgnoreCase(category)
+        || "Armor".equalsIgnoreCase(category)
+        || "Artifact".equalsIgnoreCase(category);
+  }
+
+  /**
+   * Checks if the item is consumable based on its category.
+   *
+   * @return true if the item is consumable, false otherwise
+   */
+  public boolean isConsumable() {
+    return "Consumable".equalsIgnoreCase(category);
   }
 
   /**
@@ -133,16 +158,26 @@ public final class Item {
    * @return true if this is a key item, false otherwise
    */
   public boolean isKeyItem() {
-    return isKeyItem;
+    return "Key Item".equalsIgnoreCase(category);
   }
 
   /**
-   * Checks if this item can be removed from the player's inventory.
+   * Checks if this item can be removed from the player's inventory. Key items and artifacts with
+   * permanent effects cannot be removed.
    *
    * @return true if the item can be removed, false otherwise
    */
   public boolean isRemovable() {
-    return isRemovable;
+    // Key items cannot be removed
+    if (isKeyItem()) {
+      return false;
+    }
+    // Artifacts with "Cannot be removed" or "permanently" in special effect cannot be removed
+    if ("Artifact".equalsIgnoreCase(category) && specialEffect != null) {
+      String lowerSpecial = specialEffect.toLowerCase();
+      return !lowerSpecial.contains("cannot be removed") && !lowerSpecial.contains("permanently");
+    }
+    return true;
   }
 
   @Override

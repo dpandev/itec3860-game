@@ -1,268 +1,258 @@
 package avengers.domain.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Represents an immutable room in the game world.
- *
- * <p>Rooms are locations that players can visit, containing exits to other rooms, items to collect,
- * monsters to fight, and puzzles to solve. Each room has a unique identifier and descriptive
- * information.
- */
+/** Represents a room in the game world with items, monsters, and navigation connections. */
 public final class Room {
   private final String id;
   private final String name;
   private final String description;
-  private final Map<Direction, String> exits;
-  private final List<String> monsterIds;
   private final List<String> itemIds;
+  private final List<String> monsterIds;
+  private final Map<String, String> exits;
   private final List<String> puzzleIds;
+  private final boolean isVisited;
 
   /**
-   * Private constructor used by the Builder.
+   * Constructs a Room with the specified properties.
    *
-   * @param builder the builder containing room data
+   * @param id the unique identifier for the room
+   * @param name the name of the room
+   * @param description the description of the room
+   * @param itemIds list of item IDs present in the room
+   * @param monsterIds list of monster IDs present in the room
+   * @param exits map of direction to room ID for navigation
+   * @param puzzleIds list of puzzle IDs in the room
+   * @param isVisited whether the room has been visited before
    */
-  private Room(Builder builder) {
-    if (builder.id == null || builder.id.isBlank()) {
-      throw new IllegalArgumentException("Room id cannot be null or blank");
+  public Room(
+      String id,
+      String name,
+      String description,
+      List<String> itemIds,
+      List<String> monsterIds,
+      Map<String, String> exits,
+      List<String> puzzleIds,
+      boolean isVisited) {
+    if (id == null || id.trim().isEmpty()) {
+      throw new IllegalArgumentException("Room ID cannot be null or blank");
     }
-    if (builder.name == null || builder.name.isBlank()) {
+    if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Room name cannot be null or blank");
     }
-    if (builder.description == null || builder.description.isBlank()) {
-      throw new IllegalArgumentException("Room description cannot be null or blank");
-    }
-    if (builder.name.length() > 100) {
-      throw new IllegalArgumentException("Room name cannot exceed 100 characters");
-    }
-    if (builder.description.length() > 500) {
-      throw new IllegalArgumentException("Room description cannot exceed 500 characters");
-    }
 
-    this.id = builder.id;
-    this.name = builder.name;
-    this.description = builder.description;
-    this.exits = Map.copyOf(builder.exits);
-    this.monsterIds = List.copyOf(builder.monsterIds);
-    this.itemIds = List.copyOf(builder.itemIds);
-    this.puzzleIds = List.copyOf(builder.puzzleIds);
-  }
-
-  /**
-   * Creates a new Builder for constructing Room instances.
-   *
-   * @return a new Room.Builder
-   */
-  public static Builder builder() {
-    return new Builder();
+    this.id = id;
+    this.name = name;
+    this.description = description != null ? description : "";
+    this.itemIds = new ArrayList<>(itemIds != null ? itemIds : new ArrayList<>());
+    this.monsterIds = new ArrayList<>(monsterIds != null ? monsterIds : new ArrayList<>());
+    this.exits = exits;
+    this.puzzleIds = new ArrayList<>(puzzleIds != null ? puzzleIds : new ArrayList<>());
+    this.isVisited = isVisited;
   }
 
   /**
    * Gets the unique identifier of this room.
    *
-   * @return the room ID
+   * @return the room's ID
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Gets the display name of this room.
+   * Gets the name of this room.
    *
-   * @return the room name
+   * @return the room's name
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Gets the description of this room.
+   * Gets the description of the room.
    *
-   * @return the room description
+   * @return the room's description
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Gets the exits from this room to other rooms.
+   * Gets the list of item IDs in the room.
    *
-   * @return an immutable map of direction to room ID
+   * @return a copy of the item IDs list
    */
-  public Map<Direction, String> getExits() {
+  public List<String> getItemIds() {
+    return new ArrayList<>(itemIds);
+  }
+
+  /**
+   * Gets the list of monster IDs in the room.
+   *
+   * @return a copy of the monster IDs list
+   */
+  public List<String> getMonsterIds() {
+    return new ArrayList<>(monsterIds);
+  }
+
+  /**
+   * Gets the exits map for navigation.
+   *
+   * @return the exits map
+   */
+  public Map<String, String> getExits() {
     return exits;
   }
 
   /**
-   * Gets the IDs of monsters in this room.
+   * Gets the list of puzzle IDs in the room.
    *
-   * @return an immutable list of monster IDs
-   */
-  public List<String> getMonsterIds() {
-    return monsterIds;
-  }
-
-  /**
-   * Gets the IDs of items in this room.
-   *
-   * @return an immutable list of item IDs
-   */
-  public List<String> getItemIds() {
-    return itemIds;
-  }
-
-  /**
-   * Gets the IDs of puzzles in this room.
-   *
-   * @return an immutable list of puzzle IDs
+   * @return a copy of the puzzle IDs list
    */
   public List<String> getPuzzleIds() {
-    return puzzleIds;
+    return new ArrayList<>(puzzleIds);
   }
 
   /**
-   * Checks if this room has an exit in the specified direction.
+   * Checks if the room has been visited.
+   *
+   * @return true if the room has been visited, false otherwise
+   */
+  public boolean isVisited() {
+    return isVisited;
+  }
+
+  /**
+   * Adds an item to the room.
+   *
+   * @param itemId the ID of the item to add
+   * @return true if the item was added, false if it was already present
+   */
+  public boolean addItem(String itemId) {
+    if (!itemIds.contains(itemId)) {
+      return itemIds.add(itemId);
+    }
+    return false;
+  }
+
+  /**
+   * Removes an item from the room.
+   *
+   * @param itemId the ID of the item to remove
+   * @return true if the item was removed, false if it wasn't present
+   */
+  public boolean removeItem(String itemId) {
+    return itemIds.remove(itemId);
+  }
+
+  /**
+   * Checks if the room contains a specific item.
+   *
+   * @param itemId the ID of the item to check
+   * @return true if the item is in the room, false otherwise
+   */
+  public boolean hasItem(String itemId) {
+    return itemIds.contains(itemId);
+  }
+
+  /**
+   * Adds a monster to the room.
+   *
+   * @param monsterId the ID of the monster to add
+   * @return true if the monster was added, false if it was already present
+   */
+  public boolean addMonster(String monsterId) {
+    if (!monsterIds.contains(monsterId)) {
+      return monsterIds.add(monsterId);
+    }
+    return false;
+  }
+
+  /**
+   * Removes a monster from the room.
+   *
+   * @param monsterId the ID of the monster to remove
+   * @return true if the monster was removed, false if it wasn't present
+   */
+  public boolean removeMonster(String monsterId) {
+    return monsterIds.remove(monsterId);
+  }
+
+  /**
+   * Checks if the room contains a specific monster.
+   *
+   * @param monsterId the ID of the monster to check
+   * @return true if the monster is in the room, false otherwise
+   */
+  public boolean hasMonster(String monsterId) {
+    return monsterIds.contains(monsterId);
+  }
+
+  /**
+   * Checks if the room has any items.
+   *
+   * @return true if the room has items, false otherwise
+   */
+  public boolean hasItems() {
+    return !itemIds.isEmpty();
+  }
+
+  /**
+   * Checks if the room has any monsters.
+   *
+   * @return true if the room has monsters, false otherwise
+   */
+  public boolean hasMonsters() {
+    return !monsterIds.isEmpty();
+  }
+
+  /**
+   * Gets the number of items in the room.
+   *
+   * @return the count of items
+   */
+  public int getItemCount() {
+    return itemIds.size();
+  }
+
+  /**
+   * Gets the number of monsters in the room.
+   *
+   * @return the count of monsters
+   */
+  public int getMonsterCount() {
+    return monsterIds.size();
+  }
+
+  /**
+   * Checks if the room has an exit in the specified direction.
    *
    * @param direction the direction to check
-   * @return true if an exit exists in that direction, false otherwise
+   * @return true if there's an exit in that direction, false otherwise
    */
   public boolean hasExit(Direction direction) {
-    return exits.containsKey(direction);
+    return exits != null && exits.containsKey(direction.toString().toLowerCase());
   }
 
   /**
-   * Gets the room ID that this room connects to in the specified direction.
+   * Gets the room ID for the exit in the specified direction.
    *
    * @param direction the direction to check
-   * @return the room ID, or null if no exit exists in that direction
+   * @return the room ID for that direction, or null if no exit exists
    */
   public String getExitRoomId(Direction direction) {
-    return exits.get(direction);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    if (exits == null) {
+      return null;
     }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    Room room = (Room) obj;
-    return id.equals(room.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return id.hashCode();
+    return exits.get(direction.toString().toLowerCase());
   }
 
   @Override
   public String toString() {
     return String.format(
-        "Room{id='%s', name='%s', exits=%d, items=%d, monsters=%d, puzzles=%d}",
-        id, name, exits.size(), itemIds.size(), monsterIds.size(), puzzleIds.size());
-  }
-
-  /** Builder class for constructing Room instances. */
-  public static final class Builder {
-    private String id;
-    private String name;
-    private String description;
-    private Map<Direction, String> exits = Map.of();
-    private List<String> monsterIds = List.of();
-    private List<String> itemIds = List.of();
-    private List<String> puzzleIds = List.of();
-
-    private Builder() {}
-
-    /**
-     * Sets the room ID.
-     *
-     * @param id the room ID
-     * @return this builder
-     */
-    public Builder id(String id) {
-      this.id = id;
-      return this;
-    }
-
-    /**
-     * Sets the room name.
-     *
-     * @param name the room name
-     * @return this builder
-     */
-    public Builder name(String name) {
-      this.name = name;
-      return this;
-    }
-
-    /**
-     * Sets the room description.
-     *
-     * @param description the room description
-     * @return this builder
-     */
-    public Builder description(String description) {
-      this.description = description;
-      return this;
-    }
-
-    /**
-     * Sets the exits from this room.
-     *
-     * @param exits map of direction to room ID
-     * @return this builder
-     */
-    public Builder exits(Map<Direction, String> exits) {
-      this.exits = exits != null ? exits : Map.of();
-      return this;
-    }
-
-    /**
-     * Sets the monster IDs in this room.
-     *
-     * @param monsterIds list of monster IDs
-     * @return this builder
-     */
-    public Builder monsterIds(List<String> monsterIds) {
-      this.monsterIds = monsterIds != null ? monsterIds : List.of();
-      return this;
-    }
-
-    /**
-     * Sets the item IDs in this room.
-     *
-     * @param itemIds list of item IDs
-     * @return this builder
-     */
-    public Builder itemIds(List<String> itemIds) {
-      this.itemIds = itemIds != null ? itemIds : List.of();
-      return this;
-    }
-
-    /**
-     * Sets the puzzle IDs in this room.
-     *
-     * @param puzzleIds list of puzzle IDs
-     * @return this builder
-     */
-    public Builder puzzleIds(List<String> puzzleIds) {
-      this.puzzleIds = puzzleIds != null ? puzzleIds : List.of();
-      return this;
-    }
-
-    /**
-     * Builds the Room instance.
-     *
-     * @return a new immutable Room
-     * @throws IllegalArgumentException if any required field is invalid
-     */
-    public Room build() {
-      return new Room(this);
-    }
+        "%s - Items: %d, Monsters: %d", getName(), getItemCount(), getMonsterCount());
   }
 }
