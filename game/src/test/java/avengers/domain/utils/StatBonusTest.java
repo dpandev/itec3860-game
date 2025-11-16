@@ -159,4 +159,43 @@ class StatBonusTest {
 
     assertEquals(15, bonus.getAttackBonus());
   }
+
+  @Test
+  void testStatAliases() {
+    // Test Damage -> Attack alias
+    StatBonus damageBonus = StatBonus.parseEffect("+25 Damage");
+    assertEquals(25, damageBonus.getAttackBonus());
+
+    // Test Defence -> Defense alias
+    StatBonus defenceBonus = StatBonus.parseEffect("+10 Defence");
+    assertEquals(10, defenceBonus.getDefenseBonus());
+
+    // Test Health -> HP alias
+    StatBonus healthBonus = StatBonus.parseEffect("+30 Health");
+    assertEquals(30, healthBonus.getHealthBonus());
+
+    // Test mixed aliases
+    StatBonus mixedBonus = StatBonus.parseEffect("+15 Damage, +8 Defence, +25 Health");
+    assertEquals(15, mixedBonus.getAttackBonus());
+    assertEquals(8, mixedBonus.getDefenseBonus());
+    assertEquals(25, mixedBonus.getHealthBonus());
+  }
+
+  @Test
+  void testPercentageBonuses() {
+    // Test single percentage bonus
+    StatBonus percentBonus = StatBonus.parseEffect("+15% all stats");
+    assertEquals(15.0, percentBonus.getPercentageBonus("all stats"), 0.01);
+
+    // Test mixed flat and percentage bonuses
+    StatBonus mixedBonus = StatBonus.parseEffect("+10 Attack, +15% all stats, +5 Defense");
+    assertEquals(10, mixedBonus.getAttackBonus());
+    assertEquals(5, mixedBonus.getDefenseBonus());
+    assertEquals(15.0, mixedBonus.getPercentageBonus("all stats"), 0.01);
+
+    // Test multiple percentage bonuses
+    StatBonus multiPercent = StatBonus.parseEffect("+10% Attack, +5% Defense");
+    assertEquals(10.0, multiPercent.getPercentageBonus("Attack"), 0.01);
+    assertEquals(5.0, multiPercent.getPercentageBonus("Defense"), 0.01);
+  }
 }

@@ -6,18 +6,31 @@ import java.util.Map;
 /**
  * Utility class for parsing and managing stat bonuses from item effects.
  *
- * <p>Supports parsing effects in the format: "+10 Attack, +5 Defense, +20 HP"
+ * <p>Supports parsing effects in the format: "+10 Attack, +5 Defense, +20 HP, +15% all stats"
  */
 public final class StatBonus {
   private final Map<String, Integer> bonuses;
+  private final Map<String, Double> percentageBonuses;
 
   /**
-   * Constructs a StatBonus with the given bonuses map.
+   * Constructs a StatBonus with the given bonuses maps.
+   *
+   * @param bonuses map of stat names to flat bonus values
+   * @param percentageBonuses map of stat names to percentage bonus values
+   */
+  public StatBonus(Map<String, Integer> bonuses, Map<String, Double> percentageBonuses) {
+    this.bonuses = new HashMap<>(bonuses);
+    this.percentageBonuses = new HashMap<>(percentageBonuses);
+  }
+
+  /**
+   * Constructs a StatBonus with only flat bonuses.
    *
    * @param bonuses map of stat names to bonus values
    */
   public StatBonus(Map<String, Integer> bonuses) {
     this.bonuses = new HashMap<>(bonuses);
+    this.percentageBonuses = new HashMap<>();
   }
 
   /**
@@ -29,9 +42,10 @@ public final class StatBonus {
    */
   public static StatBonus parseEffect(String effectString) {
     Map<String, Integer> bonuses = new HashMap<>();
+    Map<String, Double> percentageBonuses = new HashMap<>();
 
     if (effectString == null || effectString.trim().isEmpty()) {
-      return new StatBonus(bonuses);
+      return new StatBonus(bonuses, percentageBonuses);
     }
 
     String[] effects = effectString.split(",");
@@ -41,22 +55,54 @@ public final class StatBonus {
         continue;
       }
 
-      // Parse format: "+10 Attack" or "-5 Defense"
+      // Parse format: "+10 Attack", "-5 Defense", or "+15% all stats"
       String[] parts = effect.split("\\s+", 2);
       if (parts.length != 2) {
         throw new IllegalArgumentException("Invalid effect format: " + effect);
       }
 
       try {
-        int value = Integer.parseInt(parts[0]);
-        String statName = parts[1];
-        bonuses.put(statName, bonuses.getOrDefault(statName, 0) + value);
+        String valueStr = parts[0];
+        String statName = normalizeStatName(parts[1]);
+
+        // Validate that value starts with + or -
+        if (!valueStr.startsWith("+") && !valueStr.startsWith("-")) {
+          throw new IllegalArgumentException("Effect value must start with + or -: " + effect);
+        }
+
+        if (valueStr.endsWith("%")) {
+          // Handle percentage bonus
+          double percentage = Double.parseDouble(valueStr.substring(0, valueStr.length() - 1));
+          percentageBonuses.put(
+              statName, percentageBonuses.getOrDefault(statName, 0.0) + percentage);
+        } else {
+          // Handle flat bonus
+          int value = Integer.parseInt(valueStr);
+          bonuses.put(statName, bonuses.getOrDefault(statName, 0) + value);
+        }
       } catch (NumberFormatException e) {
         throw new IllegalArgumentException("Invalid number in effect: " + effect, e);
       }
     }
 
-    return new StatBonus(bonuses);
+    return new StatBonus(bonuses, percentageBonuses);
+  }
+
+  /**
+   * Normalizes stat names to handle aliases and ensure consistency.
+   *
+   * @param statName the original stat name
+   * @return the normalized stat name
+   */
+  private static String normalizeStatName(String statName) {
+    return switch (statName.toLowerCase()) {
+      case "damage" -> "Attack";
+      case "attack" -> "Attack";
+      case "defense", "defence" -> "Defense";
+      case "hp", "health" -> "HP";
+      case "all stats", "all" -> "all stats";
+      default -> statName; // Keep original case for unknown stats
+    };
   }
 
   /**
@@ -97,7 +143,17 @@ public final class StatBonus {
   }
 
   /**
-   * Gets all bonuses as a map.
+   * Gets the percentage bonus for a specific stat.
+   *
+   * @param statName the name of the stat (case-sensitive)
+   * @return the percentage bonus value, or 0.0 if no bonus exists for this stat
+   */
+  public double getPercentageBonus(String statName) {
+    return percentageBonuses.getOrDefault(statName, 0.0);
+  }
+
+  /**
+   * Gets all flat bonuses as a map.
    *
    * @return copy of the bonuses map
    */
@@ -106,12 +162,21 @@ public final class StatBonus {
   }
 
   /**
+   * Gets all percentage bonuses as a map.
+   *
+   * @return copy of the percentage bonuses map
+   */
+  public Map<String, Double> getAllPercentageBonuses() {
+    return new HashMap<>(percentageBonuses);
+  }
+
+  /**
    * Checks if this StatBonus has any bonuses.
    *
    * @return true if there are any bonuses, false otherwise
    */
   public boolean hasBonuses() {
-    return !bonuses.isEmpty();
+    return !bonuses.isEmpty() || !percentageBonuses.isEmpty();
   }
 
   @Override

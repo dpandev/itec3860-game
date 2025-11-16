@@ -32,6 +32,8 @@ public class InventoryController implements CommandController {
       case PICKUP -> handlePickup(cmd, ctx);
       case DROP -> handleDrop(cmd, ctx);
       case INSPECT -> handleInspect(cmd, ctx);
+      case EQUIP -> handleEquip(cmd, ctx);
+      case UNEQUIP -> handleUnequip(cmd, ctx);
       default -> CommandResult.fail("Unsupported inventory command: " + cmd.verb());
     };
   }
@@ -82,5 +84,37 @@ public class InventoryController implements CommandController {
 
     String targetName = String.join(" ", cmd.args());
     return inventoryService.inspectTarget(ctx, targetName);
+  }
+
+  /**
+   * Handles the EQUIP command.
+   *
+   * @param cmd the command token
+   * @param ctx the game context
+   * @return the result of the equip operation
+   */
+  private CommandResult handleEquip(CommandToken cmd, GameContext ctx) {
+    if (cmd.args().isEmpty()) {
+      return CommandResult.fail("What do you want to equip? Usage: equip <item name>");
+    }
+
+    String itemName = String.join(" ", cmd.args());
+    return inventoryService.equipItem(ctx, itemName);
+  }
+
+  /**
+   * Handles the UNEQUIP command.
+   *
+   * @param cmd the command token
+   * @param ctx the game context
+   * @return the result of the unequip operation
+   */
+  private CommandResult handleUnequip(CommandToken cmd, GameContext ctx) {
+    if (cmd.args().isEmpty()) {
+      return CommandResult.fail("What do you want to unequip? Usage: unequip <slot name>");
+    }
+
+    String slotName = String.join(" ", cmd.args());
+    return inventoryService.unequipItem(ctx, slotName);
   }
 }

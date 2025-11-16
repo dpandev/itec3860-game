@@ -21,7 +21,7 @@
       "name": "Orc Axe",
       "description": "A crude axe dropped by Orc Warriors.",
       "category": "Weapon",
-      "effect": "+25 Damage",
+      "effect": "+25 Attack",
       "specialEffect": "Increases critical hit chance slightly."
     },
     {
@@ -29,7 +29,7 @@
       "name": "High Orc Club",
       "description": "A massive club wielded by Orc Chiefs.",
       "category": "Weapon",
-      "effect": "+40 Damage",
+      "effect": "+40 Attack",
       "specialEffect": "Reduces enemy defense slightly on hit."
     },
     {
@@ -37,7 +37,7 @@
       "name": "Kasaka's Venom Fang",
       "description": "A dagger carved from Kasaka's fangs.",
       "category": "Weapon",
-      "effect": "+35 Damage",
+      "effect": "+35 Attack",
       "specialEffect": "Applies poison (5 dmg/turn for 3 turns)."
     },
     {
@@ -77,7 +77,7 @@
       "name": "Cerberus Fang",
       "description": "One of Cerberus's fangs, crackling with infernal energy.",
       "category": "Weapon",
-      "effect": "+60 Damage",
+      "effect": "+60 Attack",
       "specialEffect": "10% chance to cause \"Bleed\" (HP loss/turn)."
     },
     {
@@ -85,7 +85,7 @@
       "name": "Baruka's Twin Blades",
       "description": "Dual cursed blades that hum with dark energy.",
       "category": "Weapon",
-      "effect": "+70 Damage",
+      "effect": "+70 Attack",
       "specialEffect": "Can strike twice in one turn."
     },
     {
@@ -101,7 +101,7 @@
       "name": "Lich's Staff",
       "description": "A staff dripping with necrotic energy.",
       "category": "Weapon",
-      "effect": "+80 Damage",
+      "effect": "+80 Attack",
       "specialEffect": "Summons 2 skeletons to assist in combat."
     },
     {
@@ -117,7 +117,7 @@
       "name": "Ant King's Carapace",
       "description": "A hardened shell fragment from the Ant King.",
       "category": "Armor",
-      "effect": "",
+      "effect": "+20 Defense",
       "specialEffect": "Reduces incoming damage by 20%."
     },
     {
@@ -133,7 +133,7 @@
       "name": "Dragon's Fang Sword",
       "description": "A legendary blade forged from Antares' fang.",
       "category": "Weapon",
-      "effect": "+150 Damage",
+      "effect": "+150 Attack",
       "specialEffect": "Deals bonus damage to Monarch-class enemies."
     },
     {
@@ -149,7 +149,7 @@
       "name": "Rusted Trial Sword",
       "description": "A faintly glowing sword from PUZ-07.",
       "category": "Key Item",
-      "effect": "+10 Damage",
+      "effect": "+10 Attack",
       "specialEffect": "Required to break Final Gate."
     },
     {
@@ -165,7 +165,7 @@
       "name": "Hunter's Leather Armor",
       "description": "Basic armor crafted for new hunters.",
       "category": "Armor",
-      "effect": "",
+      "effect": "+50 HP",
       "specialEffect": "Increases Max HP from 100 → 150."
     },
     {
@@ -173,7 +173,7 @@
       "name": "Steel Plate Mail",
       "description": "Heavy defensive armor dropped by High Orc Chief.",
       "category": "Armor",
-      "effect": "",
+      "effect": "+50 HP",
       "specialEffect": "Increases Max HP from 150 → 200."
     },
     {
@@ -181,7 +181,7 @@
       "name": "Dragonbone Armor",
       "description": "Forged from fallen dragon remains.",
       "category": "Armor",
-      "effect": "",
+      "effect": "+50 HP",
       "specialEffect": "Increases Max HP from 200 → 250. Also reduces fire damage by 10%."
     },
     {
@@ -189,7 +189,7 @@
       "name": "Shadow Monarch's Armor (optional)",
       "description": "Legendary armor imbued with shadow energy, endgame gear.",
       "category": "Armor",
-      "effect": "",
+      "effect": "+100 HP",
       "specialEffect": "Increases Max HP cap permanently to 300. Stacks with System Blessing."
     }
   ]
