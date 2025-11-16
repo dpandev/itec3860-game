@@ -8,7 +8,7 @@ import avengers.domain.model.Player;
 import avengers.domain.model.World;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.VerbCategory;
-import avengers.service.*;
+import avengers.service.SaveService;
 import avengers.service.spi.FileSaveRepository;
 import avengers.service.world.JsonWorldLoader;
 import avengers.service.world.WorldLoader;
@@ -32,15 +32,12 @@ public class ClientApp {
     String savesPath = System.getProperty("saves.dir", "saves");
     var saveDirectory = Path.of(savesPath).toAbsolutePath();
     SaveService saveService = new SaveService(new FileSaveRepository(saveDirectory));
-    InteractionService interactionService = new DefaultInteractionService();
-    ExplorationService explorationService = new DefaultExplorationService(interactionService);
-    CombatService combatService = new DefaultCombatService();
 
     // init controllers here
-    CommandController movementController = new MovementController(explorationService);
+    CommandController movementController = new MovementController();
     CommandController inventoryController = new InventoryController();
-    CommandController interactionController = new InteractionController(interactionService);
-    CommandController combatController = new CombatController(combatService);
+    CommandController interactionController = new InteractionController();
+    CommandController combatController = new CombatController();
     CommandController systemController = new SystemController(saveService, loader);
 
     // init game controller (main controller)
@@ -54,12 +51,6 @@ public class ClientApp {
                 VerbCategory.SYSTEM, systemController),
             systemController // fallback
             );
-
-    // Show initial room description
-    view.println("Welcome to Solo Leveling");
-    view.println("Type 'help' for commands, 'quit' to exit.");
-    view.println("");
-    view.println(explorationService.describeCurrentRoom(ctx));
 
     // init and start game loop
     GameLoop gameLoop = new GameLoop(view, parser, gameController, ctx);

@@ -1,6 +1,7 @@
 package avengers.client.controller;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import avengers.domain.model.Player;
 import avengers.domain.model.World;
@@ -8,10 +9,6 @@ import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
-import avengers.service.DefaultExplorationService;
-import avengers.service.DefaultInteractionService;
-import avengers.service.ExplorationService;
-import avengers.service.InteractionService;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,18 +18,10 @@ class MovementControllerTest {
 
   private MovementController controller;
   private GameContext context;
-  private ExplorationService explorationService;
 
   @BeforeEach
   void setUp() {
-    // Create services
-    InteractionService interactionService = new DefaultInteractionService();
-    explorationService = new DefaultExplorationService(interactionService);
-
-    // Create controller with service
-    controller = new MovementController(explorationService);
-
-    // Create test world and context
+    controller = new MovementController();
     World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
     Player player = new Player("TestPlayer", "room1");
     context = new GameContext(world, player);
@@ -49,8 +38,8 @@ class MovementControllerTest {
 
     CommandResult result = controller.handle(cmd, context);
 
-    // Now returns a proper result instead of null
-    assertNotNull(result);
+    // Currently returns null as it's a placeholder
+    assertNull(result);
   }
 
   @Test
@@ -60,19 +49,19 @@ class MovementControllerTest {
     CommandToken cmdEast = new CommandToken(Verb.GO, "east", List.of("east"), "go east");
     CommandToken cmdWest = new CommandToken(Verb.GO, "west", List.of("west"), "go west");
 
-    // All should return proper results (failures since test world has no exits)
-    assertNotNull(controller.handle(cmdNorth, context));
-    assertNotNull(controller.handle(cmdSouth, context));
-    assertNotNull(controller.handle(cmdEast, context));
-    assertNotNull(controller.handle(cmdWest, context));
+    // All currently return null (placeholder implementation)
+    assertNull(controller.handle(cmdNorth, context));
+    assertNull(controller.handle(cmdSouth, context));
+    assertNull(controller.handle(cmdEast, context));
+    assertNull(controller.handle(cmdWest, context));
   }
 
   @Test
   void testHandleWithNullCommand() {
     CommandResult result = controller.handle(null, context);
 
-    // Should handle gracefully
-    assertNotNull(result);
+    // Should handle gracefully (currently returns null)
+    assertNull(result);
   }
 
   @Test
@@ -81,7 +70,7 @@ class MovementControllerTest {
 
     CommandResult result = controller.handle(cmd, null);
 
-    // Should handle gracefully
-    assertNotNull(result);
+    // Should handle gracefully (currently returns null)
+    assertNull(result);
   }
 }
