@@ -103,7 +103,7 @@ public class DefaultMapService implements MapService {
       if (currentRoom == null) {
         continue;
       }
-      
+
       MapLayout.RoomPosition currentPos = layout.getRoomPosition(currentRoomId);
       if (currentPos == null) {
         continue;
@@ -321,7 +321,8 @@ public class DefaultMapService implements MapService {
     }
 
     boolean isPositionOccupied(int x, int y) {
-      return roomPositions.values().stream().anyMatch(pos -> pos.xCoordinate == x && pos.yCoordinate == y);
+      return roomPositions.values().stream()
+          .anyMatch(pos -> pos.xCoordinate == x && pos.yCoordinate == y);
     }
 
     boolean isRoomVisited(String roomId) {
