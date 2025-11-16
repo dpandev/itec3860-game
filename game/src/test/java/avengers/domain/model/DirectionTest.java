@@ -53,5 +53,7 @@ class DirectionTest {
     assertThrows(IllegalArgumentException.class, () -> Direction.fromString("INVALID"));
     assertThrows(IllegalArgumentException.class, () -> Direction.fromString("UP"));
     assertThrows(IllegalArgumentException.class, () -> Direction.fromString("DOWN"));
+    assertThrows(IllegalArgumentException.class, () -> Direction.fromString("NORTHEAST"));
+    assertThrows(IllegalArgumentException.class, () -> Direction.fromString("LEFT"));
   }
 }
