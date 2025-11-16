@@ -22,9 +22,8 @@ public final class Player extends Character {
   /** Enum representing different equipment slots for the player. */
   public enum EquipmentSlot {
     WEAPON,
-    HELMET,
     ARMOR,
-    OTHER // its an additional slot for equipped items like IT-13, see SRS or game data
+    ARTIFACT
   }
 
   /**

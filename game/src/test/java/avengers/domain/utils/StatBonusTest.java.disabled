@@ -1,0 +1,162 @@
+package avengers.domain.utils;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+
+/** Unit tests for StatBonus class. */
+class StatBonusTest {
+
+  @Test
+  void testParseEffect_singleEffect() {
+    StatBonus bonus = StatBonus.parseEffect("+10 Attack");
+
+    assertEquals(10, bonus.getAttackBonus());
+    assertEquals(0, bonus.getDefenseBonus());
+    assertEquals(0, bonus.getHealthBonus());
+  }
+
+  @Test
+  void testParseEffect_multipleEffects() {
+    StatBonus bonus = StatBonus.parseEffect("+10 Attack, +5 Defense, +20 HP");
+
+    assertEquals(10, bonus.getAttackBonus());
+    assertEquals(5, bonus.getDefenseBonus());
+    assertEquals(20, bonus.getHealthBonus());
+  }
+
+  @Test
+  void testParseEffect_negativeEffects() {
+    StatBonus bonus = StatBonus.parseEffect("-5 Attack, +10 Defense");
+
+    assertEquals(-5, bonus.getAttackBonus());
+    assertEquals(10, bonus.getDefenseBonus());
+    assertEquals(0, bonus.getHealthBonus());
+  }
+
+  @Test
+  void testParseEffect_healthVariations() {
+    StatBonus bonus1 = StatBonus.parseEffect("+20 HP");
+    StatBonus bonus2 = StatBonus.parseEffect("+15 Health");
+    StatBonus bonus3 = StatBonus.parseEffect("+10 HP, +5 Health");
+
+    assertEquals(20, bonus1.getHealthBonus());
+    assertEquals(15, bonus2.getHealthBonus());
+    assertEquals(15, bonus3.getHealthBonus()); // 10 + 5
+  }
+
+  @Test
+  void testParseEffect_emptyString() {
+    StatBonus bonus = StatBonus.parseEffect("");
+
+    assertEquals(0, bonus.getAttackBonus());
+    assertEquals(0, bonus.getDefenseBonus());
+    assertEquals(0, bonus.getHealthBonus());
+    assertFalse(bonus.hasBonuses());
+  }
+
+  @Test
+  void testParseEffect_nullString() {
+    StatBonus bonus = StatBonus.parseEffect(null);
+
+    assertEquals(0, bonus.getAttackBonus());
+    assertEquals(0, bonus.getDefenseBonus());
+    assertEquals(0, bonus.getHealthBonus());
+    assertFalse(bonus.hasBonuses());
+  }
+
+  @Test
+  void testParseEffect_whitespaceHandling() {
+    StatBonus bonus = StatBonus.parseEffect("  +10 Attack  ,  +5 Defense  ");
+
+    assertEquals(10, bonus.getAttackBonus());
+    assertEquals(5, bonus.getDefenseBonus());
+  }
+
+  @Test
+  void testParseEffect_invalidFormat() {
+    assertThrows(IllegalArgumentException.class, () -> StatBonus.parseEffect("invalid"));
+    assertThrows(
+        IllegalArgumentException.class, () -> StatBonus.parseEffect("10 Attack")); // missing +
+    assertThrows(
+        IllegalArgumentException.class, () -> StatBonus.parseEffect("+Attack 10")); // reversed
+  }
+
+  @Test
+  void testParseEffect_invalidNumber() {
+    assertThrows(IllegalArgumentException.class, () -> StatBonus.parseEffect("+abc Attack"));
+  }
+
+  @Test
+  void testGetBonus_customStat() {
+    StatBonus bonus = StatBonus.parseEffect("+15 Magic, +8 Speed");
+
+    assertEquals(15, bonus.getBonus("Magic"));
+    assertEquals(8, bonus.getBonus("Speed"));
+    assertEquals(0, bonus.getBonus("NonExistent"));
+  }
+
+  @Test
+  void testGetAllBonuses() {
+    StatBonus bonus = StatBonus.parseEffect("+10 Attack, +5 Defense");
+    Map<String, Integer> allBonuses = bonus.getAllBonuses();
+
+    assertEquals(2, allBonuses.size());
+    assertEquals(10, allBonuses.get("Attack"));
+    assertEquals(5, allBonuses.get("Defense"));
+  }
+
+  @Test
+  void testHasBonuses() {
+    StatBonus emptyBonus = StatBonus.parseEffect("");
+    StatBonus nonEmptyBonus = StatBonus.parseEffect("+10 Attack");
+
+    assertFalse(emptyBonus.hasBonuses());
+    assertTrue(nonEmptyBonus.hasBonuses());
+  }
+
+  @Test
+  void testToString() {
+    StatBonus bonus1 = StatBonus.parseEffect("+10 Attack, +5 Defense");
+    StatBonus bonus2 = StatBonus.parseEffect("-3 Attack");
+    StatBonus emptyBonus = StatBonus.parseEffect("");
+
+    String str1 = bonus1.toString();
+    assertTrue(str1.contains("+10 Attack"));
+    assertTrue(str1.contains("+5 Defense"));
+
+    String str2 = bonus2.toString();
+    assertTrue(str2.contains("-3 Attack"));
+
+    assertEquals("No bonuses", emptyBonus.toString());
+  }
+
+  @Test
+  void testEquals() {
+    StatBonus bonus1 = StatBonus.parseEffect("+10 Attack, +5 Defense");
+    StatBonus bonus2 = StatBonus.parseEffect("+10 Attack, +5 Defense");
+    StatBonus bonus3 = StatBonus.parseEffect("+15 Attack");
+
+    assertEquals(bonus1, bonus2);
+    assertNotEquals(bonus1, bonus3);
+    assertNotEquals(bonus1, null);
+    assertNotEquals(bonus1, "not a StatBonus");
+  }
+
+  @Test
+  void testHashCode() {
+    StatBonus bonus1 = StatBonus.parseEffect("+10 Attack, +5 Defense");
+    StatBonus bonus2 = StatBonus.parseEffect("+10 Attack, +5 Defense");
+
+    assertEquals(bonus1.hashCode(), bonus2.hashCode());
+  }
+
+  @Test
+  void testAccumulatingEffects() {
+    // Test that multiple effects with same stat name accumulate
+    StatBonus bonus = StatBonus.parseEffect("+10 Attack, +5 Attack");
+
+    assertEquals(15, bonus.getAttackBonus());
+  }
+}

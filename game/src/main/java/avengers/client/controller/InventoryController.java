@@ -20,7 +20,9 @@ public class InventoryController implements CommandController {
     return verb == Verb.INVENTORY
         || verb == Verb.PICKUP
         || verb == Verb.DROP
-        || verb == Verb.INSPECT;
+        || verb == Verb.INSPECT
+        || verb == Verb.EQUIP
+        || verb == Verb.UNEQUIP;
   }
 
   @Override
