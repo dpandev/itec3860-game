@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 /** Represents a room in the game world with items, monsters, and navigation connections. */
-public final class Room extends Entity {
+public final class Room {
+  private final String id;
+  private final String name;
   private final String description;
   private final List<String> itemIds;
   private final List<String> monsterIds;
@@ -34,13 +36,39 @@ public final class Room extends Entity {
       Map<String, String> exits,
       List<String> puzzleIds,
       boolean isVisited) {
-    super(id, name);
-    this.description = description;
+    if (id == null || id.trim().isEmpty()) {
+      throw new IllegalArgumentException("Room ID cannot be null or blank");
+    }
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("Room name cannot be null or blank");
+    }
+    
+    this.id = id;
+    this.name = name;
+    this.description = description != null ? description : "";
     this.itemIds = new ArrayList<>(itemIds != null ? itemIds : new ArrayList<>());
     this.monsterIds = new ArrayList<>(monsterIds != null ? monsterIds : new ArrayList<>());
     this.exits = exits;
     this.puzzleIds = new ArrayList<>(puzzleIds != null ? puzzleIds : new ArrayList<>());
     this.isVisited = isVisited;
+  }
+
+  /**
+   * Gets the unique identifier of this room.
+   *
+   * @return the room's ID
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * Gets the name of this room.
+   *
+   * @return the room's name
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -197,6 +225,29 @@ public final class Room extends Entity {
    */
   public int getMonsterCount() {
     return monsterIds.size();
+  }
+
+  /**
+   * Checks if the room has an exit in the specified direction.
+   *
+   * @param direction the direction to check
+   * @return true if there's an exit in that direction, false otherwise
+   */
+  public boolean hasExit(Direction direction) {
+    return exits != null && exits.containsKey(direction.toString().toLowerCase());
+  }
+
+  /**
+   * Gets the room ID for the exit in the specified direction.
+   *
+   * @param direction the direction to check
+   * @return the room ID for that direction, or null if no exit exists
+   */
+  public String getExitRoomId(Direction direction) {
+    if (exits == null) {
+      return null;
+    }
+    return exits.get(direction.toString().toLowerCase());
   }
 
   @Override

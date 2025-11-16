@@ -14,8 +14,6 @@ public final class Item {
   private final String category;
   private final String effect;
   private final String specialEffect;
-  private final boolean isKeyItem;
-  private final boolean isRemovable;
 
   /**
    * Constructs a new Item with the specified properties.
@@ -35,11 +33,40 @@ public final class Item {
       String category,
       String effect,
       String specialEffect) {
-    super(id, name);
-    this.description = description;
+    if (id == null || id.trim().isEmpty()) {
+      throw new IllegalArgumentException("Item ID cannot be null or blank");
+    }
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("Item name cannot be null or blank");
+    }
+    if (category == null || category.trim().isEmpty()) {
+      throw new IllegalArgumentException("Item category cannot be null or blank");
+    }
+    
+    this.id = id;
+    this.name = name;
+    this.description = description != null ? description : "";
     this.category = category;
-    this.effect = effect;
-    this.specialEffect = specialEffect;
+    this.effect = effect != null ? effect : "";
+    this.specialEffect = specialEffect != null ? specialEffect : "";
+  }
+
+  /**
+   * Gets the unique identifier of this item.
+   *
+   * @return the item's ID
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * Gets the name of this item.
+   *
+   * @return the item's name
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -55,9 +82,6 @@ public final class Item {
    * Gets the category of the item.
    *
    * @return the item's category
-   * Gets the category of this item.
-   *
-   * @return the item category
    */
   public String getCategory() {
     return category;
@@ -67,9 +91,6 @@ public final class Item {
    * Gets the primary effect of the item.
    *
    * @return the item's effect
-   * Gets the mechanical effect of this item.
-   *
-   * @return the item effect
    */
   public String getEffect() {
     return effect;
@@ -79,9 +100,6 @@ public final class Item {
    * Gets the special effect of the item.
    *
    * @return the item's special effect
-   * Gets any special effects or restrictions of this item.
-   *
-   * @return the special effect description
    */
   public String getSpecialEffect() {
     return specialEffect;
@@ -123,21 +141,34 @@ public final class Item {
    */
   public boolean isConsumable() {
     return "Consumable".equalsIgnoreCase(category);
+  }
+
+  /**
    * Checks if this item is a key item required for game progression.
    *
    * @return true if this is a key item, false otherwise
    */
   public boolean isKeyItem() {
-    return isKeyItem;
+    return "Key Item".equalsIgnoreCase(category);
   }
 
   /**
    * Checks if this item can be removed from the player's inventory.
+   * Key items and artifacts with permanent effects cannot be removed.
    *
    * @return true if the item can be removed, false otherwise
    */
   public boolean isRemovable() {
-    return isRemovable;
+    // Key items cannot be removed
+    if (isKeyItem()) {
+      return false;
+    }
+    // Artifacts with "Cannot be removed" or "permanently" in special effect cannot be removed
+    if ("Artifact".equalsIgnoreCase(category) && specialEffect != null) {
+      String lowerSpecial = specialEffect.toLowerCase();
+      return !lowerSpecial.contains("cannot be removed") && !lowerSpecial.contains("permanently");
+    }
+    return true;
   }
 
   @Override
