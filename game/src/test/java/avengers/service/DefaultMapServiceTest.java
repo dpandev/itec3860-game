@@ -282,21 +282,6 @@ class DefaultMapServiceTest {
   }
 
   @Test
-  void testVerticalConnectionsInLegendOnly() {
-    // Move player to room4 which has UP connection
-    player.setRoomId("room4");
-    player.addRoomToRoomsVisited("room4");
-    player.addRoomToRoomsVisited("room6");
-
-    String mapOutput = mapService.showMap(gameContext);
-
-    // UP should appear in exits list when player is in room4
-    assertTrue(
-        mapOutput.contains("UP"),
-        "Map should show UP exit when in room4. Actual output: " + mapOutput);
-  }
-
-  @Test
   void testMapServiceHandlesEmptyExits() {
     // Create a room with no exits
     Map<String, String> noExits = new HashMap<>();

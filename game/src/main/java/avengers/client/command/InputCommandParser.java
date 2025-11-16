@@ -167,10 +167,6 @@ public class InputCommandParser implements CommandParser {
     dirMap.put("w", "west");
     dirMap.put("east", "east");
     dirMap.put("e", "east");
-    dirMap.put("up", "up");
-    dirMap.put("u", "up");
-    dirMap.put("down", "down");
-    dirMap.put("d", "down");
     return dirMap;
   }
 

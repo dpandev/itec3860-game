@@ -1,7 +1,7 @@
 package avengers.domain.model;
 
 /**
- * Represents the six directions for room navigation including vertical movement.
+ * Represents the four cardinal directions for room navigation.
  *
  * <p>Provides utility methods for converting from string representations commonly found in JSON
  * data or user input.
@@ -10,15 +10,13 @@ public enum Direction {
   NORTH,
   SOUTH,
   EAST,
-  WEST,
-  UP,
-  DOWN;
+  WEST;
 
   /**
    * Converts a string representation to a Direction enum value.
    *
-   * <p>Supports both full names (NORTH, SOUTH, UP, DOWN, etc.) and single-letter abbreviations (N,
-   * S, U, D, etc.). Case-insensitive.
+   * <p>Supports both full names (NORTH, SOUTH, EAST, WEST) and single-letter abbreviations (N, S,
+   * E, W). Case-insensitive.
    *
    * @param s the string to convert
    * @return the corresponding Direction
@@ -34,8 +32,6 @@ public enum Direction {
       case "S", "SOUTH" -> SOUTH;
       case "E", "EAST" -> EAST;
       case "W", "WEST" -> WEST;
-      case "U", "UP" -> UP;
-      case "D", "DOWN" -> DOWN;
       default -> throw new IllegalArgumentException("Unknown direction: " + s);
     };
   }

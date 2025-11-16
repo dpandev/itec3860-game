@@ -13,8 +13,6 @@ class DirectionTest {
     assertEquals(Direction.SOUTH, Direction.fromString("SOUTH"));
     assertEquals(Direction.EAST, Direction.fromString("EAST"));
     assertEquals(Direction.WEST, Direction.fromString("WEST"));
-    assertEquals(Direction.UP, Direction.fromString("UP"));
-    assertEquals(Direction.DOWN, Direction.fromString("DOWN"));
   }
 
   @Test
@@ -23,8 +21,6 @@ class DirectionTest {
     assertEquals(Direction.SOUTH, Direction.fromString("S"));
     assertEquals(Direction.EAST, Direction.fromString("E"));
     assertEquals(Direction.WEST, Direction.fromString("W"));
-    assertEquals(Direction.UP, Direction.fromString("U"));
-    assertEquals(Direction.DOWN, Direction.fromString("D"));
   }
 
   @Test
@@ -55,6 +51,8 @@ class DirectionTest {
   @Test
   void fromString_invalidDirection_throwsIllegalArgumentException() {
     assertThrows(IllegalArgumentException.class, () -> Direction.fromString("INVALID"));
+    assertThrows(IllegalArgumentException.class, () -> Direction.fromString("UP"));
+    assertThrows(IllegalArgumentException.class, () -> Direction.fromString("DOWN"));
     assertThrows(IllegalArgumentException.class, () -> Direction.fromString("NORTHEAST"));
     assertThrows(IllegalArgumentException.class, () -> Direction.fromString("LEFT"));
   }
