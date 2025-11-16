@@ -8,6 +8,7 @@ import java.util.UUID;
 /**
  * Represents the saved data of a player's game state.
  *
+ * @param playerId the unique identifier of the player
  * @param playerName the name of the player
  * @param roomId the current room ID
  * @param itemIds the list of items in inventory
