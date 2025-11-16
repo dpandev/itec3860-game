@@ -13,6 +13,7 @@ import java.util.Map;
  * Example controller class. Replace with actual controllers (GameController, MenuController, etc.)
  */
 public final class GameController {
+  //
   private final GameService gameService;
   private final Map<VerbCategory, CommandController> controllersByCategory;
   private final CommandController systemController;

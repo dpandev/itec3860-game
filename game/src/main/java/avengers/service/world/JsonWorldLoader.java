@@ -251,6 +251,8 @@ public class JsonWorldLoader implements WorldLoader {
     }
   }
 
+  //
+
   /**
    * Gets a Reader for a resource file.
    *

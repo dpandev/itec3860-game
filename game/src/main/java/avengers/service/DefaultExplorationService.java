@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 /** Default implementation of ExplorationService. */
 public class DefaultExplorationService implements ExplorationService {
+  //
 
   private static final Map<String, String> DIRECTION_ALIASES = new HashMap<>();
 

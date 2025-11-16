@@ -4,6 +4,7 @@ import avengers.domain.utils.GameContext;
 
 /** Service for managing combat encounters. */
 public interface CombatService {
+  //
 
   /**
    * Starts combat with a monster.

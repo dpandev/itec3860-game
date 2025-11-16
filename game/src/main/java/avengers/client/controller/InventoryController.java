@@ -7,6 +7,7 @@ import avengers.domain.utils.Verb;
 
 /** Controller for managing inventory-related commands in the Avengers game. */
 public class InventoryController implements CommandController {
+  //
   @Override
   public boolean supports(Verb verb) {
     return verb == Verb.INVENTORY;

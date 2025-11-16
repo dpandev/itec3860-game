@@ -2,6 +2,7 @@ package avengers.domain.model;
 
 /** Represents a puzzle in the game with solution, rewards, and failure consequences. */
 public final class Puzzle {
+  //
   private final String id;
   private final String name;
   private final String description;

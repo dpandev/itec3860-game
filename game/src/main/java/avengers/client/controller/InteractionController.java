@@ -10,6 +10,7 @@ import java.util.Optional;
 
 /** Controller responsible for handling interactions within the game. */
 public class InteractionController implements CommandController {
+  //
   private final InteractionService interactionService;
 
   /**

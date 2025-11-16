@@ -10,6 +10,7 @@ import java.util.Map;
  * puzzles solved, and rooms visited.
  */
 public final class Player extends Character {
+  //
   private String roomId;
   private final List<String> inventoryItems;
   private List<String> puzzlesSolved;

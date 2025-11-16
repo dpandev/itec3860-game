@@ -2,6 +2,8 @@ package avengers.domain.model;
 
 /** Represents a monster character in the game with specific attributes. */
 public class Monster extends Character {
+
+  //
   /**
    * Constructs a Monster with the specified name, maximum health, base attack, and base defense.
    *

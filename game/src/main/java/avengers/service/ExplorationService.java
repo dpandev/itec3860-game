@@ -4,6 +4,7 @@ import avengers.domain.utils.GameContext;
 
 /** Service for exploring rooms and moving through the game world. */
 public interface ExplorationService {
+  //
 
   /**
    * Describes the current room the player is in.

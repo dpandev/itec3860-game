@@ -4,6 +4,7 @@ import avengers.domain.model.Entity;
 
 /** Example service class. Replace with actual game services (GameService, SaveService, etc.) */
 public class GameService {
+  //
   public Entity createEntity(String id, String name) {
     return new Entity(id, name);
   }

@@ -113,4 +113,5 @@ public final class Item {
         && !specialEffect.isBlank()
         && !"None".equalsIgnoreCase(specialEffect);
   }
+  //
 }

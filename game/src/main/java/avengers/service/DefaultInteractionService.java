@@ -8,6 +8,7 @@ import java.util.Optional;
 
 /** Default implementation of InteractionService. */
 public class DefaultInteractionService implements InteractionService {
+  //
 
   @Override
   public String presentPuzzle(GameContext ctx, String puzzleId) {

@@ -10,6 +10,7 @@ import java.util.Random;
 
 /** Default implementation of CombatService with critical hit mechanics. */
 public class DefaultCombatService implements CombatService {
+  //
 
   private static final double CRITICAL_HIT_CHANCE = 0.15; // 15% chance
   private static final double CRITICAL_HIT_MULTIPLIER = 1.5; // 1.5x damage
