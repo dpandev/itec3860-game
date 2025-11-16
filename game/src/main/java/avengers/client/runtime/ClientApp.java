@@ -8,6 +8,8 @@ import avengers.domain.model.Player;
 import avengers.domain.model.World;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.VerbCategory;
+import avengers.service.DefaultExplorationService;
+import avengers.service.ExplorationService;
 import avengers.service.SaveService;
 import avengers.service.spi.FileSaveRepository;
 import avengers.service.world.JsonWorldLoader;
@@ -33,12 +35,15 @@ public class ClientApp {
     var saveDirectory = Path.of(savesPath).toAbsolutePath();
     SaveService saveService = new SaveService(new FileSaveRepository(saveDirectory));
 
+    // init services
+    ExplorationService explorationService = new DefaultExplorationService();
+    
     // init controllers here
     CommandController movementController = new MovementController();
     CommandController inventoryController = new InventoryController();
     CommandController interactionController = new InteractionController();
     CommandController combatController = new CombatController();
-    CommandController systemController = new SystemController(saveService, loader);
+    CommandController systemController = new SystemController(saveService, loader, explorationService);
 
     // init game controller (main controller)
     GameController gameController =
