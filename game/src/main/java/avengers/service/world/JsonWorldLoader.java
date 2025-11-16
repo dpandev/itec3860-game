@@ -143,6 +143,8 @@ public class JsonWorldLoader implements WorldLoader {
     return new HashMap<>();
   }
 
+  //
+
   /**
    * Gets a Reader for a resource file.
    *

@@ -4,8 +4,6 @@ import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
-import avengers.domain.utils.Verb;
-import avengers.service.ExplorationService;
 import avengers.service.SaveService;
 import avengers.service.world.WorldLoader;
 
@@ -13,16 +11,11 @@ import avengers.service.world.WorldLoader;
 public class SystemController implements CommandController {
   private final SaveService save;
   private final WorldLoader worldLoader;
-  private final ExplorationService explorationService;
 
-  /**
-   * Constructs a SystemController with the given SaveService, WorldLoader, and ExplorationService.
-   */
-  public SystemController(
-      SaveService save, WorldLoader worldLoader, ExplorationService explorationService) {
+  /** Constructs a SystemController with the given SaveService, ConsoleView, and WorldLoader. */
+  public SystemController(SaveService save, WorldLoader worldLoader) {
     this.save = save;
     this.worldLoader = worldLoader;
-    this.explorationService = explorationService;
   }
 
   /** Handles system commands and returns the result. */
@@ -44,7 +37,6 @@ public class SystemController implements CommandController {
                   + "  use <item> - Use an item\n"
                   + "  attack <monster> - Attack a monster (starts combat)\n"
                   + "  ignore <monster> - Ignore a monster (makes it disappear)\n"
-                  + "  stats - Display player stats and equipped items\n"
                   + "  save - Save your game\n"
                   + "  quit - Save and quit the game");
       case SAVE -> {
@@ -70,7 +62,6 @@ public class SystemController implements CommandController {
                 + "All monsters, items, and puzzles have been reset.\n"
                 + "Type 'look' to see your surroundings.");
       }
-      case Verb.STATS -> CommandResult.success(explorationService.showStats(ctx));
       case QUIT -> {
         save.saveData(ctx);
         yield CommandResult.exit("Game saved. Goodbye!");

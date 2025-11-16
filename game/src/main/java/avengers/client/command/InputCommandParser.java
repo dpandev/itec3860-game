@@ -55,6 +55,7 @@ public class InputCommandParser implements CommandParser {
       return new CommandToken(Verb.GO, directionSynonyms.get(head), List.of(), raw);
     }
 
+    //
     // Resolve the verb
     Verb verb = resolveVerb(head);
 

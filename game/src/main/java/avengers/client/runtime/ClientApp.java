@@ -38,6 +38,7 @@ public class ClientApp {
     // init services
     ExplorationService explorationService = new DefaultExplorationService();
 
+    //
     // init controllers here
     CommandController movementController = new MovementController();
     CommandController inventoryController = new InventoryController();

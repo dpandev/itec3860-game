@@ -9,5 +9,6 @@ public interface WorldLoader {
    *
    * @return the loaded World object
    */
+  //
   World load();
 }

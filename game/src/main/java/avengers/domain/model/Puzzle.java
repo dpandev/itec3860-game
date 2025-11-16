@@ -7,6 +7,7 @@ package avengers.domain.model;
  * specific solution, reward for success, and consequence for failure.
  */
 public final class Puzzle {
+  //
   private final String id;
   private final String name;
   private final String description;

@@ -256,3 +256,4 @@ public final class Room {
         "%s - Items: %d, Monsters: %d", getName(), getItemCount(), getMonsterCount());
   }
 }
+//

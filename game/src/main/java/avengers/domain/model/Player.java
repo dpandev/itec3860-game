@@ -1,6 +1,5 @@
 package avengers.domain.model;
 
-import avengers.domain.utils.StatBonus;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +22,7 @@ public final class Player extends Character {
   /** Enum representing different equipment slots for the player. */
   public enum EquipmentSlot {
     WEAPON,
+    HELMET,
     ARMOR,
     ARTIFACT
   }
@@ -203,106 +203,5 @@ public final class Player extends Character {
    */
   public String unequipItem(EquipmentSlot slot) {
     return equippedItems.remove(slot);
-  }
-
-  /**
-   * Calculates equipment bonuses for the player based on equipped items. This method requires a
-   * World instance to look up item effects.
-   *
-   * @param world the game world containing item definitions
-   * @return StatBonus object containing all equipment bonuses
-   */
-  public StatBonus calculateEquipmentBonuses(World world) {
-    Map<String, Integer> totalBonuses = new HashMap<>();
-    Map<String, Double> totalPercentageBonuses = new HashMap<>();
-
-    for (String itemId : equippedItems.values()) {
-      if (itemId != null) {
-        world
-            .findItem(itemId)
-            .ifPresent(
-                item -> {
-                  if (item.hasEffect()) {
-                    StatBonus itemBonus = StatBonus.parseEffect(item.getEffect());
-                    // Combine flat bonuses
-                    itemBonus
-                        .getAllBonuses()
-                        .forEach((stat, bonus) -> totalBonuses.merge(stat, bonus, Integer::sum));
-                    // Combine percentage bonuses
-                    itemBonus
-                        .getAllPercentageBonuses()
-                        .forEach(
-                            (stat, bonus) ->
-                                totalPercentageBonuses.merge(stat, bonus, Double::sum));
-                  }
-                });
-      }
-    }
-
-    return new StatBonus(totalBonuses, totalPercentageBonuses);
-  }
-
-  /**
-   * Gets the total attack including base attack and equipment bonuses.
-   *
-   * @param world the game world to look up equipment effects
-   * @return the total attack value
-   */
-  public int getTotalAttack(World world) {
-    StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalAttack = getBaseAttack() + equipmentBonus.getAttackBonus();
-
-    // Apply percentage bonuses
-    double percentageBonus =
-        equipmentBonus.getPercentageBonus("Attack")
-            + equipmentBonus.getPercentageBonus("all stats");
-    if (percentageBonus != 0) {
-      totalAttack = (int) Math.round(totalAttack * (1 + percentageBonus / 100.0));
-    }
-
-    return totalAttack;
-  }
-
-  /**
-   * Gets the total defense including base defense and equipment bonuses.
-   *
-   * @param world the game world to look up equipment effects
-   * @return the total defense value
-   */
-  public int getTotalDefense(World world) {
-    StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalDefense = getBaseDefense() + equipmentBonus.getDefenseBonus();
-
-    // Apply percentage bonuses
-    double percentageBonus =
-        equipmentBonus.getPercentageBonus("Defense")
-            + equipmentBonus.getPercentageBonus("all stats");
-    if (percentageBonus != 0) {
-      totalDefense = (int) Math.round(totalDefense * (1 + percentageBonus / 100.0));
-    }
-
-    return totalDefense;
-  }
-
-  /**
-   * Gets the total maximum health including base health and equipment bonuses.
-   *
-   * @param world the game world to look up equipment effects
-   * @return the total maximum health value
-   */
-  public int getTotalMaxHealth(World world) {
-    StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalMaxHealth = getMaxHealth() + equipmentBonus.getHealthBonus();
-
-    // Apply percentage bonuses
-    double percentageBonus =
-        equipmentBonus.getPercentageBonus("HP")
-            + equipmentBonus.getPercentageBonus("Health")
-            + equipmentBonus.getPercentageBonus("all stats");
-    if (percentageBonus != 0) {
-      totalMaxHealth = (int) Math.round(totalMaxHealth * (1 + percentageBonus / 100.0));
-    }
-
-    return totalMaxHealth;
   }
 }

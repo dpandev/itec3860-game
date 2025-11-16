@@ -10,6 +10,7 @@ import avengers.domain.utils.Verb;
  * they support and how to handle them.
  */
 public interface CommandController {
+  //
 
   /**
    * Checks if this controller supports handling the given verb.

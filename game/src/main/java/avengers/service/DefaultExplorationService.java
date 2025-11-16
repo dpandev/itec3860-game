@@ -7,6 +7,7 @@ import avengers.domain.utils.GameContext;
 
 /** Default implementation of ExplorationService for handling exploration-related operations. */
 public class DefaultExplorationService implements ExplorationService {
+  //
 
   @Override
   public String showStats(GameContext ctx) {
