@@ -63,7 +63,7 @@ public class JsonWorldLoader implements WorldLoader {
       Map<String, Puzzle> puzzles = loadPuzzles();
 
       // TODO: Once Room class is fully implemented, parse rooms from worldData
-      Map<String, Room> rooms = new HashMap<>();
+      Map<String, Room> rooms = parseRooms(worldData.rooms); // updated by Daniel
       // When Room is implemented with proper fields, update this section
 
       LOGGER.info(
@@ -101,17 +101,66 @@ public class JsonWorldLoader implements WorldLoader {
   }
 
   /**
+   * Parses room data from JSON into Room objects.
+   *
+   * @param roomJsonList list of room JSON data
+   * @return map of room ID to Room objects
+   */
+  private Map<String, Room> parseRooms(List<RoomJson> roomJsonList) {
+    Map<String, Room> rooms = new HashMap<>();
+    if (roomJsonList == null) {
+      return rooms;
+    }
+
+    for (RoomJson roomJson : roomJsonList) {
+      Room room =
+          new Room(
+              roomJson.id,
+              roomJson.name,
+              roomJson.description,
+              roomJson.exits != null ? roomJson.exits : Map.of(),
+              roomJson.monsters != null ? roomJson.monsters : List.of(),
+              roomJson.items != null ? roomJson.items : List.of(),
+              roomJson.puzzles != null ? roomJson.puzzles : List.of());
+      rooms.put(roomJson.id, room);
+    }
+
+    LOGGER.fine(String.format("Parsed %d rooms", rooms.size()));
+    return rooms;
+  }
+
+  /**
    * Loads item data from items.json.
    *
    * @return Map of item ID to Item objects
    * @throws WorldLoadException if loading fails
    */
   private Map<String, Item> loadItems() {
-    // TODO: Once Item class is fully implemented with fields, update this method
-    // When Item is implemented, deserialize from JSON and create proper Item objects
+    try (Reader reader = getResourceReader(ITEMS_JSON_PATH)) {
+      ItemsData data = gson.fromJson(reader, ItemsData.class);
+      Map<String, Item> items = new HashMap<>();
 
-    LOGGER.fine("Loading items (currently placeholder - Item class not yet implemented)");
-    return new HashMap<>();
+      if (data != null && data.items != null) {
+        for (ItemJson itemJson : data.items) {
+          Item item =
+              new Item(
+                  itemJson.id,
+                  itemJson.name,
+                  itemJson.description,
+                  itemJson.category,
+                  itemJson.effect != null ? itemJson.effect : "",
+                  itemJson.specialEffect != null ? itemJson.specialEffect : "");
+          items.put(itemJson.id, item);
+        }
+      }
+
+      LOGGER.fine(String.format("Loaded %d items", items.size()));
+      return items;
+    } catch (JsonSyntaxException e) {
+      throw new WorldLoadException("Invalid JSON syntax in items.json", e);
+    } catch (IOException e) {
+      throw new WorldLoadException("Failed to read items.json", e);
+    }
   }
 
   /**
@@ -121,12 +170,30 @@ public class JsonWorldLoader implements WorldLoader {
    * @throws WorldLoadException if loading fails
    */
   private Map<String, Monster> loadMonsters() {
-    // TODO: Once Monster class is fully implemented with all fields, update this method
-    // When Monster is extended with proper fields (roomLocation, specialEffects, itemDrops, etc.),
-    // deserialize fully from JSON
+    try (Reader reader = getResourceReader(MONSTERS_JSON_PATH)) {
+      MonstersData data = gson.fromJson(reader, MonstersData.class);
+      Map<String, Monster> monsters = new HashMap<>();
 
-    LOGGER.fine("Loading monsters (currently placeholder - Monster class not fully implemented)");
-    return new HashMap<>();
+      if (data != null && data.monsters != null) {
+        for (MonsterJson monsterJson : data.monsters) {
+          Monster monster =
+              new Monster(
+                  monsterJson.name,
+                  monsterJson.maxHp,
+                  monsterJson.damage,
+                  0 // Base defense, can be extracted from special effects if needed
+                  );
+          monsters.put(monsterJson.id, monster);
+        }
+      }
+
+      LOGGER.fine(String.format("Loaded %d monsters", monsters.size()));
+      return monsters;
+    } catch (JsonSyntaxException e) {
+      throw new WorldLoadException("Invalid JSON syntax in monsters.json", e);
+    } catch (IOException e) {
+      throw new WorldLoadException("Failed to read monsters.json", e);
+    }
   }
 
   /**
@@ -136,11 +203,52 @@ public class JsonWorldLoader implements WorldLoader {
    * @throws WorldLoadException if loading fails
    */
   private Map<String, Puzzle> loadPuzzles() {
-    // TODO: Once Puzzle class is fully implemented with fields, update this method
-    // When Puzzle is implemented, deserialize from JSON
+    try (Reader reader = getResourceReader(PUZZLES_JSON_PATH)) {
+      PuzzlesData data = gson.fromJson(reader, PuzzlesData.class);
+      Map<String, Puzzle> puzzles = new HashMap<>();
 
-    LOGGER.fine("Loading puzzles (currently placeholder - Puzzle class not yet implemented)");
-    return new HashMap<>();
+      if (data != null && data.puzzles != null) {
+        for (PuzzleJson puzzleJson : data.puzzles) {
+          // Parse numberOfAttempts - handle both int and string "Unlimited"
+          int attempts = 1;
+          if (puzzleJson.numberOfAttempts != null) {
+            if (puzzleJson.numberOfAttempts instanceof Number) {
+              attempts = ((Number) puzzleJson.numberOfAttempts).intValue();
+            } else if (puzzleJson.numberOfAttempts instanceof String) {
+              String attemptsStr = (String) puzzleJson.numberOfAttempts;
+              if (attemptsStr.toLowerCase().contains("unlimited")) {
+                attempts = -1;
+              } else {
+                try {
+                  attempts = Integer.parseInt(attemptsStr);
+                } catch (NumberFormatException e) {
+                  attempts = 1;
+                }
+              }
+            }
+          }
+
+          Puzzle puzzle =
+              new Puzzle(
+                  puzzleJson.id,
+                  puzzleJson.name,
+                  puzzleJson.description,
+                  puzzleJson.solution != null ? puzzleJson.solution : "",
+                  puzzleJson.reward != null ? puzzleJson.reward : "",
+                  puzzleJson.failureConsequence != null ? puzzleJson.failureConsequence : "",
+                  puzzleJson.commandUsed != null ? puzzleJson.commandUsed : "",
+                  attempts);
+          puzzles.put(puzzleJson.id, puzzle);
+        }
+      }
+
+      LOGGER.fine(String.format("Loaded %d puzzles", puzzles.size()));
+      return puzzles;
+    } catch (JsonSyntaxException e) {
+      throw new WorldLoadException("Invalid JSON syntax in puzzles.json", e);
+    } catch (IOException e) {
+      throw new WorldLoadException("Failed to read puzzles.json", e);
+    }
   }
 
   /**
@@ -177,6 +285,56 @@ public class JsonWorldLoader implements WorldLoader {
     private List<String> monsters;
     private List<String> items;
     private List<String> puzzles;
+  }
+
+  /** Data class for deserializing items.json structure. */
+  private static class ItemsData {
+    private List<ItemJson> items;
+  }
+
+  /** Data class for deserializing individual item data from JSON. */
+  private static class ItemJson {
+    private String id;
+    private String name;
+    private String description;
+    private String category;
+    private String effect;
+    private String specialEffect;
+  }
+
+  /** Data class for deserializing monsters.json structure. */
+  private static class MonstersData {
+    private List<MonsterJson> monsters;
+  }
+
+  /** Data class for deserializing individual monster data from JSON. */
+  private static class MonsterJson {
+    private String id;
+    private String name;
+    private String roomLocation;
+    private String description;
+    private int hp;
+    private int maxHp;
+    private int damage;
+    private List<String> specialEffects;
+    private List<String> itemDrops;
+  }
+
+  /** Data class for deserializing puzzles.json structure. */
+  private static class PuzzlesData {
+    private List<PuzzleJson> puzzles;
+  }
+
+  /** Data class for deserializing individual puzzle data from JSON. */
+  private static class PuzzleJson {
+    private String id;
+    private String name;
+    private String description;
+    private String solution;
+    private String reward;
+    private String failureConsequence;
+    private String commandUsed;
+    private Object numberOfAttempts; // Can be int or string "Unlimited"
   }
 
   /** Custom exception for world loading errors. */
