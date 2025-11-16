@@ -39,6 +39,7 @@ public class CombatController implements CommandController {
     };
   }
 
+  // line added for commit
   /**
    * Handles ATTACK command.
    *

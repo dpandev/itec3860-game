@@ -85,6 +85,7 @@ public class MovementController implements CommandController {
 
     var room = roomOpt.get();
     var exits = room.getExits();
+    //
 
     StringBuilder map = new StringBuilder();
     map.append("\n=== MAP ===\n");

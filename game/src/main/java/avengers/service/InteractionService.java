@@ -4,6 +4,7 @@ import avengers.domain.utils.GameContext;
 
 /** Service for handling puzzle interactions. */
 public interface InteractionService {
+  //
 
   /**
    * Presents a puzzle to the player.
