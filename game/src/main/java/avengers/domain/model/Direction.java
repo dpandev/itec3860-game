@@ -15,8 +15,8 @@ public enum Direction {
   /**
    * Converts a string representation to a Direction enum value.
    *
-   * <p>Supports both full names (NORTH, SOUTH, etc.) and single-letter abbreviations (N, S, etc.).
-   * Case-insensitive.
+   * <p>Supports both full names (NORTH, SOUTH, EAST, WEST) and single-letter abbreviations (N, S,
+   * E, W). Case-insensitive.
    *
    * @param s the string to convert
    * @return the corresponding Direction
