@@ -137,4 +137,34 @@ public abstract class Character {
   public void setBaseDefense(int defense) {
     this.baseDefense = Math.max(0, defense);
   }
+
+  /**
+   * Gets the total attack including base attack and any bonuses. Default implementation returns
+   * base attack only. Subclasses should override to include equipment bonuses.
+   *
+   * @return the total attack value
+   */
+  public int getTotalAttack() {
+    return baseAttack;
+  }
+
+  /**
+   * Gets the total defense including base defense and any bonuses. Default implementation returns
+   * base defense only. Subclasses should override to include equipment bonuses.
+   *
+   * @return the total defense value
+   */
+  public int getTotalDefense() {
+    return baseDefense;
+  }
+
+  /**
+   * Gets the total maximum health including base health and any bonuses. Default implementation
+   * returns base max health only. Subclasses should override to include equipment bonuses.
+   *
+   * @return the total maximum health value
+   */
+  public int getTotalMaxHealth() {
+    return maxHealth;
+  }
 }

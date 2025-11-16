@@ -3,6 +3,7 @@ package avengers.service;
 import avengers.domain.model.Item;
 import avengers.domain.model.Monster;
 import avengers.domain.model.Player;
+import avengers.domain.model.Player.EquipmentSlot;
 import avengers.domain.model.Room;
 import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
@@ -350,5 +351,118 @@ public final class InventoryService {
     output.append("Status: ").append(monster.isAlive() ? "Alive" : "Defeated").append("\n");
 
     return output.toString();
+  }
+
+  /**
+   * Attempts to equip an item from the player's inventory.
+   *
+   * @param ctx the game context
+   * @param itemName the name or ID of the item to equip
+   * @return CommandResult indicating success or failure
+   */
+  public CommandResult equipItem(GameContext ctx, String itemName) {
+    var player = ctx.player();
+    var world = ctx.world();
+
+    // Find the item in player's inventory
+    var itemToEquip = findItemInInventory(world, player, itemName);
+    if (itemToEquip.isEmpty()) {
+      return CommandResult.fail(
+          "You don't have an item called '" + itemName + "' in your inventory.");
+    }
+
+    var item = itemToEquip.get();
+
+    // Check if item is equippable
+    if (!item.isEquippable()) {
+      return CommandResult.fail("Item cannot be equipped.");
+    }
+
+    // Determine equipment slot based on category
+    EquipmentSlot slot = determineEquipmentSlot(item);
+    if (slot == null) {
+      return CommandResult.fail("Item cannot be equipped to any slot.");
+    }
+
+    // Check if there's already an item in that slot
+    String previousItemId = null;
+    if (player.hasEquippedItem(slot)) {
+      previousItemId = player.getEquippedItem(slot);
+    }
+
+    // Remove item from inventory and equip it
+    player.removeItemFromInventory(item.getId());
+    player.equipItem(slot, item.getId());
+
+    // If there was a previous item, return it to inventory
+    if (previousItemId != null) {
+      player.addItemToInventory(previousItemId);
+      var previousItem = world.findItem(previousItemId);
+      String previousItemName =
+          previousItem.isPresent() ? previousItem.get().getName() : previousItemId;
+      return CommandResult.success(
+          "You equipped the "
+              + item.getName()
+              + " ("
+              + slot.name()
+              + "). The "
+              + previousItemName
+              + " was returned to your inventory.");
+    } else {
+      return CommandResult.success(
+          "You equipped the " + item.getName() + " (" + slot.name() + ").");
+    }
+  }
+
+  /**
+   * Attempts to unequip an item from the specified equipment slot.
+   *
+   * @param ctx the game context
+   * @param slotName the name of the equipment slot to unequip from
+   * @return CommandResult indicating success or failure
+   */
+  public CommandResult unequipItem(GameContext ctx, String slotName) {
+    var player = ctx.player();
+
+    // Parse equipment slot
+    EquipmentSlot slot;
+    try {
+      slot = EquipmentSlot.valueOf(slotName.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      return CommandResult.fail(
+          "Invalid equipment slot: " + slotName + ". Valid slots are: WEAPON, ARMOR, ARTIFACT.");
+    }
+
+    // Check if there's an item in that slot
+    if (!player.hasEquippedItem(slot)) {
+      return CommandResult.fail("No item is equipped in the " + slot.name() + " slot.");
+    }
+
+    // Unequip the item and return it to inventory
+    String itemId = player.unequipItem(slot);
+    player.addItemToInventory(itemId);
+
+    var world = ctx.world();
+    var item = world.findItem(itemId);
+    String itemName = item.isPresent() ? item.get().getName() : itemId;
+
+    return CommandResult.success(
+        "You unequipped the " + itemName + " from the " + slot.name() + " slot.");
+  }
+
+  /**
+   * Determines the appropriate equipment slot for an item based on its category.
+   *
+   * @param item the item to determine the slot for
+   * @return the appropriate EquipmentSlot, or null if the item cannot be equipped
+   */
+  private EquipmentSlot determineEquipmentSlot(Item item) {
+    String category = item.getCategory();
+    return switch (category.toLowerCase()) {
+      case "weapon" -> EquipmentSlot.WEAPON;
+      case "armor" -> EquipmentSlot.ARMOR;
+      case "artifact" -> EquipmentSlot.ARTIFACT;
+      default -> null;
+    };
   }
 }
