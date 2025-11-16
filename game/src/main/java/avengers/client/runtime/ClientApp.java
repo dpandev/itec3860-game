@@ -8,9 +8,7 @@ import avengers.domain.model.Player;
 import avengers.domain.model.World;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.VerbCategory;
-import avengers.service.DefaultExplorationService;
-import avengers.service.ExplorationService;
-import avengers.service.SaveService;
+import avengers.service.*;
 import avengers.service.spi.FileSaveRepository;
 import avengers.service.world.JsonWorldLoader;
 import avengers.service.world.WorldLoader;
@@ -36,13 +34,17 @@ public class ClientApp {
     SaveService saveService = new SaveService(new FileSaveRepository(saveDirectory));
 
     // init services
-    ExplorationService explorationService = new DefaultExplorationService();
+    InteractionService interactionService = new DefaultInteractionService();
+    ExplorationService explorationService = new DefaultExplorationService(interactionService);
+    CombatService combatService = new DefaultCombatService();
+    MapService mapService = new DefaultMapService();
 
     // init controllers here
-    CommandController movementController = new MovementController();
+    CommandController movementController = new MovementController(explorationService);
     CommandController inventoryController = new InventoryController();
-    CommandController interactionController = new InteractionController();
-    CommandController combatController = new CombatController();
+    CommandController interactionController = new InteractionController(interactionService);
+    CommandController combatController = new CombatController(combatService);
+    CommandController mapController = new MapController(mapService);
     CommandController systemController =
         new SystemController(saveService, loader, explorationService);
 
@@ -57,6 +59,16 @@ public class ClientApp {
                 VerbCategory.SYSTEM, systemController),
             systemController // fallback
             );
+
+    // Show welcome message and initial room description
+    view.println("=== Welcome to Solo Leveling ===");
+    view.println("Type 'help' for commands, 'quit' to exit.");
+    view.println("");
+
+    // Show initial room
+    var initialExplore = explorationService.explore(ctx);
+    view.println(initialExplore.message());
+    view.println("");
 
     // init and start game loop
     GameLoop gameLoop = new GameLoop(view, parser, gameController, ctx);
