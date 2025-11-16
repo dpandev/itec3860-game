@@ -13,9 +13,7 @@ import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
 import avengers.domain.utils.VerbCategory;
-import avengers.service.DefaultExplorationService;
-import avengers.service.ExplorationService;
-import avengers.service.SaveService;
+import avengers.service.*;
 import avengers.service.spi.FileSaveRepository;
 import avengers.service.world.JsonWorldLoader;
 import avengers.service.world.WorldLoader;
@@ -31,14 +29,18 @@ class GameControllerTest {
   private Map<VerbCategory, CommandController> controllerMap;
   private CommandController systemController;
   private GameContext context;
+  private InteractionService interactionService;
+  private CombatService combatService;
+  private InventoryService inventoryService;
+  private ExplorationService explorationService;
 
   @BeforeEach
   void setUp() {
     controllerMap = new HashMap<>();
-    controllerMap.put(VerbCategory.MOVEMENT, new MovementController());
+    controllerMap.put(VerbCategory.MOVEMENT, new MovementController(explorationService));
     controllerMap.put(VerbCategory.INVENTORY, new InventoryController());
-    controllerMap.put(VerbCategory.INTERACTION, new InteractionController());
-    controllerMap.put(VerbCategory.COMBAT, new CombatController());
+    controllerMap.put(VerbCategory.INTERACTION, new InteractionController(interactionService));
+    controllerMap.put(VerbCategory.COMBAT, new CombatController(combatService));
 
     SaveService saveService = new SaveService(new FileSaveRepository(Paths.get("test-saves")));
     WorldLoader worldLoader = new JsonWorldLoader();

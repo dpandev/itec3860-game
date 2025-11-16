@@ -12,16 +12,19 @@ import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
 import java.util.List;
 import java.util.Map;
+
+import avengers.service.CombatService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class CombatControllerTest {
   private CombatController controller;
   private GameContext context;
+  private CombatService combatService;
 
   @BeforeEach
   void setUp() {
-    controller = new CombatController();
+    controller = new CombatController(combatService);
     World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
     Player player = new Player("TestPlayer", "room1");
     context = new GameContext(world, player);

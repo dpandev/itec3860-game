@@ -11,6 +11,8 @@ import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
 import java.util.List;
 import java.util.Map;
+
+import avengers.service.ExplorationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,10 +20,11 @@ class MovementControllerTest {
 
   private MovementController controller;
   private GameContext context;
+  private ExplorationService explorationService;
 
   @BeforeEach
   void setUp() {
-    controller = new MovementController();
+    controller = new MovementController(explorationService);
     World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
     Player player = new Player("TestPlayer", "room1");
     context = new GameContext(world, player);

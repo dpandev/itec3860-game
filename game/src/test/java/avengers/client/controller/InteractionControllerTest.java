@@ -11,6 +11,7 @@ import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
+import avengers.service.InteractionService;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,10 +21,11 @@ class InteractionControllerTest {
 
   private InteractionController controller;
   private GameContext context;
+  private InteractionService interactionService;
 
   @BeforeEach
   void setUp() {
-    controller = new InteractionController();
+    controller = new InteractionController(interactionService);
     World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
     Player player = new Player("TestPlayer", "room1");
     context = new GameContext(world, player);
