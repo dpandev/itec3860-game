@@ -42,7 +42,7 @@ public final class Room {
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Room name cannot be null or blank");
     }
-    
+
     this.id = id;
     this.name = name;
     this.description = description != null ? description : "";

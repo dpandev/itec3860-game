@@ -37,13 +37,16 @@ class InventoryServiceTest {
         new Item("IT-01", "Test Sword", "A basic test sword", "Weapon", "+10 Damage", "None");
 
     // Create test monster
-    testMonster = new Monster("Orc", 50, 15, 5);
+    testMonster =
+        new Monster(
+            "MON-01", "Orc", "RM-01", "A test orc", 50, 15, new ArrayList<>(), new ArrayList<>());
+    testMonster.increaseBaseDefense(5); // Set defense to 5 as expected by test
 
     // Create test room with the item and monster
     List<String> roomItems = new ArrayList<>();
     roomItems.add("IT-01");
     List<String> roomMonsters = new ArrayList<>();
-    roomMonsters.add(testMonster.getId().toString());
+    roomMonsters.add(testMonster.getId());
 
     testRoom =
         new Room(

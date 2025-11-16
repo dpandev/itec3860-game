@@ -39,13 +39,22 @@ public final class Item {
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Item name cannot be null or blank");
     }
+    if (description == null) {
+      throw new IllegalArgumentException("Item description cannot be null");
+    }
     if (category == null || category.trim().isEmpty()) {
       throw new IllegalArgumentException("Item category cannot be null or blank");
     }
-    
+    if (name.length() > 100) {
+      throw new IllegalArgumentException("Item name cannot exceed 100 characters");
+    }
+    if (description.length() > 500) {
+      throw new IllegalArgumentException("Item description cannot exceed 500 characters");
+    }
+
     this.id = id;
     this.name = name;
-    this.description = description != null ? description : "";
+    this.description = description;
     this.category = category;
     this.effect = effect != null ? effect : "";
     this.specialEffect = specialEffect != null ? specialEffect : "";
@@ -153,8 +162,8 @@ public final class Item {
   }
 
   /**
-   * Checks if this item can be removed from the player's inventory.
-   * Key items and artifacts with permanent effects cannot be removed.
+   * Checks if this item can be removed from the player's inventory. Key items and artifacts with
+   * permanent effects cannot be removed.
    *
    * @return true if the item can be removed, false otherwise
    */
