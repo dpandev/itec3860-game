@@ -1,6 +1,5 @@
 package avengers.client.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,7 +62,7 @@ class GameControllerTest {
     SaveService saveService = new SaveService(new FileSaveRepository(Paths.get("test-saves")));
     WorldLoader worldLoader = new JsonWorldLoader();
     GameController emptyController =
-      new GameController(new HashMap<>(), new SystemController(saveService, worldLoader));
+        new GameController(new HashMap<>(), new SystemController(saveService, worldLoader));
 
     assertNotNull(emptyController);
   }
@@ -120,7 +119,8 @@ class GameControllerTest {
 
     assertNotNull(result);
     assertFalse(result.success());
-    assertTrue(result.message().contains("Unknown command") || result.message().contains("UNKNOWN"));
+    assertTrue(
+        result.message().contains("Unknown command") || result.message().contains("UNKNOWN"));
   }
 
   @Test
@@ -133,8 +133,7 @@ class GameControllerTest {
     assertTrue(result.success());
     // InteractionController's activate returns a placeholder message
     assertTrue(
-      result.message().contains("activate")
-        || result.message().contains("nothing happens"));
+        result.message().contains("activate") || result.message().contains("nothing happens"));
   }
 
   @Test
@@ -233,9 +232,9 @@ class GameControllerTest {
   @Test
   void testRouting_InteractionCategory() {
     CommandToken activateCmd =
-      new CommandToken(Verb.ACTIVATE, "lever", List.of("lever"), "activate lever");
+        new CommandToken(Verb.ACTIVATE, "lever", List.of("lever"), "activate lever");
     CommandToken inspectCmd =
-      new CommandToken(Verb.INSPECT, "item", List.of("item"), "inspect item");
+        new CommandToken(Verb.INSPECT, "item", List.of("item"), "inspect item");
 
     CommandResult activateResult = controller.handle(activateCmd, context);
     CommandResult inspectResult = controller.handle(inspectCmd, context);
@@ -247,10 +246,10 @@ class GameControllerTest {
   @Test
   void testRouting_CombatCategory() {
     CommandToken attackCmd =
-      new CommandToken(Verb.ATTACK, "monster", List.of("monster"), "attack monster");
+        new CommandToken(Verb.ATTACK, "monster", List.of("monster"), "attack monster");
     CommandToken defendCmd = new CommandToken(Verb.DEFEND, null, List.of(), "defend");
     CommandToken ignoreCmd =
-      new CommandToken(Verb.IGNORE, "monster", List.of("monster"), "ignore monster");
+        new CommandToken(Verb.IGNORE, "monster", List.of("monster"), "ignore monster");
 
     CommandResult attackResult = controller.handle(attackCmd, context);
     CommandResult defendResult = controller.handle(defendCmd, context);

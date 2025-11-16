@@ -31,36 +31,36 @@ class InteractionControllerTest {
 
     // Create test world with puzzle room
     Puzzle puzzle =
-      new Puzzle(
-        "PUZ-01",
-        "Stone Riddle",
-        "What walks on four legs in the morning?",
-        "man",
-        "Correct! The door opens.",
-        "Wrong! Try again.",
-        "solve",
-        3);
+        new Puzzle(
+            "PUZ-01",
+            "Stone Riddle",
+            "What walks on four legs in the morning?",
+            "man",
+            "Correct! The door opens.",
+            "Wrong! Try again.",
+            "solve",
+            3);
 
     Item sword = new Item("IT-01", "Steel Sword", "A sharp blade", "Weapon", "+30 Damage", "");
     Monster goblin = new Monster("Goblin", 50, 15, 5);
 
     room =
-      new Room(
-        "RM-01",
-        "Puzzle Chamber",
-        "A mysterious room",
-        Map.of(),
-        List.of("MON-01"),
-        List.of("IT-01"),
-        List.of("PUZ-01"));
+        new Room(
+            "RM-01",
+            "Puzzle Chamber",
+            "A mysterious room",
+            Map.of(),
+            List.of("MON-01"),
+            List.of("IT-01"),
+            List.of("PUZ-01"));
 
     world =
-      new World(
-        Map.of("RM-01", room),
-        Map.of("IT-01", sword),
-        Map.of("PUZ-01", puzzle),
-        Map.of("MON-01", goblin),
-        "RM-01");
+        new World(
+            Map.of("RM-01", room),
+            Map.of("IT-01", sword),
+            Map.of("PUZ-01", puzzle),
+            Map.of("MON-01", goblin),
+            "RM-01");
 
     player = new Player("TestPlayer", "RM-01");
     ctx = new GameContext(world, player);
@@ -136,7 +136,7 @@ class InteractionControllerTest {
     ctx.setAwaitingPuzzleAnswer(true);
 
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), eq("man")))
-      .thenReturn(InteractionService.SolveResult.correct("Correct! Puzzle solved."));
+        .thenReturn(InteractionService.SolveResult.correct("Correct! Puzzle solved."));
 
     CommandToken cmd = new CommandToken(Verb.SOLVE, "man", List.of("man"), "solve man");
     CommandResult result = controller.handle(cmd, ctx);
@@ -151,7 +151,7 @@ class InteractionControllerTest {
     ctx.setAwaitingPuzzleAnswer(true);
 
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), eq("dog")))
-      .thenReturn(InteractionService.SolveResult.incorrect("Wrong answer.", false));
+        .thenReturn(InteractionService.SolveResult.incorrect("Wrong answer.", false));
 
     CommandToken cmd = new CommandToken(Verb.SOLVE, "dog", List.of("dog"), "solve dog");
     CommandResult result = controller.handle(cmd, ctx);
@@ -214,7 +214,7 @@ class InteractionControllerTest {
 
     // Create room without puzzles
     Room noPuzzleRoom =
-      new Room("RM-02", "Empty Room", "Nothing here", Map.of(), List.of(), List.of(), List.of());
+        new Room("RM-02", "Empty Room", "Nothing here", Map.of(), List.of(), List.of(), List.of());
     world.getRooms().put("RM-02", noPuzzleRoom);
     player.setRoomId("RM-02");
 
@@ -245,14 +245,14 @@ class InteractionControllerTest {
     ctx.setAwaitingPuzzleAnswer(true);
 
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), eq("the answer is man")))
-      .thenReturn(InteractionService.SolveResult.correct("Correct!"));
+        .thenReturn(InteractionService.SolveResult.correct("Correct!"));
 
     CommandToken cmd =
-      new CommandToken(
-        Verb.SOLVE,
-        "the answer is man",
-        List.of("the", "answer", "is", "man"),
-        "solve the answer is man");
+        new CommandToken(
+            Verb.SOLVE,
+            "the answer is man",
+            List.of("the", "answer", "is", "man"),
+            "solve the answer is man");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -274,7 +274,7 @@ class InteractionControllerTest {
   @Test
   void testHint_NoPuzzleInRoom() {
     Room noPuzzleRoom =
-      new Room("RM-02", "Empty Room", "Nothing here", Map.of(), List.of(), List.of(), List.of());
+        new Room("RM-02", "Empty Room", "Nothing here", Map.of(), List.of(), List.of(), List.of());
     world.getRooms().put("RM-02", noPuzzleRoom);
     player.setRoomId("RM-02");
 
@@ -314,7 +314,7 @@ class InteractionControllerTest {
   @Test
   void testInspect_ValidItem() {
     CommandToken cmd =
-      new CommandToken(Verb.INSPECT, "steel sword", List.of("steel", "sword"), "inspect sword");
+        new CommandToken(Verb.INSPECT, "steel sword", List.of("steel", "sword"), "inspect sword");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -327,7 +327,7 @@ class InteractionControllerTest {
   @Test
   void testInspect_ValidMonster() {
     CommandToken cmd =
-      new CommandToken(Verb.INSPECT, "goblin", List.of("goblin"), "inspect goblin");
+        new CommandToken(Verb.INSPECT, "goblin", List.of("goblin"), "inspect goblin");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -340,7 +340,7 @@ class InteractionControllerTest {
   @Test
   void testInspect_CaseInsensitiveItem() {
     CommandToken cmd =
-      new CommandToken(Verb.INSPECT, "STEEL SWORD", List.of("STEEL", "SWORD"), "inspect sword");
+        new CommandToken(Verb.INSPECT, "STEEL SWORD", List.of("STEEL", "SWORD"), "inspect sword");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -350,7 +350,7 @@ class InteractionControllerTest {
   @Test
   void testInspect_CaseInsensitiveMonster() {
     CommandToken cmd =
-      new CommandToken(Verb.INSPECT, "GOBLIN", List.of("GOBLIN"), "inspect GOBLIN");
+        new CommandToken(Verb.INSPECT, "GOBLIN", List.of("GOBLIN"), "inspect GOBLIN");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -378,7 +378,7 @@ class InteractionControllerTest {
   @Test
   void testInspect_NotFound() {
     CommandToken cmd =
-      new CommandToken(Verb.INSPECT, "dragon", List.of("dragon"), "inspect dragon");
+        new CommandToken(Verb.INSPECT, "dragon", List.of("dragon"), "inspect dragon");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertFalse(result.success());
@@ -389,17 +389,12 @@ class InteractionControllerTest {
   @Test
   void testInspect_ItemWithSpecialEffect() {
     Item magicItem =
-      new Item(
-        "IT-02",
-        "Magic Wand",
-        "A mystical wand",
-        "Weapon",
-        "+50 Damage",
-        "Casts fireball");
+        new Item(
+            "IT-02", "Magic Wand", "A mystical wand", "Weapon", "+50 Damage", "Casts fireball");
     world.getItems().put("IT-02", magicItem);
 
     CommandToken cmd =
-      new CommandToken(Verb.INSPECT, "magic wand", List.of("magic", "wand"), "inspect wand");
+        new CommandToken(Verb.INSPECT, "magic wand", List.of("magic", "wand"), "inspect wand");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -414,7 +409,7 @@ class InteractionControllerTest {
     world.getItems().put("IT-03", simpleItem);
 
     CommandToken cmd =
-      new CommandToken(Verb.INSPECT, "old key", List.of("old", "key"), "inspect key");
+        new CommandToken(Verb.INSPECT, "old key", List.of("old", "key"), "inspect key");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -426,8 +421,7 @@ class InteractionControllerTest {
 
   @Test
   void testActivate_WithTarget() {
-    CommandToken cmd =
-      new CommandToken(Verb.ACTIVATE, "lever", List.of("lever"), "activate lever");
+    CommandToken cmd = new CommandToken(Verb.ACTIVATE, "lever", List.of("lever"), "activate lever");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -457,11 +451,11 @@ class InteractionControllerTest {
   @Test
   void testActivate_MultiWordTarget() {
     CommandToken cmd =
-      new CommandToken(
-        Verb.ACTIVATE,
-        "ancient stone door",
-        List.of("ancient", "stone", "door"),
-        "activate ancient stone door");
+        new CommandToken(
+            Verb.ACTIVATE,
+            "ancient stone door",
+            List.of("ancient", "stone", "door"),
+            "activate ancient stone door");
     CommandResult result = controller.handle(cmd, ctx);
 
     assertTrue(result.success());
@@ -477,7 +471,7 @@ class InteractionControllerTest {
 
     // Mock correct answer
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), eq("man")))
-      .thenReturn(InteractionService.SolveResult.correct("Success! Door opens."));
+        .thenReturn(InteractionService.SolveResult.correct("Success! Door opens."));
 
     // Solve the puzzle
     CommandToken cmd = new CommandToken(Verb.SOLVE, "man", List.of("man"), "solve man");
@@ -494,7 +488,7 @@ class InteractionControllerTest {
 
     // First attempt - wrong
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), eq("dog")))
-      .thenReturn(InteractionService.SolveResult.incorrect("Wrong! 2 attempts left.", false));
+        .thenReturn(InteractionService.SolveResult.incorrect("Wrong! 2 attempts left.", false));
 
     CommandToken cmd1 = new CommandToken(Verb.SOLVE, "dog", List.of("dog"), "solve dog");
     CommandResult result1 = controller.handle(cmd1, ctx);
@@ -503,7 +497,7 @@ class InteractionControllerTest {
 
     // Second attempt - correct
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), eq("man")))
-      .thenReturn(InteractionService.SolveResult.correct("Correct!"));
+        .thenReturn(InteractionService.SolveResult.correct("Correct!"));
 
     CommandToken cmd2 = new CommandToken(Verb.SOLVE, "man", List.of("man"), "solve man");
     CommandResult result2 = controller.handle(cmd2, ctx);
@@ -516,14 +510,14 @@ class InteractionControllerTest {
   void testInspectFlow_ItemThenMonster() {
     // Inspect item
     CommandToken cmd1 =
-      new CommandToken(Verb.INSPECT, "steel sword", List.of("steel", "sword"), "inspect sword");
+        new CommandToken(Verb.INSPECT, "steel sword", List.of("steel", "sword"), "inspect sword");
     CommandResult result1 = controller.handle(cmd1, ctx);
     assertTrue(result1.success());
     assertTrue(result1.message().contains("Steel Sword"));
 
     // Inspect monster
     CommandToken cmd2 =
-      new CommandToken(Verb.INSPECT, "goblin", List.of("goblin"), "inspect goblin");
+        new CommandToken(Verb.INSPECT, "goblin", List.of("goblin"), "inspect goblin");
     CommandResult result2 = controller.handle(cmd2, ctx);
     assertTrue(result2.success());
     assertTrue(result2.message().contains("Goblin"));
@@ -540,7 +534,7 @@ class InteractionControllerTest {
 
     // Then solve
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), eq("man")))
-      .thenReturn(InteractionService.SolveResult.correct("Correct!"));
+        .thenReturn(InteractionService.SolveResult.correct("Correct!"));
 
     CommandToken solveCmd = new CommandToken(Verb.SOLVE, "man", List.of("man"), "solve man");
     CommandResult solveResult = controller.handle(solveCmd, ctx);
@@ -551,15 +545,8 @@ class InteractionControllerTest {
   void testMultiplePuzzlesInRoom() {
     // Add second puzzle
     Puzzle puzzle2 =
-      new Puzzle(
-        "PUZ-02",
-        "Number Puzzle",
-        "What is 2+2?",
-        "4",
-        "Correct!",
-        "Wrong!",
-        "solve",
-        1);
+        new Puzzle(
+            "PUZ-02", "Number Puzzle", "What is 2+2?", "4", "Correct!", "Wrong!", "solve", 1);
     world.getPuzzles().put("PUZ-02", puzzle2);
     room.getPuzzleIds().add("PUZ-02");
 
@@ -567,7 +554,7 @@ class InteractionControllerTest {
 
     // Should use first unsolved puzzle
     when(mockInteractionService.solve(eq(ctx), eq("PUZ-01"), anyString()))
-      .thenReturn(InteractionService.SolveResult.correct("First puzzle solved!"));
+        .thenReturn(InteractionService.SolveResult.correct("First puzzle solved!"));
 
     CommandToken cmd = new CommandToken(Verb.SOLVE, "man", List.of("man"), "solve man");
     CommandResult result = controller.handle(cmd, ctx);

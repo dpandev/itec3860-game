@@ -26,22 +26,22 @@ class DefaultCombatServiceTest {
     Monster strongMonster = new Monster("Dragon", 200, 50, 20);
 
     room =
-      new Room(
-        "RM-01",
-        "Arena",
-        "Fight here",
-        Map.of(),
-        List.of("MON-01", "MON-02"),
-        List.of(),
-        List.of());
+        new Room(
+            "RM-01",
+            "Arena",
+            "Fight here",
+            Map.of(),
+            List.of("MON-01", "MON-02"),
+            List.of(),
+            List.of());
 
     world =
-      new World(
-        Map.of("RM-01", room),
-        Map.of(),
-        Map.of(),
-        Map.of("MON-01", weakMonster, "MON-02", strongMonster),
-        "RM-01");
+        new World(
+            Map.of("RM-01", room),
+            Map.of(),
+            Map.of(),
+            Map.of("MON-01", weakMonster, "MON-02", strongMonster),
+            "RM-01");
 
     player = new Player("TestPlayer", "RM-01");
     ctx = new GameContext(world, player);
@@ -246,21 +246,14 @@ class DefaultCombatServiceTest {
       // Create fresh context for each iteration
       Monster testMonster = new Monster("Test" + i, 100, 10, 5);
       Room testRoom =
-        new Room(
-          "TEST",
-          "Test",
-          "Test",
-          Map.of(),
-          List.of("TEST-MON"),
-          List.of(),
-          List.of());
+          new Room("TEST", "Test", "Test", Map.of(), List.of("TEST-MON"), List.of(), List.of());
       World testWorld =
-        new World(
-          Map.of("TEST", testRoom),
-          Map.of(),
-          Map.of(),
-          Map.of("TEST-MON", testMonster),
-          "TEST");
+          new World(
+              Map.of("TEST", testRoom),
+              Map.of(),
+              Map.of(),
+              Map.of("TEST-MON", testMonster),
+              "TEST");
       Player testPlayer = new Player("Test", "TEST");
       GameContext testCtx = new GameContext(testWorld, testPlayer);
 
