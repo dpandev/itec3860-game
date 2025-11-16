@@ -19,6 +19,7 @@ public enum Verb {
   DEFEND,
   IGNORE,
   HELP,
+  STATS,
   SAVE,
   LOAD,
   QUIT,
