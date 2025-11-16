@@ -37,13 +37,14 @@ public class ClientApp {
 
     // init services
     ExplorationService explorationService = new DefaultExplorationService();
-    
+
     // init controllers here
     CommandController movementController = new MovementController();
     CommandController inventoryController = new InventoryController();
     CommandController interactionController = new InteractionController();
     CommandController combatController = new CombatController();
-    CommandController systemController = new SystemController(saveService, loader, explorationService);
+    CommandController systemController =
+        new SystemController(saveService, loader, explorationService);
 
     // init game controller (main controller)
     GameController gameController =

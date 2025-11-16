@@ -13,6 +13,8 @@ import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
 import avengers.domain.utils.VerbCategory;
+import avengers.service.DefaultExplorationService;
+import avengers.service.ExplorationService;
 import avengers.service.SaveService;
 import avengers.service.spi.FileSaveRepository;
 import avengers.service.world.JsonWorldLoader;
@@ -40,7 +42,8 @@ class GameControllerTest {
 
     SaveService saveService = new SaveService(new FileSaveRepository(Paths.get("test-saves")));
     WorldLoader worldLoader = new JsonWorldLoader();
-    systemController = new SystemController(saveService, worldLoader);
+    ExplorationService explorationService = new DefaultExplorationService();
+    systemController = new SystemController(saveService, worldLoader, explorationService);
     controller = new GameController(controllerMap, systemController);
 
     World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
@@ -57,8 +60,10 @@ class GameControllerTest {
   void testControllerCreationWithEmptyMap() {
     SaveService saveService = new SaveService(new FileSaveRepository(Paths.get("test-saves")));
     WorldLoader worldLoader = new JsonWorldLoader();
+    ExplorationService explorationService = new DefaultExplorationService();
     GameController emptyController =
-        new GameController(new HashMap<>(), new SystemController(saveService, worldLoader));
+        new GameController(
+            new HashMap<>(), new SystemController(saveService, worldLoader, explorationService));
 
     assertNotNull(emptyController);
   }

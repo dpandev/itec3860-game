@@ -2,9 +2,7 @@ package avengers.service;
 
 import avengers.domain.utils.GameContext;
 
-/**
- * Service interface for handling exploration-related operations including player stats display.
- */
+/** Service interface for handling exploration-related operations including player stats display. */
 public interface ExplorationService {
 
   /**

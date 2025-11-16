@@ -11,7 +11,7 @@ class VerbTest {
   void testVerbValues() {
     Verb[] verbs = Verb.values();
 
-    assertEquals(22, verbs.length);
+    assertEquals(23, verbs.length);
   }
 
   @Test

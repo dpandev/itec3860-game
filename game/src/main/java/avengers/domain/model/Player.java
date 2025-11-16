@@ -206,8 +206,8 @@ public final class Player extends Character {
   }
 
   /**
-   * Calculates equipment bonuses for the player based on equipped items.
-   * This method requires a World instance to look up item effects.
+   * Calculates equipment bonuses for the player based on equipped items. This method requires a
+   * World instance to look up item effects.
    *
    * @param world the game world containing item definitions
    * @return StatBonus object containing all equipment bonuses
@@ -218,17 +218,24 @@ public final class Player extends Character {
 
     for (String itemId : equippedItems.values()) {
       if (itemId != null) {
-        world.findItem(itemId).ifPresent(item -> {
-          if (item.hasEffect()) {
-            StatBonus itemBonus = StatBonus.parseEffect(item.getEffect());
-            // Combine flat bonuses
-            itemBonus.getAllBonuses().forEach((stat, bonus) ->
-                totalBonuses.merge(stat, bonus, Integer::sum));
-            // Combine percentage bonuses
-            itemBonus.getAllPercentageBonuses().forEach((stat, bonus) ->
-                totalPercentageBonuses.merge(stat, bonus, Double::sum));
-          }
-        });
+        world
+            .findItem(itemId)
+            .ifPresent(
+                item -> {
+                  if (item.hasEffect()) {
+                    StatBonus itemBonus = StatBonus.parseEffect(item.getEffect());
+                    // Combine flat bonuses
+                    itemBonus
+                        .getAllBonuses()
+                        .forEach((stat, bonus) -> totalBonuses.merge(stat, bonus, Integer::sum));
+                    // Combine percentage bonuses
+                    itemBonus
+                        .getAllPercentageBonuses()
+                        .forEach(
+                            (stat, bonus) ->
+                                totalPercentageBonuses.merge(stat, bonus, Double::sum));
+                  }
+                });
       }
     }
 
@@ -244,14 +251,15 @@ public final class Player extends Character {
   public int getTotalAttack(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
     int totalAttack = getBaseAttack() + equipmentBonus.getAttackBonus();
-    
+
     // Apply percentage bonuses
-    double percentageBonus = equipmentBonus.getPercentageBonus("Attack") + 
-                           equipmentBonus.getPercentageBonus("all stats");
+    double percentageBonus =
+        equipmentBonus.getPercentageBonus("Attack")
+            + equipmentBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalAttack = (int) Math.round(totalAttack * (1 + percentageBonus / 100.0));
     }
-    
+
     return totalAttack;
   }
 
@@ -264,14 +272,15 @@ public final class Player extends Character {
   public int getTotalDefense(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
     int totalDefense = getBaseDefense() + equipmentBonus.getDefenseBonus();
-    
+
     // Apply percentage bonuses
-    double percentageBonus = equipmentBonus.getPercentageBonus("Defense") + 
-                           equipmentBonus.getPercentageBonus("all stats");
+    double percentageBonus =
+        equipmentBonus.getPercentageBonus("Defense")
+            + equipmentBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalDefense = (int) Math.round(totalDefense * (1 + percentageBonus / 100.0));
     }
-    
+
     return totalDefense;
   }
 
@@ -284,15 +293,16 @@ public final class Player extends Character {
   public int getTotalMaxHealth(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
     int totalMaxHealth = getMaxHealth() + equipmentBonus.getHealthBonus();
-    
+
     // Apply percentage bonuses
-    double percentageBonus = equipmentBonus.getPercentageBonus("HP") + 
-                           equipmentBonus.getPercentageBonus("Health") +
-                           equipmentBonus.getPercentageBonus("all stats");
+    double percentageBonus =
+        equipmentBonus.getPercentageBonus("HP")
+            + equipmentBonus.getPercentageBonus("Health")
+            + equipmentBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalMaxHealth = (int) Math.round(totalMaxHealth * (1 + percentageBonus / 100.0));
     }
-    
+
     return totalMaxHealth;
   }
 }

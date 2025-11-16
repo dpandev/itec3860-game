@@ -11,6 +11,8 @@ import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.Verb;
+import avengers.service.DefaultExplorationService;
+import avengers.service.ExplorationService;
 import avengers.service.SaveService;
 import avengers.service.spi.FileSaveRepository;
 import avengers.service.world.JsonWorldLoader;
@@ -30,7 +32,8 @@ class SystemControllerTest {
   void setUp() {
     SaveService saveService = new SaveService(new FileSaveRepository(Paths.get("test-saves")));
     WorldLoader worldLoader = new JsonWorldLoader();
-    controller = new SystemController(saveService, worldLoader);
+    ExplorationService explorationService = new DefaultExplorationService();
+    controller = new SystemController(saveService, worldLoader, explorationService);
     World world = new World(Map.of(), Map.of(), Map.of(), Map.of(), "room1");
     Player player = new Player("TestPlayer", "room1");
     context = new GameContext(world, player);

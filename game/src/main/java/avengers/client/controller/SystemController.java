@@ -15,8 +15,11 @@ public class SystemController implements CommandController {
   private final WorldLoader worldLoader;
   private final ExplorationService explorationService;
 
-  /** Constructs a SystemController with the given SaveService, WorldLoader, and ExplorationService. */
-  public SystemController(SaveService save, WorldLoader worldLoader, ExplorationService explorationService) {
+  /**
+   * Constructs a SystemController with the given SaveService, WorldLoader, and ExplorationService.
+   */
+  public SystemController(
+      SaveService save, WorldLoader worldLoader, ExplorationService explorationService) {
     this.save = save;
     this.worldLoader = worldLoader;
     this.explorationService = explorationService;
