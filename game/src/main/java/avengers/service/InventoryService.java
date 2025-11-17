@@ -339,7 +339,7 @@ public final class InventoryService {
     var output = new StringBuilder();
     output.append("=== MONSTER DETAILS ===\n");
     output.append("Name: ").append(monster.getName()).append("\n");
-    output.append("ID: ").append(monster.getId()).append("\n");
+    output.append("Description: ").append(monster.getDescription()).append("\n\n");
     output
         .append("Health: ")
         .append(monster.getCurrentHealth())
@@ -349,6 +349,14 @@ public final class InventoryService {
     output.append("Attack: ").append(monster.getBaseAttack()).append("\n");
     output.append("Defense: ").append(monster.getBaseDefense()).append("\n");
     output.append("Status: ").append(monster.isAlive() ? "Alive" : "Defeated").append("\n");
+
+    // Show special effects if any
+    if (monster.getSpecialEffects() != null && !monster.getSpecialEffects().isEmpty()) {
+      output.append("\nSpecial Abilities:\n");
+      for (String effect : monster.getSpecialEffects()) {
+        output.append("  - ").append(effect).append("\n");
+      }
+    }
 
     return output.toString();
   }
