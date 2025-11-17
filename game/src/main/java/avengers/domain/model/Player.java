@@ -53,8 +53,8 @@ public final class Player extends Character {
     this.roomsVisited = new ArrayList<String>();
     this.activatedArtifacts = new ArrayList<>();
     this.defeatedMonsters = new ArrayList<>(); // Initialize the defeated monsters list
-    increaseBaseAttack(10000);
-    increaseBaseDefense(0);
+    increaseBaseAttack(100);
+    increaseBaseDefense(20);
   }
 
   /**
