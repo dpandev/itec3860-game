@@ -1,0 +1,204 @@
+package avengers.domain.model;
+
+/**
+ * Represents an immutable item in the game world.
+ *
+ * <p>Items can be consumables, weapons, armor, key items, or artifacts. Each item has properties
+ * that determine its behavior, including whether it can be removed from inventory and whether it's
+ * a key item required for progression.
+ */
+public final class Item {
+  private final String id;
+  private final String name;
+  private final String description;
+  private final String category;
+  private final String effect;
+  private final String specialEffect;
+
+  /**
+   * Constructs a new Item with the specified properties.
+   *
+   * @param id the unique identifier for this item (e.g., "IT-01")
+   * @param name the display name of the item
+   * @param description the detailed description of the item
+   * @param category the category of the item (Consumable, Weapon, Armor, Key Item, Artifact)
+   * @param effect the mechanical effect of the item (e.g., "+20 HP")
+   * @param specialEffect any special effects or restrictions
+   * @throws IllegalArgumentException if any required field is null or blank
+   */
+  public Item(
+      String id,
+      String name,
+      String description,
+      String category,
+      String effect,
+      String specialEffect) {
+    if (id == null || id.trim().isEmpty()) {
+      throw new IllegalArgumentException("Item ID cannot be null or blank");
+    }
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("Item name cannot be null or blank");
+    }
+    if (description == null) {
+      throw new IllegalArgumentException("Item description cannot be null");
+    }
+    if (category == null || category.trim().isEmpty()) {
+      throw new IllegalArgumentException("Item category cannot be null or blank");
+    }
+    if (name.length() > 100) {
+      throw new IllegalArgumentException("Item name cannot exceed 100 characters");
+    }
+    if (description.length() > 500) {
+      throw new IllegalArgumentException("Item description cannot exceed 500 characters");
+    }
+
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.category = category;
+    this.effect = effect != null ? effect : "";
+    this.specialEffect = specialEffect != null ? specialEffect : "";
+  }
+
+  /**
+   * Gets the unique identifier of this item.
+   *
+   * @return the item's ID
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * Gets the name of this item.
+   *
+   * @return the item's name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Gets the description of the item.
+   *
+   * @return the item's description
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Gets the category of the item.
+   *
+   * @return the item's category
+   */
+  public String getCategory() {
+    return category;
+  }
+
+  /**
+   * Gets the primary effect of the item.
+   *
+   * @return the item's effect
+   */
+  public String getEffect() {
+    return effect;
+  }
+
+  /**
+   * Gets the special effect of the item.
+   *
+   * @return the item's special effect
+   */
+  public String getSpecialEffect() {
+    return specialEffect;
+  }
+
+  /**
+   * Checks if the item has any effect.
+   *
+   * @return true if the item has a non-empty effect, false otherwise
+   */
+  public boolean hasEffect() {
+    return effect != null && !effect.trim().isEmpty();
+  }
+
+  /**
+   * Checks if the item has any special effect.
+   *
+   * @return true if the item has a non-empty special effect, false otherwise
+   */
+  public boolean hasSpecialEffect() {
+    return specialEffect != null && !specialEffect.trim().isEmpty();
+  }
+
+  /**
+   * Checks if the item is equippable based on its category.
+   *
+   * @return true if the item can be equipped, false otherwise
+   */
+  public boolean isEquippable() {
+    return "Weapon".equalsIgnoreCase(category)
+        || "Armor".equalsIgnoreCase(category)
+        || "Artifact".equalsIgnoreCase(category);
+  }
+
+  /**
+   * Checks if the item is consumable based on its category.
+   *
+   * @return true if the item is consumable, false otherwise
+   */
+  public boolean isConsumable() {
+    return "Consumable".equalsIgnoreCase(category);
+  }
+
+  /**
+   * Checks if this item is a key item required for game progression.
+   *
+   * @return true if this is a key item, false otherwise
+   */
+  public boolean isKeyItem() {
+    return "Key Item".equalsIgnoreCase(category);
+  }
+
+  /**
+   * Checks if this item can be removed from the player's inventory. Key items and artifacts with
+   * permanent effects cannot be removed.
+   *
+   * @return true if the item can be removed, false otherwise
+   */
+  public boolean isRemovable() {
+    // Key items cannot be removed
+    if (isKeyItem()) {
+      return false;
+    }
+    // Artifacts with "Cannot be removed" or "permanently" in special effect cannot be removed
+    if ("Artifact".equalsIgnoreCase(category) && specialEffect != null) {
+      String lowerSpecial = specialEffect.toLowerCase();
+      return !lowerSpecial.contains("cannot be removed") && !lowerSpecial.contains("permanently");
+    }
+    return true;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Item item = (Item) obj;
+    return id.equals(item.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return id.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Item{id='%s', name='%s', category='%s'}", id, name, category);
+  }
+}

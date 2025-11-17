@@ -1,0 +1,124 @@
+{
+  "puzzles": [
+    {
+      "id": "PUZ-01",
+      "name": "Trial of the Statues",
+      "description": "Towering gods demand worship. Several statues hold weapons, while one holds nothing.",
+      "solution": "Kneel only before the statue with no weapon. Choosing wrong is fatal.",
+      "reward": "Unlocks passage to the Fire Chamber.",
+      "failureConsequence": "Instant death → respawn at Guild Hall.",
+      "commandUsed": "kneel statue",
+      "numberOfAttempts": 1
+    },
+    {
+      "id": "PUZ-02",
+      "name": "Lava Stepping Stones",
+      "description": "In Pyros' Fire Chamber, rocks float across a lava river. Some are solid, others crack when stepped on.",
+      "solution": "Time your movements carefully, and hop only on the solid stones.",
+      "reward": "Safe path across the lava river to boss arena.",
+      "failureConsequence": "Fall into lava → lose HP and restart at riverbank.",
+      "commandUsed": "jump stone",
+      "numberOfAttempts": 3
+    },
+    {
+      "id": "PUZ-03",
+      "name": "Water Cavern Flood Puzzle",
+      "description": "Neressa raises the water level, forcing hunters onto ledges. Coral pillars glow faintly in sequence.",
+      "solution": "Activate the coral pillars in the correct glowing order.",
+      "reward": "Lowers water, exposing boss Neressa.",
+      "failureConsequence": "Drowned → respawn at cavern entrance.",
+      "commandUsed": "activate pillar",
+      "numberOfAttempts": 3
+    },
+    {
+      "id": "PUZ-04",
+      "name": "Earth Fortress Boulder Lock",
+      "description": "Gravemaw blocks the path with enormous rune-marked boulders that rearrange when struck.",
+      "solution": "Strike runes in correct sequence (clues hidden on walls).",
+      "reward": "Unlocks Gravemaw's inner chamber.",
+      "failureConsequence": "Puzzle resets, no progress until correct order is found.",
+      "commandUsed": "strike rune",
+      "numberOfAttempts": "Unlimited (resets until correct)"
+    },
+    {
+      "id": "PUZ-05",
+      "name": "Air Spire Bridge Gusts",
+      "description": "Zephyra summons fierce gusts across a high bridge. Glowing feathers scatter mid-air.",
+      "solution": "Collect feathers and use them as anchors to weigh down the bridge.",
+      "reward": "Allows safe crossing to Zephyra's throne.",
+      "failureConsequence": "Knocked off bridge → lose HP and restart at bridge start.",
+      "commandUsed": "collect feather",
+      "numberOfAttempts": 3
+    },
+    {
+      "id": "PUZ-06",
+      "name": "Rune Circle of Shadows",
+      "description": "In the Demon Castle Library, a giant rune circle glows on the floor, shifting constantly. Dark whispers dare entry.",
+      "solution": "Step on runes in the correct order matching the chant.",
+      "reward": "Unlocks hidden grimoire granting shadow power.",
+      "failureConsequence": "Wrong rune = shadow attack (HP loss), puzzle resets.",
+      "commandUsed": "step rune",
+      "numberOfAttempts": "Unlimited (resets until correct)"
+    },
+    {
+      "id": "PUZ-07",
+      "name": "Eternal Battlefield Weapon Trial",
+      "description": "Spirits mislead adventurers among scattered weapons. Only one sword can pierce the Final Gate.",
+      "solution": "Choose the rusted sword that glows faintly when lifted.",
+      "reward": "IT-19 IT-21",
+      "failureConsequence": "Choosing wrong weapon = cursed → HP drain / respawn.",
+      "commandUsed": "choose sword",
+      "numberOfAttempts": 2
+    },
+    {
+      "id": "PUZ-08",
+      "name": "Shadow Army Summoning",
+      "description": "On the Shadow Plains, fallen souls rise but scatter without command.",
+      "solution": "Issue the correct command phrase to bind them.",
+      "reward": "Adds shadows as allies in later battles.",
+      "failureConsequence": "Failure → shadows disperse, retry possible.",
+      "commandUsed": "say arise",
+      "numberOfAttempts": "Unlimited (retry allowed)"
+    },
+    {
+      "id": "PUZ-09",
+      "name": "Monarch's Throne Riddle",
+      "description": "From the obsidian throne, a riddle echoes: \"What walks with no legs, speaks with no mouth, and follows yet leads?\"",
+      "solution": "Answer: Shadow.",
+      "reward": "Unlocks final throne room and Monarch's audience.",
+      "failureConsequence": "Wrong answer → immediate expulsion from throne room.",
+      "commandUsed": "answer shadow",
+      "numberOfAttempts": 1
+    },
+    {
+      "id": "PUZ-10",
+      "name": "Final Gate Seal",
+      "description": "A colossal rift sealed by four elemental emblems (Fire, Water, Earth, Air).",
+      "solution": "Collect all 4 sigils from bosses and place them into the gate lock.",
+      "reward": "The Final Gate opens → last boss fight / ending.",
+      "failureConsequence": "Missing sigils → gate remains sealed, cannot progress.",
+      "commandUsed": "place sigil",
+      "numberOfAttempts": "Unlimited (progress-gated)"
+    },
+    {
+      "id": "PUZ-11",
+      "name": "Architect's Test",
+      "description": "Kandiaru, the Architect, forces you to input the correct sequence of glowing runes that represent the System's code.",
+      "solution": "Enter runes in the correct sequence to stabilize the System.",
+      "reward": "IT-20",
+      "failureConsequence": "HP drains steadily until puzzle resets.",
+      "commandUsed": "input code",
+      "numberOfAttempts": 3
+    },
+    {
+      "id": "PUZ-12",
+      "name": "Shadow Monarch's Choice",
+      "description": "At the Monarch's Throne, shadows whisper: \"Will you embrace dominion or resist?\"",
+      "solution": "Choose to embrace shadows or resist shadows.",
+      "reward": "Determines alternate ending path (Shadow Monarch Ending vs Hunter King Ending).",
+      "failureConsequence": "Wrong choice or indecision = lose all Shadow Army allies and get expelled.",
+      "commandUsed": "embrace shadows / resist shadows",
+      "numberOfAttempts": 1
+    }
+  ]
+}

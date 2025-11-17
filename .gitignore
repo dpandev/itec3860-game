@@ -3,6 +3,9 @@
 build/
 !gradle/wrapper/gradle-wrapper.jar
 
+# Java compiled classes
+*.class
+
 # IDEs
 .idea/
 *.iml
@@ -15,3 +18,8 @@ out/
 # OS
 .DS_Store
 Thumbs.db
+
+game/test-saves
+game/src/test
+
+saves/*
