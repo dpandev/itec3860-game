@@ -57,6 +57,11 @@ public class DefaultInteractionService implements InteractionService {
         if (puzzleOpt.isPresent()) {
           Puzzle puzzle = puzzleOpt.get();
 
+          // Check if puzzle requires specific items to be accessible
+          if (!hasRequiredItemsForPuzzle(player, puzzleId)) {
+            continue; // Skip this puzzle, check next one
+          }
+
           // Initialize attempts if not set
           if (!puzzleAttempts.containsKey(puzzleId)) {
             puzzleAttempts.put(puzzleId, puzzle.getNumberOfAttempts());
@@ -73,6 +78,31 @@ public class DefaultInteractionService implements InteractionService {
     }
 
     return null;
+  }
+
+  /**
+   * Checks if the player has the required items to access a specific puzzle. Some puzzles are gated
+   * behind specific items that must be in the player's inventory.
+   *
+   * @param player the player
+   * @param puzzleId the puzzle ID to check
+   * @return true if the player has the required items (or no items required), false otherwise
+   */
+  private boolean hasRequiredItemsForPuzzle(Player player, String puzzleId) {
+    // Define puzzle-item requirements
+    // PUZ-11 (Architect's Test) requires IT-14 (Architect's Core)
+    if (puzzleId.equals("PUZ-11")) {
+      return player.hasItemInInventory("IT-14");
+    }
+
+    // Add more puzzle requirements here as needed
+    // Example:
+    // if (puzzleId.equals("PUZ-XX")) {
+    //   return player.hasItemInInventory("IT-XX");
+    // }
+
+    // By default, no item requirement
+    return true;
   }
 
   @Override
