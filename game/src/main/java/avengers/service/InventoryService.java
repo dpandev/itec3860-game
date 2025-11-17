@@ -534,6 +534,62 @@ public final class InventoryService {
   }
 
   /**
+   * Attempts to activate an artifact from the player's inventory to enable passive effects.
+   *
+   * @param ctx the game context
+   * @param itemName the name or ID of the artifact to activate
+   * @return CommandResult indicating success or failure
+   */
+  public CommandResult activateArtifact(GameContext ctx, String itemName) {
+    var player = ctx.player();
+    var world = ctx.world();
+
+    // Find the item in player's inventory
+    var itemToActivate = findItemInInventory(world, player, itemName);
+    if (itemToActivate.isEmpty()) {
+      return CommandResult.fail(
+          "You don't have an item called '" + itemName + "' in your inventory.");
+    }
+
+    var item = itemToActivate.get();
+
+    // Check if item is an artifact or key item
+    String category = item.getCategory();
+    if (!category.equalsIgnoreCase("Artifact") && !category.equalsIgnoreCase("Key Item")) {
+      return CommandResult.fail(
+          "Only artifacts and key items can be activated. "
+              + item.getName()
+              + " is a "
+              + category
+              + ".");
+    }
+
+    // Check if artifact has any effects
+    if (!item.hasEffect() || item.getEffect().isBlank()) {
+      return CommandResult.fail(item.getName() + " has no passive effects to activate.");
+    }
+
+    // Try to activate the artifact
+    boolean activated = player.activateArtifact(item.getId());
+    if (!activated) {
+      return CommandResult.fail(item.getName() + " is already activated.");
+    }
+
+    // Build success message with effect details
+    StringBuilder message = new StringBuilder();
+    message.append("You activate the ").append(item.getName()).append("!\n\n");
+    message.append("Passive Effect Applied: ").append(item.getEffect()).append("\n");
+
+    if (item.hasSpecialEffect() && !item.getSpecialEffect().isBlank()) {
+      message.append("Special Effect: ").append(item.getSpecialEffect()).append("\n");
+    }
+
+    message.append("\nYour stats have been updated with the artifact's bonuses.");
+
+    return CommandResult.success(message.toString());
+  }
+
+  /**
    * Determines the appropriate equipment slot for an item based on its category.
    *
    * @param item the item to determine the slot for

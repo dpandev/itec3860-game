@@ -19,6 +19,7 @@ public final class Player extends Character {
   private final List<String> roomsVisited;
   private final List<String> allies;
   private final Map<EquipmentSlot, String> equippedItems = new HashMap<>();
+  private final List<String> activatedArtifacts;
   private DestinyChoice destinyChoice = DestinyChoice.UNDECIDED;
 
   /** Enum representing the player's destiny choice from PUZ-12. */
@@ -49,6 +50,7 @@ public final class Player extends Character {
     this.inventoryItems = new ArrayList<String>();
     this.puzzlesSolved = new ArrayList<String>();
     this.roomsVisited = new ArrayList<String>();
+    this.activatedArtifacts = new ArrayList<>();
     increaseBaseAttack(10000);
     increaseBaseDefense(0);
   }
@@ -164,6 +166,49 @@ public final class Player extends Character {
   }
 
   /**
+   * Gets the list of activated artifact IDs.
+   *
+   * @return A list of activated artifact IDs.
+   */
+  public List<String> getActivatedArtifacts() {
+    return new ArrayList<>(activatedArtifacts);
+  }
+
+  /**
+   * Activates an artifact to enable its passive effects.
+   *
+   * @param artifactId The ID of the artifact to activate.
+   * @return true if the artifact was activated, false if already activated.
+   */
+  public boolean activateArtifact(String artifactId) {
+    if (activatedArtifacts.contains(artifactId)) {
+      return false; // Already activated
+    }
+    activatedArtifacts.add(artifactId);
+    return true;
+  }
+
+  /**
+   * Checks if an artifact is activated.
+   *
+   * @param artifactId The ID of the artifact to check.
+   * @return true if the artifact is activated, false otherwise.
+   */
+  public boolean isArtifactActivated(String artifactId) {
+    return activatedArtifacts.contains(artifactId);
+  }
+
+  /**
+   * Deactivates an artifact, removing its passive effects.
+   *
+   * @param artifactId The ID of the artifact to deactivate.
+   * @return true if the artifact was deactivated, false if not activated.
+   */
+  public boolean deactivateArtifact(String artifactId) {
+    return activatedArtifacts.remove(artifactId);
+  }
+
+  /**
    * Gets a map of equipped items by equipment slot.
    *
    * @return A map where the key is the equipment slot and the value is the item ID.
@@ -251,23 +296,24 @@ public final class Player extends Character {
   }
 
   /**
-   * Calculates passive bonuses from items in inventory that provide effects without being equipped.
-   * This includes artifacts like IT-12 (Demon King's Crown) that boost stats passively.
+   * Calculates passive bonuses from ACTIVATED artifacts in inventory. Artifacts must be activated
+   * using the "activate" command before their passive effects apply (FR-IT-06).
    *
    * @param world the game world containing item definitions
-   * @return StatBonus object containing all passive inventory bonuses
+   * @return StatBonus object containing all passive bonuses from activated artifacts
    */
   public StatBonus calculatePassiveInventoryBonuses(World world) {
     Map<String, Integer> totalBonuses = new HashMap<>();
     Map<String, Double> totalPercentageBonuses = new HashMap<>();
 
-    for (String itemId : inventoryItems) {
-      if (itemId != null) {
+    // Only process activated artifacts
+    for (String artifactId : activatedArtifacts) {
+      if (artifactId != null && inventoryItems.contains(artifactId)) {
         world
-            .findItem(itemId)
+            .findItem(artifactId)
             .ifPresent(
                 item -> {
-                  // Only artifacts and key items provide passive bonuses while in inventory
+                  // Verify it's still an artifact and has effects
                   String category = item.getCategory();
                   if ((category.equalsIgnoreCase("Artifact")
                           || category.equalsIgnoreCase("Key Item"))

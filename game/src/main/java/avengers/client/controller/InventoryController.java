@@ -23,7 +23,8 @@ public class InventoryController implements CommandController {
         || verb == Verb.INSPECT
         || verb == Verb.EQUIP
         || verb == Verb.UNEQUIP
-        || verb == Verb.USE;
+        || verb == Verb.USE
+        || verb == Verb.ACTIVATE;
   }
 
   @Override
@@ -36,6 +37,7 @@ public class InventoryController implements CommandController {
       case EQUIP -> handleEquip(cmd, ctx);
       case UNEQUIP -> handleUnequip(cmd, ctx);
       case USE -> handleUse(cmd, ctx);
+      case ACTIVATE -> handleActivate(cmd, ctx);
       default -> CommandResult.fail("Unsupported inventory command: " + cmd.verb());
     };
   }
@@ -134,5 +136,21 @@ public class InventoryController implements CommandController {
 
     String itemName = String.join(" ", cmd.args());
     return inventoryService.useItem(ctx, itemName);
+  }
+
+  /**
+   * Handles the ACTIVATE command.
+   *
+   * @param cmd the command token
+   * @param ctx the game context
+   * @return the result of the activate operation
+   */
+  private CommandResult handleActivate(CommandToken cmd, GameContext ctx) {
+    if (cmd.args().isEmpty()) {
+      return CommandResult.fail("What do you want to activate? Usage: activate <artifact name>");
+    }
+
+    String itemName = String.join(" ", cmd.args());
+    return inventoryService.activateArtifact(ctx, itemName);
   }
 }
