@@ -133,6 +133,86 @@ public final class FileSaveRepository implements SaveRepository {
     }
   }
 
+  @Override
+  public java.util.List<String> listAllSaves() {
+    try {
+      if (!Files.exists(savesPath)) {
+        return java.util.Collections.emptyList();
+      }
+
+      return Files.list(savesPath)
+          .filter(path -> path.toString().endsWith(FILE_EXTENSION))
+          .map(path -> path.getFileName().toString())
+          .sorted()
+          .collect(java.util.stream.Collectors.toList());
+
+    } catch (IOException e) {
+      LOGGER.log(Level.SEVERE, "Failed to list save files", e);
+      return java.util.Collections.emptyList();
+    }
+  }
+
+  @Override
+  public Optional<SaveData> loadFromFile(String fileName) {
+    if (fileName == null || fileName.isBlank()) {
+      LOGGER.warning("Attempted to load save with null or blank file name");
+      return Optional.empty();
+    }
+
+    Path saveFile = savesPath.resolve(fileName);
+
+    if (!Files.exists(saveFile)) {
+      LOGGER.fine(String.format("Save file not found: %s", fileName));
+      return Optional.empty();
+    }
+
+    try (Reader reader = Files.newBufferedReader(saveFile, StandardCharsets.UTF_8)) {
+      SaveData saveData = gson.fromJson(reader, SaveData.class);
+
+      if (saveData == null) {
+        LOGGER.warning(String.format("Save file exists but contains no data: %s", fileName));
+        return Optional.empty();
+      }
+
+      LOGGER.info(
+          String.format(
+              "Successfully loaded save from file: %s (Player: %s)",
+              fileName, saveData.playerName()));
+      return Optional.of(saveData);
+
+    } catch (JsonSyntaxException e) {
+      LOGGER.log(Level.SEVERE, String.format("Invalid JSON in save file: %s", fileName), e);
+      return Optional.empty();
+    } catch (IOException e) {
+      LOGGER.log(Level.SEVERE, String.format("Failed to read save file: %s", fileName), e);
+      return Optional.empty();
+    }
+  }
+
+  @Override
+  public boolean deleteSave(String fileName) {
+    if (fileName == null || fileName.isBlank()) {
+      LOGGER.warning("Attempted to delete save with null or blank file name");
+      return false;
+    }
+
+    Path saveFile = savesPath.resolve(fileName);
+
+    if (!Files.exists(saveFile)) {
+      LOGGER.fine(String.format("Save file not found for deletion: %s", fileName));
+      return false;
+    }
+
+    try {
+      Files.delete(saveFile);
+      LOGGER.info(String.format("Successfully deleted save file: %s", fileName));
+      return true;
+    } catch (IOException e) {
+      LOGGER.log(Level.SEVERE, String.format("Failed to delete save file: %s", fileName), e);
+      return false;
+    }
+  }
+
   /**
    * Gets the file path for a save file based on player ID.
    *

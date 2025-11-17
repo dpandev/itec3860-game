@@ -21,3 +21,5 @@ Thumbs.db
 
 game/test-saves
 game/src/test
+
+saves/*

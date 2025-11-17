@@ -6,6 +6,7 @@ public enum VerbCategory {
   INTERACTION,
   INVENTORY,
   COMBAT,
+  MAP,
   SYSTEM;
 
   /**
@@ -19,10 +20,11 @@ public enum VerbCategory {
       return SYSTEM;
     }
     return switch (v) {
-      case GO, EXPLORE, MAP -> MOVEMENT;
-      case INVENTORY, PICKUP, DROP, EQUIP, UNEQUIP, USE -> INVENTORY;
-      case ACTIVATE, INSPECT, SOLVE, HINT -> INTERACTION;
-      case ATTACK, DEFEND, IGNORE -> COMBAT;
+      case GO, EXPLORE -> MOVEMENT;
+      case INVENTORY, PICKUP, DROP, EQUIP, UNEQUIP, USE, INSPECT, ACTIVATE -> INVENTORY;
+      case SOLVE, HINT -> INTERACTION;
+      case ATTACK, DEFEND, IGNORE, SUMMON -> COMBAT;
+      case MAP -> MAP;
       case HELP, STATS, QUIT, SAVE, LOAD, NEW_GAME, UNKNOWN -> SYSTEM;
     };
   }

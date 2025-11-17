@@ -3,6 +3,7 @@ package avengers.client.controller;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.CommandToken;
 import avengers.domain.utils.GameContext;
+import avengers.domain.utils.Verb;
 import avengers.service.InteractionService;
 
 /** Controller responsible for handling interactions within the game. */
@@ -20,6 +21,11 @@ public class InteractionController implements CommandController {
   }
 
   @Override
+  public boolean supports(Verb verb) {
+    return verb == Verb.SOLVE || verb == Verb.HINT;
+  }
+
+  @Override
   public CommandResult handle(CommandToken cmd, GameContext ctx) {
     if (cmd == null) {
       return CommandResult.fail("Invalid command.");
@@ -28,7 +34,6 @@ public class InteractionController implements CommandController {
     return switch (cmd.verb()) {
       case SOLVE -> handleSolve(cmd, ctx);
       case HINT -> interactionService.getHint(ctx);
-      case ACTIVATE -> CommandResult.success("Interaction handled.");
       default -> CommandResult.fail("Unsupported interaction command: " + cmd.verb());
     };
   }

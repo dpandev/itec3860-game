@@ -111,6 +111,9 @@ public class DefaultCombatService implements CombatService {
     if (!monster.isAlive()) {
       result.append("\nThe ").append(monster.getName()).append(" has been defeated!\n");
 
+      // Mark monster as defeated so it stays dead after save/load
+      player.addDefeatedMonster(monster.getId());
+
       // Handle loot
       String lootMsg = handleLoot(ctx, monster.getId());
       if (!lootMsg.isBlank()) {
@@ -267,6 +270,74 @@ public class DefaultCombatService implements CombatService {
   }
 
   @Override
+  public CommandResult summonAllies(GameContext ctx) {
+    if (!ctx.isInCombat()) {
+      return CommandResult.fail("You can only summon allies during combat!");
+    }
+
+    Player player = ctx.player();
+
+    // Check if player has allies
+    if (player.getAllyCount() == 0) {
+      return CommandResult.fail(
+          "You have no allies to summon! Complete the Shadow Army puzzle (PUZ-08) to gain shadow allies.");
+    }
+
+    World world = ctx.world();
+    Optional<Monster> monsterOpt = world.findMonster(ctx.getCombatMonsterId());
+    if (monsterOpt.isEmpty()) {
+      return CommandResult.fail("No monster in combat!");
+    }
+
+    Monster monster = monsterOpt.get();
+
+    // Calculate ally damage (each ally does 50 base damage + 10% of player's attack)
+    int baseAllyDamage = 50;
+    int playerAttackBonus = (int) (player.getTotalAttack(world) * 0.10);
+    int damagePerAlly = baseAllyDamage + playerAttackBonus;
+    int totalAllyDamage = damagePerAlly * player.getAllyCount();
+
+    // Apply damage to monster
+    monster.takeDamage(totalAllyDamage);
+
+    StringBuilder result = new StringBuilder();
+    result.append("You summon your Shadow Army!\n\n");
+    result.append(String.format("%d shadow(s) emerge from the darkness!\n", player.getAllyCount()));
+    result.append(
+        String.format(
+            "They strike the %s for %d total damage!\n", monster.getName(), totalAllyDamage));
+
+    // Check if monster is defeated
+    if (!monster.isAlive()) {
+      result.append("\nThe ").append(monster.getName()).append(" has been defeated!\n");
+
+      // Mark monster as defeated
+      player.addDefeatedMonster(monster.getId());
+
+      // Handle loot
+      String lootMsg = handleLoot(ctx, monster.getId());
+      if (!lootMsg.isBlank()) {
+        result.append(lootMsg);
+      }
+
+      // Remove monster from room
+      Optional<Room> roomOpt = world.getRoomById(player.getRoomId());
+      roomOpt.ifPresent(room -> room.removeMonster(monster.getId()));
+
+      // End combat
+      ctx.endCombat();
+
+      return CommandResult.success(result.toString());
+    }
+
+    // Monster counter-attacks
+    CommandResult monsterResult = monsterAttack(ctx);
+    result.append("\n").append(monsterResult.message());
+
+    return CommandResult.success(result.toString());
+  }
+
+  @Override
   public String handleLoot(GameContext ctx, String monsterId) {
     World world = ctx.world();
     Optional<Monster> monsterOpt = world.findMonster(monsterId);
@@ -277,16 +348,23 @@ public class DefaultCombatService implements CombatService {
 
     Monster monster = monsterOpt.get();
     StringBuilder loot = new StringBuilder();
-    loot.append("\nLoot dropped:\n");
+    loot.append("\n=== LOOT OBTAINED ===\n");
 
     for (String itemIdOrName : monster.getItemDrops()) {
       // Try to find item by ID or name
       Optional<avengers.domain.model.Item> itemOpt = world.findItem(itemIdOrName);
       if (itemOpt.isPresent()) {
-        ctx.player().addItemToInventory(itemOpt.get().getId());
-        loot.append("  - ").append(itemOpt.get().getName()).append("\n");
+        avengers.domain.model.Item item = itemOpt.get();
+        ctx.player().addItemToInventory(item.getId());
+        loot.append("  ✓ ")
+            .append(item.getName())
+            .append(" (")
+            .append(item.getCategory())
+            .append(") added to inventory\n");
       } else {
-        loot.append("  - ").append(itemIdOrName).append("\n");
+        // Fallback if item not found in world data
+        ctx.player().addItemToInventory(itemIdOrName);
+        loot.append("  ✓ ").append(itemIdOrName).append(" added to inventory\n");
       }
     }
 
@@ -302,12 +380,54 @@ public class DefaultCombatService implements CombatService {
    * @return Optional containing the monster if found
    */
   private Optional<Monster> findMonsterInRoom(World world, Room room, String monsterName) {
+    String searchName = monsterName.trim().toLowerCase();
+
+    // First try exact match
+    Optional<Monster> exactMatch =
+        room.getMonsterIds().stream()
+            .map(world::findMonster)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(monster -> monster.getName().equalsIgnoreCase(searchName))
+            .findFirst();
+
+    if (exactMatch.isPresent()) {
+      return exactMatch;
+    }
+
+    // Then try partial match (monster name contains search term or vice versa)
     return room.getMonsterIds().stream()
         .map(world::findMonster)
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .filter(monster -> monster.getName().equalsIgnoreCase(monsterName))
+        .filter(
+            monster -> {
+              String monsterNameLower = monster.getName().toLowerCase();
+              // Check if monster name contains search term, or if it's a multi-part name
+              // E.g., "Gravemaw, Stone Colossus" matches "Gravemaw" or "Stone Colossus"
+              return monsterNameLower.contains(searchName)
+                  || searchName.contains(monsterNameLower)
+                  || matchesAnyPart(monsterNameLower, searchName);
+            })
         .findFirst();
+  }
+
+  /**
+   * Check if the search name matches any part of a comma-separated or multi-word monster name.
+   *
+   * @param monsterName the full monster name (lowercase)
+   * @param searchName the search term (lowercase)
+   * @return true if any part matches
+   */
+  private boolean matchesAnyPart(String monsterName, String searchName) {
+    // Split by comma or whitespace
+    String[] parts = monsterName.split("[,\\s]+");
+    for (String part : parts) {
+      if (part.equalsIgnoreCase(searchName)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

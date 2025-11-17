@@ -6,7 +6,10 @@ import avengers.domain.model.Room;
 import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.GameContext;
+import avengers.domain.utils.StatBonus;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,14 +20,14 @@ public class DefaultExplorationService implements ExplorationService {
   private static final Map<String, String> DIRECTION_ALIASES = new HashMap<>();
 
   static {
-    DIRECTION_ALIASES.put("n", "north");
-    DIRECTION_ALIASES.put("s", "south");
-    DIRECTION_ALIASES.put("e", "east");
-    DIRECTION_ALIASES.put("w", "west");
-    DIRECTION_ALIASES.put("north", "north");
-    DIRECTION_ALIASES.put("south", "south");
-    DIRECTION_ALIASES.put("east", "east");
-    DIRECTION_ALIASES.put("west", "west");
+    DIRECTION_ALIASES.put("n", "NORTH");
+    DIRECTION_ALIASES.put("s", "SOUTH");
+    DIRECTION_ALIASES.put("e", "EAST");
+    DIRECTION_ALIASES.put("w", "WEST");
+    DIRECTION_ALIASES.put("north", "NORTH");
+    DIRECTION_ALIASES.put("south", "SOUTH");
+    DIRECTION_ALIASES.put("east", "EAST");
+    DIRECTION_ALIASES.put("west", "WEST");
   }
 
   private final InteractionService interactionService;
@@ -60,11 +63,30 @@ public class DefaultExplorationService implements ExplorationService {
     int baseAttack = player.getBaseAttack();
     int totalAttack = player.getTotalAttack(world);
     int attackBonus = totalAttack - baseAttack;
+
+    StatBonus equipmentBonus = player.calculateEquipmentBonuses(world);
+    StatBonus passiveBonus = player.calculatePassiveInventoryBonuses(world);
+
     if (attackBonus > 0) {
-      stats.append(
-          String.format(
-              "Attack: %d (+%d from equipment) = %d total\n",
-              baseAttack, attackBonus, totalAttack));
+      int equipAttack = equipmentBonus.getAttackBonus();
+      int passiveAttack = passiveBonus.getAttackBonus();
+
+      if (equipAttack > 0 && passiveAttack > 0) {
+        stats.append(
+            String.format(
+                "Attack: %d (+%d equipment, +%d passive) = %d total\n",
+                baseAttack, equipAttack, passiveAttack, totalAttack));
+      } else if (equipAttack > 0) {
+        stats.append(
+            String.format(
+                "Attack: %d (+%d from equipment) = %d total\n",
+                baseAttack, attackBonus, totalAttack));
+      } else {
+        stats.append(
+            String.format(
+                "Attack: %d (+%d from passive) = %d total\n",
+                baseAttack, attackBonus, totalAttack));
+      }
     } else {
       stats.append(String.format("Attack: %d\n", baseAttack));
     }
@@ -73,11 +95,27 @@ public class DefaultExplorationService implements ExplorationService {
     int baseDefense = player.getBaseDefense();
     int totalDefense = player.getTotalDefense(world);
     int defenseBonus = totalDefense - baseDefense;
+
     if (defenseBonus > 0) {
-      stats.append(
-          String.format(
-              "Defense: %d (+%d from equipment) = %d total\n",
-              baseDefense, defenseBonus, totalDefense));
+      int equipDefense = equipmentBonus.getDefenseBonus();
+      int passiveDefense = passiveBonus.getDefenseBonus();
+
+      if (equipDefense > 0 && passiveDefense > 0) {
+        stats.append(
+            String.format(
+                "Defense: %d (+%d equipment, +%d passive) = %d total\n",
+                baseDefense, equipDefense, passiveDefense, totalDefense));
+      } else if (equipDefense > 0) {
+        stats.append(
+            String.format(
+                "Defense: %d (+%d from equipment) = %d total\n",
+                baseDefense, defenseBonus, totalDefense));
+      } else {
+        stats.append(
+            String.format(
+                "Defense: %d (+%d from passive) = %d total\n",
+                baseDefense, defenseBonus, totalDefense));
+      }
     } else {
       stats.append(String.format("Defense: %d\n", baseDefense));
     }
@@ -103,6 +141,30 @@ public class DefaultExplorationService implements ExplorationService {
 
     if (!hasEquippedItems) {
       stats.append("  No items equipped\n");
+    }
+
+    // Display activated artifacts
+    List<String> activatedArtifacts = player.getActivatedArtifacts();
+    if (!activatedArtifacts.isEmpty()) {
+      stats.append("\nActivated Artifacts (Passive Bonuses):\n");
+      for (String artifactId : activatedArtifacts) {
+        Item artifact = world.findItem(artifactId).orElse(null);
+        if (artifact != null) {
+          stats.append(String.format("- %s", artifact.getName()));
+          if (artifact.hasEffect()) {
+            stats.append(String.format(" [%s]", artifact.getEffect()));
+          }
+          stats.append("\n");
+        }
+      }
+    }
+
+    // Display allies
+    List<String> allies = player.getAllies();
+    if (!allies.isEmpty()) {
+      stats.append("\nAllies (Shadow Army):\n");
+      stats.append(String.format("  %d shadow(s) under your command\n", allies.size()));
+      stats.append("  Use 'summon' in combat to call upon them\n");
     }
 
     return stats.toString();
@@ -155,27 +217,37 @@ public class DefaultExplorationService implements ExplorationService {
       description.append("\n");
     }
 
-    // Monsters in room
+    // Monsters in room (filter out defeated ones)
     if (room.hasMonsters()) {
-      description.append("Creatures:\n");
+      // Build list of alive monsters (not in defeated list)
+      List<String> aliveMonsters = new ArrayList<>();
       for (String monsterId : room.getMonsterIds()) {
-        world
-            .findMonster(monsterId)
-            .ifPresent(
-                monster -> {
-                  if (monster.isAlive()) {
-                    description
-                        .append("  - ")
-                        .append(monster.getName())
-                        .append(" (HP: ")
-                        .append(monster.getCurrentHealth())
-                        .append("/")
-                        .append(monster.getMaxHealth())
-                        .append(")\n");
-                  }
-                });
+        if (!player.isMonsterDefeated(monsterId)) {
+          aliveMonsters.add(monsterId);
+        }
       }
-      description.append("\n");
+
+      if (!aliveMonsters.isEmpty()) {
+        description.append("Creatures:\n");
+        for (String monsterId : aliveMonsters) {
+          world
+              .findMonster(monsterId)
+              .ifPresent(
+                  monster -> {
+                    if (monster.isAlive()) {
+                      description
+                          .append("  - ")
+                          .append(monster.getName())
+                          .append(" (HP: ")
+                          .append(monster.getCurrentHealth())
+                          .append("/")
+                          .append(monster.getMaxHealth())
+                          .append(")\n");
+                    }
+                  });
+        }
+        description.append("\n");
+      }
     }
 
     // Available exits

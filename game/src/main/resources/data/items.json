@@ -93,8 +93,8 @@
       "name": "Demon King's Crown",
       "description": "A crown radiating demonic authority.",
       "category": "Artifact",
-      "effect": "",
-      "specialEffect": "Boosts overall stats by 15%."
+      "effect": "+15% all stats",
+      "specialEffect": "Passive bonus while in inventory."
     },
     {
       "id": "IT-13",

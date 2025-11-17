@@ -48,16 +48,63 @@ public class SystemController implements CommandController {
                   + "  save - Save your game\n"
                   + "  quit - Save and quit the game");
       case SAVE -> {
+        // Check if at max capacity
+        if (save.isAtMaxCapacity()) {
+          yield CommandResult.success(
+              "╔═══════════════════════════════════════════════════════════╗\n"
+                  + "║          MAXIMUM SAVE SLOTS REACHED (10/10)             ║\n"
+                  + "╠═══════════════════════════════════════════════════════════╣\n"
+                  + "║  You have reached the maximum number of save slots.     ║\n"
+                  + "║  Please use 'load' command to select a save to          ║\n"
+                  + "║  overwrite, or manually delete old saves.               ║\n"
+                  + "║                                                          ║\n"
+                  + "║  Current save files:                                    ║\n"
+                  + "║  "
+                  + String.format(
+                      "%-55s", save.listSaveFiles().size() + " save(s) in saves/ directory")
+                  + "║\n"
+                  + "╚═══════════════════════════════════════════════════════════╝\n"
+                  + "\nTip: The game will automatically overwrite your current\n"
+                  + "     save file when you continue playing and save again.");
+        }
         save.saveData(ctx);
-        yield CommandResult.success("Game saved successfully.");
+        int currentCount = save.listSaveFiles().size();
+        yield CommandResult.success(
+            "Game saved successfully. (Save slot "
+                + currentCount
+                + "/"
+                + save.getMaxSaveSlots()
+                + ")");
       }
       case LOAD -> {
-        var playerId = ctx.player().getId();
-        var loadedCtx = save.load(playerId); // no multiple saves per player, just one
-        if (loadedCtx.isEmpty()) {
-          yield CommandResult.fail("No saved game found for player ID: " + playerId);
+        // List all available save files for player to choose from
+        var availableSaves = save.listSaveFiles();
+
+        if (availableSaves.isEmpty()) {
+          yield CommandResult.fail(
+              "No saved games found.\n"
+                  + "Save files should be located in: saves/\n"
+                  + "Use 'save' command to create a new save.");
         }
-        yield save.applySave(ctx, loadedCtx.get()); // this also returns CommandResult
+
+        // Build save selection menu
+        StringBuilder loadMenu = new StringBuilder();
+        loadMenu.append("\n╔═══════════════════════════════════════════════════════════╗\n");
+        loadMenu.append("║                    AVAILABLE SAVE FILES                  ║\n");
+        loadMenu.append("╠═══════════════════════════════════════════════════════════╣\n");
+
+        for (int i = 0; i < availableSaves.size(); i++) {
+          String fileName = availableSaves.get(i);
+          loadMenu.append(String.format("║  [%d] %-54s║\n", i + 1, fileName));
+        }
+
+        loadMenu.append("╚═══════════════════════════════════════════════════════════╝\n");
+        loadMenu.append("\nNote: Use the main menu 'Load Game' option to select a save.\n");
+        loadMenu.append("The in-game 'load' command is for reference only.\n");
+        loadMenu.append("To load a different save, please restart the game and use\n");
+        loadMenu.append("the main menu.");
+
+        yield CommandResult.success(loadMenu.toString());
       }
       case NEW_GAME -> {
         // Reload the world from scratch to reset all state properly
@@ -68,7 +115,7 @@ public class SystemController implements CommandController {
             "\n=== NEW GAME STARTED ===\n"
                 + "Your adventure begins anew!\n"
                 + "All monsters, items, and puzzles have been reset.\n"
-                + "Type 'look' to see your surroundings.");
+                + "Type 'explore' to see your surroundings.");
       }
       case Verb.STATS -> CommandResult.success(explorationService.showStats(ctx));
       case QUIT -> {

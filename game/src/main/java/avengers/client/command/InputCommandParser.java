@@ -25,11 +25,14 @@ public class InputCommandParser implements CommandParser {
           Verb.EQUIP,
           Verb.UNEQUIP,
           Verb.ATTACK,
-          Verb.IGNORE);
+          Verb.IGNORE,
+          Verb.ACTIVATE,
+          Verb.SOLVE);
 
   // Verbs that don't require any target
   private static final Set<Verb> NO_TARGET_VERBS =
-      Set.of(Verb.HELP, Verb.MAP, Verb.EXPLORE, Verb.INVENTORY, Verb.QUIT, Verb.DEFEND);
+      Set.of(
+          Verb.HELP, Verb.MAP, Verb.EXPLORE, Verb.INVENTORY, Verb.QUIT, Verb.DEFEND, Verb.SUMMON);
 
   /** Construct an InputCommandParser with predefined verbs and direction synonyms. */
   public InputCommandParser() {
@@ -130,17 +133,33 @@ public class InputCommandParser implements CommandParser {
     verbMap.put("equip", Verb.EQUIP);
     verbMap.put("unequip", Verb.UNEQUIP);
     verbMap.put("use", Verb.USE);
+    verbMap.put("activate", Verb.ACTIVATE);
 
     // Interaction verbs
     verbMap.put("inspect", Verb.INSPECT);
-    verbMap.put("activate", Verb.ACTIVATE);
     verbMap.put("solve", Verb.SOLVE);
     verbMap.put("hint", Verb.HINT);
+
+    // Puzzle-specific action verbs (all map to SOLVE)
+    verbMap.put("kneel", Verb.SOLVE);
+    verbMap.put("jump", Verb.SOLVE);
+    verbMap.put("strike", Verb.SOLVE);
+    verbMap.put("step", Verb.SOLVE);
+    verbMap.put("choose", Verb.SOLVE);
+    verbMap.put("say", Verb.SOLVE);
+    verbMap.put("answer", Verb.SOLVE);
+    verbMap.put("place", Verb.SOLVE);
+    verbMap.put("input", Verb.SOLVE);
+    verbMap.put("collect", Verb.SOLVE);
+    verbMap.put("embrace", Verb.SOLVE);
+    verbMap.put("resist", Verb.SOLVE);
 
     // Combat verbs
     verbMap.put("attack", Verb.ATTACK);
     verbMap.put("defend", Verb.DEFEND);
     verbMap.put("ignore", Verb.IGNORE);
+    verbMap.put("run", Verb.IGNORE); // Synonym for ignore - run away from monsters
+    verbMap.put("summon", Verb.SUMMON);
 
     // System verbs
     verbMap.put("help", Verb.HELP);

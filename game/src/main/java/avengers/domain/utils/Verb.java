@@ -18,6 +18,7 @@ public enum Verb {
   ATTACK,
   DEFEND,
   IGNORE,
+  SUMMON,
   HELP,
   STATS,
   SAVE,

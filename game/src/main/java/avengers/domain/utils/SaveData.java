@@ -20,6 +20,7 @@ import java.util.UUID;
  * @param allies list of ally IDs the player has
  * @param puzzlesSolved list of puzzle IDs the player has solved
  * @param roomsVisited list of room IDs the player has visited
+ * @param defeatedMonsters list of monster IDs that have been defeated
  * @param savedAt the timestamp when the game was saved
  */
 public record SaveData(
@@ -35,5 +36,5 @@ public record SaveData(
     List<String> allies,
     List<String> puzzlesSolved,
     List<String> roomsVisited,
-    // TODO: add field for world/room states (monsters defeated, items taken left in room, etc.)
+    List<String> defeatedMonsters,
     Instant savedAt) {}

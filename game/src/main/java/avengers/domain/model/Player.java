@@ -19,6 +19,16 @@ public final class Player extends Character {
   private final List<String> roomsVisited;
   private final List<String> allies;
   private final Map<EquipmentSlot, String> equippedItems = new HashMap<>();
+  private final List<String> activatedArtifacts;
+  private DestinyChoice destinyChoice = DestinyChoice.UNDECIDED;
+  private final List<String> defeatedMonsters; // List of defeated monster IDs
+
+  /** Enum representing the player's destiny choice from PUZ-12. */
+  public enum DestinyChoice {
+    UNDECIDED,
+    SHADOW_MONARCH,
+    HUNTER_KING
+  }
 
   /** Enum representing different equipment slots for the player. */
   public enum EquipmentSlot {
@@ -34,14 +44,37 @@ public final class Player extends Character {
    * @param startingRoomId The ID of the starting room for the player.
    */
   public Player(String name, String startingRoomId) {
-    super(name, 100);
+    super(name, 10000);
     this.id = UUID.randomUUID();
     this.roomId = startingRoomId;
     this.allies = new ArrayList<String>();
     this.inventoryItems = new ArrayList<String>();
     this.puzzlesSolved = new ArrayList<String>();
     this.roomsVisited = new ArrayList<String>();
-    increaseBaseAttack(10);
+    this.activatedArtifacts = new ArrayList<>();
+    this.defeatedMonsters = new ArrayList<>(); // Initialize the defeated monsters list
+    increaseBaseAttack(100);
+    increaseBaseDefense(20);
+  }
+
+  /**
+   * Constructs a Player with a specific UUID (used when loading saved games).
+   *
+   * @param playerId The UUID of the player from the save file.
+   * @param name The name of the player.
+   * @param startingRoomId The ID of the starting room for the player.
+   */
+  public Player(UUID playerId, String name, String startingRoomId) {
+    super(name, 10000);
+    this.id = playerId; // Use the provided UUID instead of generating a new one
+    this.roomId = startingRoomId;
+    this.allies = new ArrayList<String>();
+    this.inventoryItems = new ArrayList<String>();
+    this.puzzlesSolved = new ArrayList<String>();
+    this.roomsVisited = new ArrayList<String>();
+    this.activatedArtifacts = new ArrayList<>();
+    this.defeatedMonsters = new ArrayList<>(); // Initialize the defeated monsters list
+    increaseBaseAttack(10000);
     increaseBaseDefense(0);
   }
 
@@ -79,6 +112,46 @@ public final class Player extends Character {
    */
   public List<String> getAllies() {
     return allies;
+  }
+
+  /**
+   * Adds an ally to the player's ally list.
+   *
+   * @param allyId The ID of the ally to add.
+   */
+  public void addAlly(String allyId) {
+    if (!allies.contains(allyId)) {
+      allies.add(allyId);
+    }
+  }
+
+  /**
+   * Removes an ally from the player's ally list.
+   *
+   * @param allyId The ID of the ally to remove.
+   * @return true if the ally was removed, false otherwise.
+   */
+  public boolean removeAlly(String allyId) {
+    return allies.remove(allyId);
+  }
+
+  /**
+   * Checks if the player has a specific ally.
+   *
+   * @param allyId The ID of the ally to check.
+   * @return true if the ally is in the list, false otherwise.
+   */
+  public boolean hasAlly(String allyId) {
+    return allies.contains(allyId);
+  }
+
+  /**
+   * Gets the number of allies the player has.
+   *
+   * @return The count of allies.
+   */
+  public int getAllyCount() {
+    return allies.size();
   }
 
   /**
@@ -153,6 +226,79 @@ public final class Player extends Character {
    */
   public void addRoomToRoomsVisited(String roomId) {
     this.roomsVisited.add(roomId);
+  }
+
+  /**
+   * Gets the list of defeated monster IDs.
+   *
+   * @return A list of monster IDs that have been defeated.
+   */
+  public List<String> getDefeatedMonsters() {
+    return defeatedMonsters;
+  }
+
+  /**
+   * Marks a monster as defeated.
+   *
+   * @param monsterId The ID of the monster that was defeated.
+   */
+  public void addDefeatedMonster(String monsterId) {
+    if (!defeatedMonsters.contains(monsterId)) {
+      defeatedMonsters.add(monsterId);
+    }
+  }
+
+  /**
+   * Checks if a monster has been defeated.
+   *
+   * @param monsterId The ID of the monster to check.
+   * @return true if the monster has been defeated, false otherwise.
+   */
+  public boolean isMonsterDefeated(String monsterId) {
+    return defeatedMonsters.contains(monsterId);
+  }
+
+  /**
+   * Gets the list of activated artifact IDs.
+   *
+   * @return A list of activated artifact IDs.
+   */
+  public List<String> getActivatedArtifacts() {
+    return new ArrayList<>(activatedArtifacts);
+  }
+
+  /**
+   * Activates an artifact to enable its passive effects.
+   *
+   * @param artifactId The ID of the artifact to activate.
+   * @return true if the artifact was activated, false if already activated.
+   */
+  public boolean activateArtifact(String artifactId) {
+    if (activatedArtifacts.contains(artifactId)) {
+      return false; // Already activated
+    }
+    activatedArtifacts.add(artifactId);
+    return true;
+  }
+
+  /**
+   * Checks if an artifact is activated.
+   *
+   * @param artifactId The ID of the artifact to check.
+   * @return true if the artifact is activated, false otherwise.
+   */
+  public boolean isArtifactActivated(String artifactId) {
+    return activatedArtifacts.contains(artifactId);
+  }
+
+  /**
+   * Deactivates an artifact, removing its passive effects.
+   *
+   * @param artifactId The ID of the artifact to deactivate.
+   * @return true if the artifact was deactivated, false if not activated.
+   */
+  public boolean deactivateArtifact(String artifactId) {
+    return activatedArtifacts.remove(artifactId);
   }
 
   /**
@@ -243,6 +389,48 @@ public final class Player extends Character {
   }
 
   /**
+   * Calculates passive bonuses from ACTIVATED artifacts in inventory. Artifacts must be activated
+   * using the "activate" command before their passive effects apply (FR-IT-06).
+   *
+   * @param world the game world containing item definitions
+   * @return StatBonus object containing all passive bonuses from activated artifacts
+   */
+  public StatBonus calculatePassiveInventoryBonuses(World world) {
+    Map<String, Integer> totalBonuses = new HashMap<>();
+    Map<String, Double> totalPercentageBonuses = new HashMap<>();
+
+    // Only process activated artifacts
+    for (String artifactId : activatedArtifacts) {
+      if (artifactId != null && inventoryItems.contains(artifactId)) {
+        world
+            .findItem(artifactId)
+            .ifPresent(
+                item -> {
+                  // Verify it's still an artifact and has effects
+                  String category = item.getCategory();
+                  if ((category.equalsIgnoreCase("Artifact")
+                          || category.equalsIgnoreCase("Key Item"))
+                      && item.hasEffect()) {
+                    StatBonus itemBonus = StatBonus.parseEffect(item.getEffect());
+                    // Combine flat bonuses
+                    itemBonus
+                        .getAllBonuses()
+                        .forEach((stat, bonus) -> totalBonuses.merge(stat, bonus, Integer::sum));
+                    // Combine percentage bonuses
+                    itemBonus
+                        .getAllPercentageBonuses()
+                        .forEach(
+                            (stat, bonus) ->
+                                totalPercentageBonuses.merge(stat, bonus, Double::sum));
+                  }
+                });
+      }
+    }
+
+    return new StatBonus(totalBonuses, totalPercentageBonuses);
+  }
+
+  /**
    * Gets the total attack including base attack and equipment bonuses.
    *
    * @param world the game world to look up equipment effects
@@ -250,12 +438,17 @@ public final class Player extends Character {
    */
   public int getTotalAttack(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalAttack = getBaseAttack() + equipmentBonus.getAttackBonus();
+    StatBonus passiveBonus = calculatePassiveInventoryBonuses(world);
 
-    // Apply percentage bonuses
+    int totalAttack =
+        getBaseAttack() + equipmentBonus.getAttackBonus() + passiveBonus.getAttackBonus();
+
+    // Apply percentage bonuses from both equipped and passive items
     double percentageBonus =
         equipmentBonus.getPercentageBonus("Attack")
-            + equipmentBonus.getPercentageBonus("all stats");
+            + equipmentBonus.getPercentageBonus("all stats")
+            + passiveBonus.getPercentageBonus("Attack")
+            + passiveBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalAttack = (int) Math.round(totalAttack * (1 + percentageBonus / 100.0));
     }
@@ -271,17 +464,40 @@ public final class Player extends Character {
    */
   public int getTotalDefense(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalDefense = getBaseDefense() + equipmentBonus.getDefenseBonus();
+    StatBonus passiveBonus = calculatePassiveInventoryBonuses(world);
 
-    // Apply percentage bonuses
+    int totalDefense =
+        getBaseDefense() + equipmentBonus.getDefenseBonus() + passiveBonus.getDefenseBonus();
+
+    // Apply percentage bonuses from both equipped and passive items
     double percentageBonus =
         equipmentBonus.getPercentageBonus("Defense")
-            + equipmentBonus.getPercentageBonus("all stats");
+            + equipmentBonus.getPercentageBonus("all stats")
+            + passiveBonus.getPercentageBonus("Defense")
+            + passiveBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalDefense = (int) Math.round(totalDefense * (1 + percentageBonus / 100.0));
     }
 
     return totalDefense;
+  }
+
+  /**
+   * Gets the player's destiny choice from PUZ-12.
+   *
+   * @return the destiny choice
+   */
+  public DestinyChoice getDestinyChoice() {
+    return destinyChoice;
+  }
+
+  /**
+   * Sets the player's destiny choice from PUZ-12.
+   *
+   * @param choice the destiny choice
+   */
+  public void setDestinyChoice(DestinyChoice choice) {
+    this.destinyChoice = choice;
   }
 
   /**
@@ -292,13 +508,19 @@ public final class Player extends Character {
    */
   public int getTotalMaxHealth(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalMaxHealth = getMaxHealth() + equipmentBonus.getHealthBonus();
+    StatBonus passiveBonus = calculatePassiveInventoryBonuses(world);
 
-    // Apply percentage bonuses
+    int totalMaxHealth =
+        getMaxHealth() + equipmentBonus.getHealthBonus() + passiveBonus.getHealthBonus();
+
+    // Apply percentage bonuses from both equipped and passive items
     double percentageBonus =
         equipmentBonus.getPercentageBonus("HP")
             + equipmentBonus.getPercentageBonus("Health")
-            + equipmentBonus.getPercentageBonus("all stats");
+            + equipmentBonus.getPercentageBonus("all stats")
+            + passiveBonus.getPercentageBonus("HP")
+            + passiveBonus.getPercentageBonus("Health")
+            + passiveBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalMaxHealth = (int) Math.round(totalMaxHealth * (1 + percentageBonus / 100.0));
     }
