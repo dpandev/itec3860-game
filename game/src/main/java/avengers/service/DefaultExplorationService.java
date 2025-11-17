@@ -17,14 +17,14 @@ public class DefaultExplorationService implements ExplorationService {
   private static final Map<String, String> DIRECTION_ALIASES = new HashMap<>();
 
   static {
-    DIRECTION_ALIASES.put("n", "north");
-    DIRECTION_ALIASES.put("s", "south");
-    DIRECTION_ALIASES.put("e", "east");
-    DIRECTION_ALIASES.put("w", "west");
-    DIRECTION_ALIASES.put("north", "north");
-    DIRECTION_ALIASES.put("south", "south");
-    DIRECTION_ALIASES.put("east", "east");
-    DIRECTION_ALIASES.put("west", "west");
+    DIRECTION_ALIASES.put("n", "NORTH");
+    DIRECTION_ALIASES.put("s", "SOUTH");
+    DIRECTION_ALIASES.put("e", "EAST");
+    DIRECTION_ALIASES.put("w", "WEST");
+    DIRECTION_ALIASES.put("north", "NORTH");
+    DIRECTION_ALIASES.put("south", "SOUTH");
+    DIRECTION_ALIASES.put("east", "EAST");
+    DIRECTION_ALIASES.put("west", "WEST");
   }
 
   private final InteractionService interactionService;

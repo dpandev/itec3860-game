@@ -1,0 +1,15 @@
+{
+  "playerId": "cebea09e-fe4c-4958-a9cc-7cc7786aaaba",
+  "playerName": "Player",
+  "roomId": "RM-01",
+  "itemIds": [],
+  "equippedItems": {},
+  "currentHealth": 100,
+  "maxHealth": 100,
+  "baseAttack": 10,
+  "baseDefense": 0,
+  "allies": [],
+  "puzzlesSolved": [],
+  "roomsVisited": [],
+  "savedAt": "2025-11-16T23:47:01.491604Z"
+}

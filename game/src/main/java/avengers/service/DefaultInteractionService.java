@@ -95,7 +95,9 @@ public class DefaultInteractionService implements InteractionService {
     int remainingAttempts = puzzleAttempts.getOrDefault(activePuzzleId, 0);
 
     // Check answer (case-insensitive)
-    if (answer.trim().equalsIgnoreCase(puzzle.getSolution().trim())) {
+    boolean isCorrect = checkAnswer(answer, puzzle);
+
+    if (isCorrect) {
       // Correct answer
       puzzlePhases.put(activePuzzleId, PuzzlePhase.SOLVED);
       ctx.player().getPuzzlesSolved().add(activePuzzleId);
@@ -219,5 +221,102 @@ public class DefaultInteractionService implements InteractionService {
     }
 
     return text.toString();
+  }
+
+  /**
+   * Check if the given answer is correct for the puzzle. Supports both exact solution matching and
+   * action-based puzzle keywords.
+   *
+   * @param answer the user's answer
+   * @param puzzle the puzzle to check against
+   * @return true if the answer is correct
+   */
+  private boolean checkAnswer(String answer, Puzzle puzzle) {
+    if (answer == null || answer.isBlank()) {
+      return false;
+    }
+
+    String userAnswer = answer.trim().toLowerCase();
+    String solution = puzzle.getSolution().trim().toLowerCase();
+
+    // Exact match (for riddles and direct answers)
+    if (userAnswer.equalsIgnoreCase(solution)) {
+      return true;
+    }
+
+    // For action-based puzzles, check if answer contains key action words
+    // PUZ-01: "kneel statue" - solution mentions "statue with no weapon"
+    if (puzzle.getId().equals("PUZ-01")) {
+      return userAnswer.contains("statue")
+          || userAnswer.contains("empty")
+          || userAnswer.contains("nothing")
+          || userAnswer.contains("no weapon");
+    }
+
+    // PUZ-02: "jump stone" - solution mentions "solid stones"
+    if (puzzle.getId().equals("PUZ-02")) {
+      return userAnswer.contains("stone")
+          || userAnswer.contains("rock")
+          || userAnswer.contains("solid");
+    }
+
+    // PUZ-03: "activate pillar" - solution mentions "coral pillars"
+    if (puzzle.getId().equals("PUZ-03")) {
+      return userAnswer.contains("pillar") || userAnswer.contains("coral");
+    }
+
+    // PUZ-04: "strike rune" - solution mentions "runes in correct sequence"
+    if (puzzle.getId().equals("PUZ-04")) {
+      return userAnswer.contains("rune") || userAnswer.contains("sequence");
+    }
+
+    // PUZ-05: "collect feather" - solution mentions "feathers"
+    if (puzzle.getId().equals("PUZ-05")) {
+      return userAnswer.contains("feather");
+    }
+
+    // PUZ-06: "step rune" - solution mentions "step on runes"
+    if (puzzle.getId().equals("PUZ-06")) {
+      return userAnswer.contains("rune") || userAnswer.contains("step");
+    }
+
+    // PUZ-07: "choose sword" - solution mentions "rusted sword"
+    if (puzzle.getId().equals("PUZ-07")) {
+      return userAnswer.contains("sword") || userAnswer.contains("rust");
+    }
+
+    // PUZ-08: "say arise" - solution mentions command phrase
+    if (puzzle.getId().equals("PUZ-08")) {
+      return userAnswer.contains("arise") || userAnswer.contains("command");
+    }
+
+    // PUZ-09: "answer shadow" - exact answer expected
+    if (puzzle.getId().equals("PUZ-09")) {
+      return userAnswer.contains("shadow");
+    }
+
+    // PUZ-10: "place sigil" - solution mentions placing sigils
+    if (puzzle.getId().equals("PUZ-10")) {
+      return userAnswer.contains("sigil") || userAnswer.contains("emblem");
+    }
+
+    // Default: accept common puzzle action keywords
+    String commandUsed =
+        puzzle.getCommandUsed() != null ? puzzle.getCommandUsed().toLowerCase() : "";
+
+    // Extract keywords from commandUsed (before the " / " separator)
+    if (commandUsed.contains("/")) {
+      String primaryCommand = commandUsed.split("/")[0].trim();
+      // Extract the target from "action target" format
+      String[] parts = primaryCommand.split("\\s+");
+      if (parts.length > 1) {
+        String target = parts[parts.length - 1]; // Last word is usually the target
+        if (userAnswer.contains(target)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }

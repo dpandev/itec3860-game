@@ -302,12 +302,54 @@ public class DefaultCombatService implements CombatService {
    * @return Optional containing the monster if found
    */
   private Optional<Monster> findMonsterInRoom(World world, Room room, String monsterName) {
+    String searchName = monsterName.trim().toLowerCase();
+
+    // First try exact match
+    Optional<Monster> exactMatch =
+        room.getMonsterIds().stream()
+            .map(world::findMonster)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(monster -> monster.getName().equalsIgnoreCase(searchName))
+            .findFirst();
+
+    if (exactMatch.isPresent()) {
+      return exactMatch;
+    }
+
+    // Then try partial match (monster name contains search term or vice versa)
     return room.getMonsterIds().stream()
         .map(world::findMonster)
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .filter(monster -> monster.getName().equalsIgnoreCase(monsterName))
+        .filter(
+            monster -> {
+              String monsterNameLower = monster.getName().toLowerCase();
+              // Check if monster name contains search term, or if it's a multi-part name
+              // E.g., "Gravemaw, Stone Colossus" matches "Gravemaw" or "Stone Colossus"
+              return monsterNameLower.contains(searchName)
+                  || searchName.contains(monsterNameLower)
+                  || matchesAnyPart(monsterNameLower, searchName);
+            })
         .findFirst();
+  }
+
+  /**
+   * Check if the search name matches any part of a comma-separated or multi-word monster name.
+   *
+   * @param monsterName the full monster name (lowercase)
+   * @param searchName the search term (lowercase)
+   * @return true if any part matches
+   */
+  private boolean matchesAnyPart(String monsterName, String searchName) {
+    // Split by comma or whitespace
+    String[] parts = monsterName.split("[,\\s]+");
+    for (String part : parts) {
+      if (part.equalsIgnoreCase(searchName)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
