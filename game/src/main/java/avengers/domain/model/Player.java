@@ -56,6 +56,26 @@ public final class Player extends Character {
   }
 
   /**
+   * Constructs a Player with a specific UUID (used when loading saved games).
+   *
+   * @param playerId The UUID of the player from the save file.
+   * @param name The name of the player.
+   * @param startingRoomId The ID of the starting room for the player.
+   */
+  public Player(UUID playerId, String name, String startingRoomId) {
+    super(name, 10000);
+    this.id = playerId; // Use the provided UUID instead of generating a new one
+    this.roomId = startingRoomId;
+    this.allies = new ArrayList<String>();
+    this.inventoryItems = new ArrayList<String>();
+    this.puzzlesSolved = new ArrayList<String>();
+    this.roomsVisited = new ArrayList<String>();
+    this.activatedArtifacts = new ArrayList<>();
+    increaseBaseAttack(10000);
+    increaseBaseDefense(0);
+  }
+
+  /**
    * Gets the unique identifier of this player.
    *
    * @return The player ID.

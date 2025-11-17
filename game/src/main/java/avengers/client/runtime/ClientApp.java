@@ -4,8 +4,6 @@ import avengers.client.command.CommandParser;
 import avengers.client.command.InputCommandParser;
 import avengers.client.controller.*;
 import avengers.client.view.ConsoleView;
-import avengers.domain.model.Player;
-import avengers.domain.model.World;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.VerbCategory;
 import avengers.service.*;
@@ -22,16 +20,20 @@ public class ClientApp {
     ConsoleView view = new ConsoleView();
     CommandParser parser = new InputCommandParser();
 
+    // Init world loader and save service for main menu
     WorldLoader loader = new JsonWorldLoader();
-    World world = loader.load();
-    Player player = new Player("Player", world.getStartRoomId());
-    GameContext ctx = new GameContext(world, player);
-
-    // init services here (when implemented)
-    // here
     String savesPath = System.getProperty("saves.dir", "saves");
     var saveDirectory = Path.of(savesPath).toAbsolutePath();
     SaveService saveService = new SaveService(new FileSaveRepository(saveDirectory));
+
+    // Show main menu and get game context (new or loaded game)
+    MainMenu mainMenu = new MainMenu(view, loader, saveService);
+    GameContext ctx = mainMenu.show();
+
+    // If user chose to exit, terminate
+    if (ctx == null) {
+      return;
+    }
 
     // init services
     InteractionService interactionService = new DefaultInteractionService();
@@ -39,7 +41,7 @@ public class ClientApp {
     CombatService combatService = new DefaultCombatService();
     MapService mapService = new DefaultMapService();
 
-    // init controllers here
+    // init controllers
     CommandController movementController = new MovementController(explorationService);
     CommandController inventoryController = new InventoryController();
     CommandController interactionController = new InteractionController(interactionService);
@@ -61,18 +63,16 @@ public class ClientApp {
             systemController // fallback
             );
 
-    // Show welcome message and initial room description
-    view.println("=== Welcome to Solo Leveling ===");
-    view.println("Type 'help' for commands, 'quit' to exit.");
-    view.println("");
-
-    // Show initial room
+    // Show initial room description
+    view.println("════════════════════════════════════════════════════════════\n");
     var initialExplore = explorationService.explore(ctx);
     view.println(initialExplore.message());
-    view.println("");
+    view.println("\n════════════════════════════════════════════════════════════");
+    view.println("Type 'help' for commands, 'save' to save, 'quit' to exit.");
+    view.println("════════════════════════════════════════════════════════════\n");
 
-    // init and start game loop
-    GameLoop gameLoop = new GameLoop(view, parser, gameController, ctx);
+    // init and start game loop with auto-save support
+    GameLoop gameLoop = new GameLoop(view, parser, gameController, ctx, saveService);
     gameLoop.start();
   }
 }
