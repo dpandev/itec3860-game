@@ -280,11 +280,7 @@ public class JsonWorldLoader implements WorldLoader {
     private String startingRoomId;
   }
 
-  /**
-   * Data class for deserializing individual room data from JSON.
-   *
-   * <p>TODO: Once Room class is implemented, use this to construct Room objects
-   */
+  /** Data class for deserializing individual room data from JSON. */
   private static class RoomJson {
     private String id;
     private String name;

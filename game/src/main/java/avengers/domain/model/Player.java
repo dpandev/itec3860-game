@@ -19,6 +19,14 @@ public final class Player extends Character {
   private final List<String> roomsVisited;
   private final List<String> allies;
   private final Map<EquipmentSlot, String> equippedItems = new HashMap<>();
+  private DestinyChoice destinyChoice = DestinyChoice.UNDECIDED;
+
+  /** Enum representing the player's destiny choice from PUZ-12. */
+  public enum DestinyChoice {
+    UNDECIDED,
+    SHADOW_MONARCH,
+    HUNTER_KING
+  }
 
   /** Enum representing different equipment slots for the player. */
   public enum EquipmentSlot {
@@ -333,6 +341,24 @@ public final class Player extends Character {
     }
 
     return totalDefense;
+  }
+
+  /**
+   * Gets the player's destiny choice from PUZ-12.
+   *
+   * @return the destiny choice
+   */
+  public DestinyChoice getDestinyChoice() {
+    return destinyChoice;
+  }
+
+  /**
+   * Sets the player's destiny choice from PUZ-12.
+   *
+   * @param choice the destiny choice
+   */
+  public void setDestinyChoice(DestinyChoice choice) {
+    this.destinyChoice = choice;
   }
 
   /**

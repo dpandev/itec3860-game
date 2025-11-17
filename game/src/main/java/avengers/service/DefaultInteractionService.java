@@ -127,6 +127,20 @@ public class DefaultInteractionService implements InteractionService {
     boolean isCorrect = checkAnswer(answer, puzzle);
 
     if (isCorrect) {
+      // Special handling for PUZ-12: Track destiny choice before marking as solved
+      if (puzzle.getId().equals("PUZ-12")) {
+        String lowerAnswer = answer.trim().toLowerCase();
+        if (lowerAnswer.contains("embrace")) {
+          ctx.player().setDestinyChoice(Player.DestinyChoice.SHADOW_MONARCH);
+        } else if (lowerAnswer.contains("resist")) {
+          ctx.player().setDestinyChoice(Player.DestinyChoice.HUNTER_KING);
+        }
+        // If neither, the answer was just "puzzle" or "solve puzzle" - treat as indecision
+        else {
+          return handlePuz12Indecision(ctx, puzzle);
+        }
+      }
+
       // Special handling for PUZ-10: Remove sigils from inventory
       if (puzzle.getId().equals("PUZ-10")) {
         List<String> sigils = List.of("IT-06", "IT-07", "IT-08", "IT-09");
@@ -173,7 +187,7 @@ public class DefaultInteractionService implements InteractionService {
       }
 
       return CommandResult.success(
-          "Correct! You have solved the puzzle: " + puzzle.getName() + rewardMessage.toString());
+          generateSuccessMessage(puzzle, ctx.player(), rewardMessage.toString()));
     } else {
       // Wrong answer
       remainingAttempts--;
@@ -264,6 +278,80 @@ public class DefaultInteractionService implements InteractionService {
     if (puzzleId.equals(activePuzzleId)) {
       activePuzzleId = null;
     }
+  }
+
+  /**
+   * Handles indecision for PUZ-12 (Shadow Monarch's Choice). When player uses generic "solve
+   * puzzle" instead of making a specific choice, they are expelled without progression.
+   *
+   * @param ctx the game context
+   * @param puzzle the PUZ-12 puzzle
+   * @return CommandResult indicating expulsion due to indecision
+   */
+  private CommandResult handlePuz12Indecision(GameContext ctx, Puzzle puzzle) {
+    // Reset puzzle to allow retry
+    puzzlePhases.put(activePuzzleId, PuzzlePhase.LOCKED);
+
+    // Clear Shadow Army allies as per failure consequence
+    ctx.player().getAllies().clear();
+
+    // Clear active puzzle state
+    activePuzzleId = null;
+    ctx.setAwaitingPuzzleAnswer(false);
+
+    return CommandResult.fail(
+        "The shadows recoil at your indecision!\n\n"
+            + "You must make a CHOICE - will you 'embrace shadows' or 'resist shadows'?\n"
+            + "Your hesitation has consequences:\n"
+            + "  - All Shadow Army allies have abandoned you\n"
+            + "  - You are expelled from the throne chamber\n\n"
+            + "Return when you are ready to decide your destiny.");
+  }
+
+  /**
+   * Generates custom success message for puzzle completion, with special handling for PUZ-12.
+   *
+   * @param puzzle the solved puzzle
+   * @param player the player who solved it
+   * @param rewardMessage additional reward message
+   * @return formatted success message
+   */
+  private String generateSuccessMessage(Puzzle puzzle, Player player, String rewardMessage) {
+    StringBuilder message = new StringBuilder();
+
+    // Special success message for PUZ-12 based on choice
+    if (puzzle.getId().equals("PUZ-12")) {
+      message.append("=== DESTINY CHOSEN ===\n\n");
+
+      if (player.getDestinyChoice() == Player.DestinyChoice.SHADOW_MONARCH) {
+        message.append("You embrace the shadows, accepting the power and burden of dominion.\n\n");
+        message.append(
+            "The throne pulses with dark energy as the shadows bow to their new master.\n");
+        message.append("Your path: SHADOW MONARCH ENDING\n\n");
+        message.append("Powers unlocked:\n");
+        message.append("  - Shadow Army size increased by 20%\n");
+        message.append("  - Shadow Monarch's Cloak obtained\n");
+        message.append("  - Dominion over the shadow realm established\n");
+      } else if (player.getDestinyChoice() == Player.DestinyChoice.HUNTER_KING) {
+        message.append(
+            "You resist the shadows, choosing your own path as humanity's protector.\n\n");
+        message.append(
+            "The shadows dissipate, leaving you standing alone in the light of your choice.\n");
+        message.append("Your path: HUNTER KING ENDING\n\n");
+        message.append("Powers retained:\n");
+        message.append("  - Independence from shadow influence\n");
+        message.append("  - Humanity's champion title\n");
+        message.append("  - Freedom to forge your own destiny\n");
+      }
+
+      message.append("\nYour choice will determine the final ending of your journey.");
+    } else {
+      // Default success message for other puzzles
+      message.append("Correct! You have solved the puzzle: ").append(puzzle.getName());
+    }
+
+    message.append(rewardMessage);
+    return message.toString();
   }
 
   /**
