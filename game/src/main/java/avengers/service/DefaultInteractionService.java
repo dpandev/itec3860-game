@@ -6,6 +6,7 @@ import avengers.domain.model.Room;
 import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.GameContext;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,32 +95,85 @@ public class DefaultInteractionService implements InteractionService {
     Puzzle puzzle = puzzleOpt.get();
     int remainingAttempts = puzzleAttempts.getOrDefault(activePuzzleId, 0);
 
+    // Special handling for PUZ-10 (Final Gate Seal) - requires all 4 sigils
+    if (puzzle.getId().equals("PUZ-10")) {
+      // Check if player has all required sigils
+      List<String> requiredSigils = List.of("IT-06", "IT-07", "IT-08", "IT-09");
+      List<String> missingSigils = new ArrayList<>();
+
+      for (String sigilId : requiredSigils) {
+        if (!ctx.player().hasItemInInventory(sigilId)) {
+          Optional<avengers.domain.model.Item> itemOpt = world.findItem(sigilId);
+          if (itemOpt.isPresent()) {
+            missingSigils.add(itemOpt.get().getName());
+          } else {
+            missingSigils.add(sigilId);
+          }
+        }
+      }
+
+      if (!missingSigils.isEmpty()) {
+        StringBuilder message = new StringBuilder();
+        message.append("You cannot solve this puzzle yet. Missing sigils:\n");
+        for (String sigil : missingSigils) {
+          message.append("  - ").append(sigil).append("\n");
+        }
+        message.append("\nDefeat the elemental bosses to obtain all sigils.");
+        return CommandResult.fail(message.toString());
+      }
+    }
+
     // Check answer (case-insensitive)
     boolean isCorrect = checkAnswer(answer, puzzle);
 
     if (isCorrect) {
-      // Correct answer
+      // Special handling for PUZ-10: Remove sigils from inventory
+      if (puzzle.getId().equals("PUZ-10")) {
+        List<String> sigils = List.of("IT-06", "IT-07", "IT-08", "IT-09");
+        for (String sigilId : sigils) {
+          ctx.player().removeItemFromInventory(sigilId);
+        }
+      }
+
       puzzlePhases.put(activePuzzleId, PuzzlePhase.SOLVED);
       ctx.player().getPuzzlesSolved().add(activePuzzleId);
       ctx.setAwaitingPuzzleAnswer(false);
       activePuzzleId = null;
 
       // Handle reward if present
-      String rewardMessage = "";
+      StringBuilder rewardMessage = new StringBuilder();
       if (puzzle.getReward() != null && !puzzle.getReward().isBlank()) {
-        rewardMessage = "\n\nReward: " + puzzle.getReward();
-
-        // If reward contains item ID, add it to inventory
         String reward = puzzle.getReward();
-        if (reward.contains("IT-") || reward.toLowerCase().contains("item")) {
-          // Extract potential item ID or name from reward text
-          // This is simplified - in production, rewards should be structured data
-          rewardMessage += "\n(Item added to inventory if applicable)";
+
+        // Extract and add items to inventory
+        // Reward format: "IT-XX IT-YY" or single "IT-XX"
+        String[] parts = reward.split("\\s+");
+        boolean itemsAdded = false;
+
+        for (String part : parts) {
+          if (part.matches("IT-\\d+")) {
+            // This is an item ID, try to find and add it
+            Optional<avengers.domain.model.Item> itemOpt = world.findItem(part);
+            if (itemOpt.isPresent()) {
+              avengers.domain.model.Item item = itemOpt.get();
+              ctx.player().addItemToInventory(item.getId());
+              if (!itemsAdded) {
+                rewardMessage.append("\n\nRewards obtained:");
+                itemsAdded = true;
+              }
+              rewardMessage.append("\n  - ").append(item.getName());
+            }
+          }
+        }
+
+        // If no items were extracted, show the reward text as-is
+        if (!itemsAdded && !reward.isEmpty()) {
+          rewardMessage.append("\n\nReward: ").append(reward);
         }
       }
 
       return CommandResult.success(
-          "Correct! You have solved the puzzle: " + puzzle.getName() + rewardMessage);
+          "Correct! You have solved the puzzle: " + puzzle.getName() + rewardMessage.toString());
     } else {
       // Wrong answer
       remainingAttempts--;
@@ -217,133 +271,14 @@ public class DefaultInteractionService implements InteractionService {
   }
 
   /**
-   * Check if the given answer is correct for the puzzle. Supports both exact solution matching and
-   * action-based puzzle keywords.
+   * Check if the given answer is correct for the puzzle.
    *
    * @param answer the user's answer
    * @param puzzle the puzzle to check against
    * @return true if the answer is correct
    */
   private boolean checkAnswer(String answer, Puzzle puzzle) {
-    if (answer == null || answer.isBlank()) {
-      return false;
-    }
-
-    String userAnswer = answer.trim().toLowerCase();
-    String solution = puzzle.getSolution().trim().toLowerCase();
-
-    // Generic "puzzle" keyword - accept as a valid attempt for ALL puzzles
-    // This allows "solve puzzle" to work as a generic solve command for any puzzle type
-    // CHECK THIS FIRST before specific puzzle logic
-    if (userAnswer.equals("puzzle") || userAnswer.equals("solve puzzle")) {
-      return true;
-    }
-
-    // Exact match (for riddles and direct answers)
-    if (userAnswer.equalsIgnoreCase(solution)) {
-      return true;
-    }
-
-    // For action-based puzzles, check if answer contains key action words
-    // PUZ-01: "kneel statue" - solution mentions "statue with no weapon"
-    if (puzzle.getId().equals("PUZ-01")) {
-      return userAnswer.contains("statue")
-          || userAnswer.contains("empty")
-          || userAnswer.contains("nothing")
-          || userAnswer.contains("no weapon");
-    }
-
-    // PUZ-02: "jump stone" - solution mentions "solid stones"
-    if (puzzle.getId().equals("PUZ-02")) {
-      return userAnswer.contains("stone")
-          || userAnswer.contains("rock")
-          || userAnswer.contains("solid");
-    }
-
-    // PUZ-03: "activate pillar" - solution mentions "coral pillars"
-    if (puzzle.getId().equals("PUZ-03")) {
-      return userAnswer.contains("pillar") || userAnswer.contains("coral");
-    }
-
-    // PUZ-04: "strike rune" - solution mentions "runes in correct sequence"
-    if (puzzle.getId().equals("PUZ-04")) {
-      return userAnswer.contains("rune") || userAnswer.contains("sequence");
-    }
-
-    // PUZ-05: "collect feather" - solution mentions "feathers"
-    if (puzzle.getId().equals("PUZ-05")) {
-      return userAnswer.contains("feather");
-    }
-
-    // PUZ-06: "step rune" - solution mentions "step on runes"
-    if (puzzle.getId().equals("PUZ-06")) {
-      return userAnswer.contains("rune") || userAnswer.contains("step");
-    }
-
-    // PUZ-07: "choose sword" - solution mentions "rusted sword"
-    if (puzzle.getId().equals("PUZ-07")) {
-      return userAnswer.contains("sword") || userAnswer.contains("rust");
-    }
-
-    // PUZ-08: "say arise" - solution mentions command phrase
-    if (puzzle.getId().equals("PUZ-08")) {
-      return userAnswer.contains("arise") || userAnswer.contains("command");
-    }
-
-    // PUZ-09: "answer shadow" - exact answer expected
-    if (puzzle.getId().equals("PUZ-09")) {
-      return userAnswer.contains("shadow");
-    }
-
-    // PUZ-10: "place sigil" - solution mentions placing sigils
-    if (puzzle.getId().equals("PUZ-10")) {
-      return userAnswer.contains("sigil") || userAnswer.contains("emblem");
-    }
-
-    // PUZ-11: "input code" - solution mentions entering runes/code
-    if (puzzle.getId().equals("PUZ-11")) {
-      return userAnswer.contains("code")
-          || userAnswer.contains("rune")
-          || userAnswer.contains("sequence");
-    }
-
-    // PUZ-12: "embrace shadows / resist shadows" - specific choice
-    if (puzzle.getId().equals("PUZ-12")) {
-      return userAnswer.contains("embrace")
-          || userAnswer.contains("resist")
-          || userAnswer.contains("shadow");
-    }
-
-    // Default: accept common puzzle action keywords
-    String commandUsed =
-        puzzle.getCommandUsed() != null ? puzzle.getCommandUsed().toLowerCase() : "";
-
-    // Extract keywords from commandUsed (before the " / " separator)
-    if (commandUsed.contains("/")) {
-      String primaryCommand = commandUsed.split("/")[0].trim();
-      // Extract the target from "action target" format
-      String[] parts = primaryCommand.split("\\s+");
-      if (parts.length > 1) {
-        String target = parts[parts.length - 1]; // Last word is usually the target
-        if (userAnswer.contains(target)) {
-          return true;
-        }
-      }
-    }
-
-    // Also try matching against the full commandUsed (without the "/" separator part)
-    if (!commandUsed.isEmpty()) {
-      String primaryCommand = commandUsed.split("/")[0].trim();
-      // Extract the target object from commands like "kneel statue", "activate pillar"
-      String[] parts = primaryCommand.split("\\s+");
-      if (parts.length > 1) {
-        String target = parts[parts.length - 1];
-        if (userAnswer.contains(target)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    // Delegate to the Puzzle class which encapsulates its own validation logic
+    return puzzle.isValidAnswer(answer);
   }
 }

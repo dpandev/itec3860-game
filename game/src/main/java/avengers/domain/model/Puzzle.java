@@ -152,6 +152,86 @@ public final class Puzzle {
     return type;
   }
 
+  /**
+   * Checks if the given answer is valid for this puzzle. Players must enter either the complete
+   * command (e.g., "kneel statue") or the generic "solve puzzle" command.
+   *
+   * @param answer the answer to validate (will be trimmed and converted to lowercase)
+   * @return true if the answer is valid
+   */
+  public boolean isValidAnswer(String answer) {
+    if (answer == null || answer.isBlank()) {
+      return false;
+    }
+
+    String userAnswer = answer.trim().toLowerCase();
+
+    // Generic command to solve any puzzle - accept "puzzle" or "solve puzzle"
+    if (userAnswer.equals("puzzle") || userAnswer.equals("solve puzzle")) {
+      return true;
+    }
+
+    // Exact match against solution (for riddles with specific answers)
+    if (userAnswer.equalsIgnoreCase(solution.trim())) {
+      return true;
+    }
+
+    // Check if the user entered the full command from commandUsed
+    // Examples: "kneel statue", "activate pillar", "strike rune", "input code"
+    if (commandUsed != null && !commandUsed.isBlank()) {
+      String cmd = commandUsed.toLowerCase().trim();
+
+      // If commandUsed has "/" separator, use the first part
+      if (cmd.contains("/")) {
+        cmd = cmd.split("/")[0].trim();
+      }
+
+      // Check if user entered the complete command (allowing minor variations)
+      // Remove extra whitespace and compare
+      String normalizedCmd = cmd.replaceAll("\\s+", " ");
+      String normalizedAnswer = userAnswer.replaceAll("\\s+", " ");
+
+      // Exact match of the full command
+      if (normalizedAnswer.equals(normalizedCmd)) {
+        return true;
+      }
+
+      // Also handle case where only the target word is provided
+      // This happens when puzzle-specific verbs (like "input", "kneel") are mapped to SOLVE
+      // and the parser extracts only the target (e.g., "code" from "input code")
+      String[] cmdParts = normalizedCmd.split("\\s+");
+      if (cmdParts.length >= 2) {
+        String action = cmdParts[0];
+        String target = cmdParts[cmdParts.length - 1];
+
+        // If user only typed the target word, check if it matches
+        // e.g., for "input code", accept just "code" as valid
+        if (normalizedAnswer.equals(target)) {
+          return true;
+        }
+
+        // Accept "action target" in any order (both words must be present)
+        if (normalizedAnswer.contains(action) && normalizedAnswer.contains(target)) {
+          // Make sure both words are present as whole words, not fragments
+          String[] answerParts = normalizedAnswer.split("\\s+");
+          boolean hasAction = false;
+          boolean hasTarget = false;
+
+          for (String part : answerParts) {
+            if (part.equals(action)) hasAction = true;
+            if (part.equals(target)) hasTarget = true;
+          }
+
+          if (hasAction && hasTarget) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

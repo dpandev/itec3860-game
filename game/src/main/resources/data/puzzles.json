@@ -65,7 +65,7 @@
       "name": "Eternal Battlefield Weapon Trial",
       "description": "Spirits mislead adventurers among scattered weapons. Only one sword can pierce the Final Gate.",
       "solution": "Choose the rusted sword that glows faintly when lifted.",
-      "reward": "Sword is required to break the seal of the Final Gate, Hunter's Leather Armor.",
+      "reward": "IT-19 IT-21",
       "failureConsequence": "Choosing wrong weapon = cursed → HP drain / respawn.",
       "commandUsed": "choose sword",
       "numberOfAttempts": 2
@@ -105,7 +105,7 @@
       "name": "Architect's Test",
       "description": "Kandiaru, the Architect, forces you to input the correct sequence of glowing runes that represent the System's code.",
       "solution": "Enter runes in the correct sequence to stabilize the System.",
-      "reward": "Gain \"System Blessing\" (+50 Max HP).",
+      "reward": "IT-20",
       "failureConsequence": "HP drains steadily until puzzle resets.",
       "commandUsed": "input code",
       "numberOfAttempts": 3
