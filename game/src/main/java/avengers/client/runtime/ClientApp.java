@@ -56,6 +56,7 @@ public class ClientApp {
                 VerbCategory.INVENTORY, inventoryController,
                 VerbCategory.INTERACTION, interactionController,
                 VerbCategory.COMBAT, combatController,
+                VerbCategory.MAP, mapController,
                 VerbCategory.SYSTEM, systemController),
             systemController // fallback
             );
