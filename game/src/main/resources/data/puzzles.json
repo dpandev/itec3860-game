@@ -7,7 +7,7 @@
       "solution": "Kneel only before the statue with no weapon. Choosing wrong is fatal.",
       "reward": "Unlocks passage to the Fire Chamber.",
       "failureConsequence": "Instant death → respawn at Guild Hall.",
-      "commandUsed": "kneel statue / solve puzzle",
+      "commandUsed": "kneel statue",
       "numberOfAttempts": 1
     },
     {
@@ -17,7 +17,7 @@
       "solution": "Time your movements carefully, and hop only on the solid stones.",
       "reward": "Safe path across the lava river to boss arena.",
       "failureConsequence": "Fall into lava → lose HP and restart at riverbank.",
-      "commandUsed": "jump stone / solve puzzle",
+      "commandUsed": "jump stone",
       "numberOfAttempts": 3
     },
     {
@@ -27,7 +27,7 @@
       "solution": "Activate the coral pillars in the correct glowing order.",
       "reward": "Lowers water, exposing boss Neressa.",
       "failureConsequence": "Drowned → respawn at cavern entrance.",
-      "commandUsed": "activate pillar / solve puzzle",
+      "commandUsed": "activate pillar",
       "numberOfAttempts": 3
     },
     {
@@ -37,7 +37,7 @@
       "solution": "Strike runes in correct sequence (clues hidden on walls).",
       "reward": "Unlocks Gravemaw's inner chamber.",
       "failureConsequence": "Puzzle resets, no progress until correct order is found.",
-      "commandUsed": "strike rune / solve puzzle",
+      "commandUsed": "strike rune",
       "numberOfAttempts": "Unlimited (resets until correct)"
     },
     {
@@ -47,7 +47,7 @@
       "solution": "Collect feathers and use them as anchors to weigh down the bridge.",
       "reward": "Allows safe crossing to Zephyra's throne.",
       "failureConsequence": "Knocked off bridge → lose HP and restart at bridge start.",
-      "commandUsed": "collect feather / solve puzzle",
+      "commandUsed": "collect feather",
       "numberOfAttempts": 3
     },
     {
@@ -57,7 +57,7 @@
       "solution": "Step on runes in the correct order matching the chant.",
       "reward": "Unlocks hidden grimoire granting shadow power.",
       "failureConsequence": "Wrong rune = shadow attack (HP loss), puzzle resets.",
-      "commandUsed": "step rune / solve puzzle",
+      "commandUsed": "step rune",
       "numberOfAttempts": "Unlimited (resets until correct)"
     },
     {
@@ -67,7 +67,7 @@
       "solution": "Choose the rusted sword that glows faintly when lifted.",
       "reward": "Sword is required to break the seal of the Final Gate, Hunter's Leather Armor.",
       "failureConsequence": "Choosing wrong weapon = cursed → HP drain / respawn.",
-      "commandUsed": "choose sword / solve puzzle",
+      "commandUsed": "choose sword",
       "numberOfAttempts": 2
     },
     {
@@ -77,7 +77,7 @@
       "solution": "Issue the correct command phrase to bind them.",
       "reward": "Adds shadows as allies in later battles.",
       "failureConsequence": "Failure → shadows disperse, retry possible.",
-      "commandUsed": "say arise / solve puzzle",
+      "commandUsed": "say arise",
       "numberOfAttempts": "Unlimited (retry allowed)"
     },
     {
@@ -87,7 +87,7 @@
       "solution": "Answer: Shadow.",
       "reward": "Unlocks final throne room and Monarch's audience.",
       "failureConsequence": "Wrong answer → immediate expulsion from throne room.",
-      "commandUsed": "answer shadow / solve puzzle",
+      "commandUsed": "answer shadow",
       "numberOfAttempts": 1
     },
     {
@@ -97,7 +97,7 @@
       "solution": "Collect all 4 sigils from bosses and place them into the gate lock.",
       "reward": "The Final Gate opens → last boss fight / ending.",
       "failureConsequence": "Missing sigils → gate remains sealed, cannot progress.",
-      "commandUsed": "place sigil / solve puzzle",
+      "commandUsed": "place sigil",
       "numberOfAttempts": "Unlimited (progress-gated)"
     },
     {
@@ -107,7 +107,7 @@
       "solution": "Enter runes in the correct sequence to stabilize the System.",
       "reward": "Gain \"System Blessing\" (+50 Max HP).",
       "failureConsequence": "HP drains steadily until puzzle resets.",
-      "commandUsed": "input code / solve puzzle",
+      "commandUsed": "input code",
       "numberOfAttempts": 3
     },
     {
