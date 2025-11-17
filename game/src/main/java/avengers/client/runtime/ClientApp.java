@@ -43,7 +43,7 @@ public class ClientApp {
     CommandController movementController = new MovementController(explorationService);
     CommandController inventoryController = new InventoryController();
     CommandController interactionController = new InteractionController(interactionService);
-    CommandController combatController = new CombatController(combatService);
+    CommandController combatController = new CombatController(combatService, interactionService);
     CommandController mapController = new MapController(mapService);
     CommandController systemController =
         new SystemController(saveService, loader, explorationService);

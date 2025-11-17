@@ -31,6 +31,12 @@ public class MovementController implements CommandController {
       return CommandResult.fail("Invalid command.");
     }
 
+    // Block movement if player is currently solving a puzzle
+    if (ctx.isAwaitingPuzzleAnswer()) {
+      return CommandResult.fail(
+          "You cannot leave while solving a puzzle! Type 'ignore' to bypass the puzzle.");
+    }
+
     return switch (cmd.verb()) {
       case GO -> handleGo(cmd, ctx);
       case EXPLORE -> explorationService.explore(ctx);

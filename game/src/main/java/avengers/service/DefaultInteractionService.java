@@ -228,6 +228,31 @@ public class DefaultInteractionService implements InteractionService {
     return CommandResult.success(hint);
   }
 
+  @Override
+  public CommandResult ignorePuzzle(GameContext ctx) {
+    if (!ctx.isAwaitingPuzzleAnswer() || activePuzzleId == null) {
+      return CommandResult.fail("There is no active puzzle to ignore.");
+    }
+
+    World world = ctx.world();
+    Optional<Puzzle> puzzleOpt = world.findPuzzle(activePuzzleId);
+
+    String puzzleName = puzzleOpt.map(Puzzle::getName).orElse("the puzzle");
+
+    // Reset puzzle state to LOCKED so it can be attempted again
+    puzzlePhases.put(activePuzzleId, PuzzlePhase.LOCKED);
+
+    // Clear active puzzle and awaiting flag
+    activePuzzleId = null;
+    ctx.setAwaitingPuzzleAnswer(false);
+
+    return CommandResult.success(
+        "You decide to ignore "
+            + puzzleName
+            + " for now.\n"
+            + "You can attempt it again if you return to this room.");
+  }
+
   /**
    * Resets puzzle state for the given puzzle ID.
    *

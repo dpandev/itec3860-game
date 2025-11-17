@@ -9,14 +9,18 @@ import avengers.service.CombatService;
 /** Controller to handle combat-related commands. */
 public class CombatController implements CommandController {
   private final CombatService combatService;
+  private final avengers.service.InteractionService interactionService;
 
   /**
    * Constructs a CombatController with the specified CombatService.
    *
    * @param combatService the combat service to use
+   * @param interactionService the interaction service for puzzle handling
    */
-  public CombatController(CombatService combatService) {
+  public CombatController(
+      CombatService combatService, avengers.service.InteractionService interactionService) {
     this.combatService = combatService;
+    this.interactionService = interactionService;
   }
 
   @Override
@@ -28,6 +32,17 @@ public class CombatController implements CommandController {
   public CommandResult handle(CommandToken cmd, GameContext ctx) {
     if (cmd == null) {
       return CommandResult.fail("Invalid command.");
+    }
+
+    // If puzzle is active and command is IGNORE, delegate to InteractionService
+    if (ctx.isAwaitingPuzzleAnswer() && cmd.verb() == Verb.IGNORE) {
+      return interactionService.ignorePuzzle(ctx);
+    }
+
+    // Block other combat actions if player is currently solving a puzzle
+    if (ctx.isAwaitingPuzzleAnswer()) {
+      return CommandResult.fail(
+          "You cannot engage in combat while solving a puzzle! Type 'ignore' to bypass the puzzle.");
     }
 
     return switch (cmd.verb()) {

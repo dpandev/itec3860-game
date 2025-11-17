@@ -30,4 +30,13 @@ public interface InteractionService {
    * @return CommandResult with hint information
    */
   CommandResult getHint(GameContext ctx);
+
+  /**
+   * Allows the player to ignore/bypass the currently active puzzle without solving it. No rewards
+   * are given, but the puzzle can be attempted again if the player re-enters the room.
+   *
+   * @param ctx the game context
+   * @return CommandResult indicating the puzzle was bypassed
+   */
+  CommandResult ignorePuzzle(GameContext ctx);
 }
