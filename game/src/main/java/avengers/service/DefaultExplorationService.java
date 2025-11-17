@@ -7,6 +7,7 @@ import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.GameContext;
 import avengers.domain.utils.StatBonus;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -208,27 +209,37 @@ public class DefaultExplorationService implements ExplorationService {
       description.append("\n");
     }
 
-    // Monsters in room
+    // Monsters in room (filter out defeated ones)
     if (room.hasMonsters()) {
-      description.append("Creatures:\n");
+      // Build list of alive monsters (not in defeated list)
+      List<String> aliveMonsters = new ArrayList<>();
       for (String monsterId : room.getMonsterIds()) {
-        world
-            .findMonster(monsterId)
-            .ifPresent(
-                monster -> {
-                  if (monster.isAlive()) {
-                    description
-                        .append("  - ")
-                        .append(monster.getName())
-                        .append(" (HP: ")
-                        .append(monster.getCurrentHealth())
-                        .append("/")
-                        .append(monster.getMaxHealth())
-                        .append(")\n");
-                  }
-                });
+        if (!player.isMonsterDefeated(monsterId)) {
+          aliveMonsters.add(monsterId);
+        }
       }
-      description.append("\n");
+
+      if (!aliveMonsters.isEmpty()) {
+        description.append("Creatures:\n");
+        for (String monsterId : aliveMonsters) {
+          world
+              .findMonster(monsterId)
+              .ifPresent(
+                  monster -> {
+                    if (monster.isAlive()) {
+                      description
+                          .append("  - ")
+                          .append(monster.getName())
+                          .append(" (HP: ")
+                          .append(monster.getCurrentHealth())
+                          .append("/")
+                          .append(monster.getMaxHealth())
+                          .append(")\n");
+                    }
+                  });
+        }
+        description.append("\n");
+      }
     }
 
     // Available exits

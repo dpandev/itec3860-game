@@ -53,6 +53,7 @@ public final class SaveService {
             List.copyOf(player.getAllies()),
             List.copyOf(player.getPuzzlesSolved()),
             List.copyOf(player.getRoomsVisited()),
+            List.copyOf(player.getDefeatedMonsters()),
             Instant.now());
 
     repo.upsert(data); // save or update the save data if exists
@@ -113,6 +114,10 @@ public final class SaveService {
     // restore rooms visited
     player.getRoomsVisited().clear();
     player.getRoomsVisited().addAll(data.roomsVisited());
+
+    // restore defeated monsters
+    player.getDefeatedMonsters().clear();
+    player.getDefeatedMonsters().addAll(data.defeatedMonsters());
 
     return CommandResult.success(
         "Game loaded successfully. You are now in room " + data.roomId() + ".");

@@ -21,6 +21,7 @@ public final class Player extends Character {
   private final Map<EquipmentSlot, String> equippedItems = new HashMap<>();
   private final List<String> activatedArtifacts;
   private DestinyChoice destinyChoice = DestinyChoice.UNDECIDED;
+  private final List<String> defeatedMonsters; // List of defeated monster IDs
 
   /** Enum representing the player's destiny choice from PUZ-12. */
   public enum DestinyChoice {
@@ -51,6 +52,7 @@ public final class Player extends Character {
     this.puzzlesSolved = new ArrayList<String>();
     this.roomsVisited = new ArrayList<String>();
     this.activatedArtifacts = new ArrayList<>();
+    this.defeatedMonsters = new ArrayList<>(); // Initialize the defeated monsters list
     increaseBaseAttack(10000);
     increaseBaseDefense(0);
   }
@@ -71,6 +73,7 @@ public final class Player extends Character {
     this.puzzlesSolved = new ArrayList<String>();
     this.roomsVisited = new ArrayList<String>();
     this.activatedArtifacts = new ArrayList<>();
+    this.defeatedMonsters = new ArrayList<>(); // Initialize the defeated monsters list
     increaseBaseAttack(10000);
     increaseBaseDefense(0);
   }
@@ -183,6 +186,36 @@ public final class Player extends Character {
    */
   public void addRoomToRoomsVisited(String roomId) {
     this.roomsVisited.add(roomId);
+  }
+
+  /**
+   * Gets the list of defeated monster IDs.
+   *
+   * @return A list of monster IDs that have been defeated.
+   */
+  public List<String> getDefeatedMonsters() {
+    return defeatedMonsters;
+  }
+
+  /**
+   * Marks a monster as defeated.
+   *
+   * @param monsterId The ID of the monster that was defeated.
+   */
+  public void addDefeatedMonster(String monsterId) {
+    if (!defeatedMonsters.contains(monsterId)) {
+      defeatedMonsters.add(monsterId);
+    }
+  }
+
+  /**
+   * Checks if a monster has been defeated.
+   *
+   * @param monsterId The ID of the monster to check.
+   * @return true if the monster has been defeated, false otherwise.
+   */
+  public boolean isMonsterDefeated(String monsterId) {
+    return defeatedMonsters.contains(monsterId);
   }
 
   /**

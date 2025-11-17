@@ -111,6 +111,9 @@ public class DefaultCombatService implements CombatService {
     if (!monster.isAlive()) {
       result.append("\nThe ").append(monster.getName()).append(" has been defeated!\n");
 
+      // Mark monster as defeated so it stays dead after save/load
+      player.addDefeatedMonster(monster.getId());
+
       // Handle loot
       String lootMsg = handleLoot(ctx, monster.getId());
       if (!lootMsg.isBlank()) {
