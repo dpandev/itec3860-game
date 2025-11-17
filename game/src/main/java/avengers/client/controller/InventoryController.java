@@ -22,7 +22,8 @@ public class InventoryController implements CommandController {
         || verb == Verb.DROP
         || verb == Verb.INSPECT
         || verb == Verb.EQUIP
-        || verb == Verb.UNEQUIP;
+        || verb == Verb.UNEQUIP
+        || verb == Verb.USE;
   }
 
   @Override
@@ -34,6 +35,7 @@ public class InventoryController implements CommandController {
       case INSPECT -> handleInspect(cmd, ctx);
       case EQUIP -> handleEquip(cmd, ctx);
       case UNEQUIP -> handleUnequip(cmd, ctx);
+      case USE -> handleUse(cmd, ctx);
       default -> CommandResult.fail("Unsupported inventory command: " + cmd.verb());
     };
   }
@@ -116,5 +118,21 @@ public class InventoryController implements CommandController {
 
     String slotName = String.join(" ", cmd.args());
     return inventoryService.unequipItem(ctx, slotName);
+  }
+
+  /**
+   * Handles the USE command.
+   *
+   * @param cmd the command token
+   * @param ctx the game context
+   * @return the result of the use operation
+   */
+  private CommandResult handleUse(CommandToken cmd, GameContext ctx) {
+    if (cmd.args().isEmpty()) {
+      return CommandResult.fail("What do you want to use? Usage: use <item name>");
+    }
+
+    String itemName = String.join(" ", cmd.args());
+    return inventoryService.useItem(ctx, itemName);
   }
 }

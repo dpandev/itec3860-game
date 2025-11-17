@@ -451,6 +451,81 @@ public final class InventoryService {
   }
 
   /**
+   * Attempts to use a consumable item from the player's inventory.
+   *
+   * @param ctx the game context
+   * @param itemName the name or ID of the item to use
+   * @return CommandResult indicating success or failure
+   */
+  public CommandResult useItem(GameContext ctx, String itemName) {
+    var player = ctx.player();
+    var world = ctx.world();
+
+    // Find the item in player's inventory
+    var itemToUse = findItemInInventory(world, player, itemName);
+    if (itemToUse.isEmpty()) {
+      return CommandResult.fail(
+          "You don't have an item called '" + itemName + "' in your inventory.");
+    }
+
+    var item = itemToUse.get();
+
+    // Check if item is consumable
+    if (!item.getCategory().equalsIgnoreCase("Consumable")) {
+      return CommandResult.fail(
+          "The " + item.getName() + " cannot be consumed. Only Consumable items can be used.");
+    }
+
+    // Parse the effect (e.g., "+20 HP")
+    if (!item.hasEffect() || item.getEffect().isBlank()) {
+      return CommandResult.fail("The " + item.getName() + " has no effect.");
+    }
+
+    String effect = item.getEffect().trim();
+
+    // Apply the effect
+    StringBuilder result = new StringBuilder();
+    result.append("You use the ").append(item.getName()).append(".\n");
+
+    // Parse HP restoration effects
+    if (effect.matches(".*\\+\\d+\\s*HP.*")) {
+      // Extract the HP value (e.g., "+20 HP" -> 20)
+      String[] parts = effect.split("\\+");
+      if (parts.length > 1) {
+        String hpPart = parts[1].replaceAll("[^0-9]", "");
+        try {
+          int hpRestore = Integer.parseInt(hpPart);
+          int currentHp = player.getCurrentHealth();
+          int maxHp = player.getTotalMaxHealth(world);
+
+          // Heal the player
+          int actualRestore = Math.min(hpRestore, maxHp - currentHp);
+          player.heal(actualRestore);
+
+          result
+              .append("Restored ")
+              .append(actualRestore)
+              .append(" HP! (")
+              .append(player.getCurrentHealth())
+              .append("/")
+              .append(maxHp)
+              .append(")");
+        } catch (NumberFormatException e) {
+          result.append("Effect: ").append(effect);
+        }
+      }
+    } else {
+      // Generic effect message for other consumables
+      result.append("Effect: ").append(effect);
+    }
+
+    // Remove the item from inventory after use
+    player.removeItemFromInventory(item.getId());
+
+    return CommandResult.success(result.toString());
+  }
+
+  /**
    * Determines the appropriate equipment slot for an item based on its category.
    *
    * @param item the item to determine the slot for
