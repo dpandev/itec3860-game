@@ -277,16 +277,23 @@ public class DefaultCombatService implements CombatService {
 
     Monster monster = monsterOpt.get();
     StringBuilder loot = new StringBuilder();
-    loot.append("\nLoot dropped:\n");
+    loot.append("\n=== LOOT OBTAINED ===\n");
 
     for (String itemIdOrName : monster.getItemDrops()) {
       // Try to find item by ID or name
       Optional<avengers.domain.model.Item> itemOpt = world.findItem(itemIdOrName);
       if (itemOpt.isPresent()) {
-        ctx.player().addItemToInventory(itemOpt.get().getId());
-        loot.append("  - ").append(itemOpt.get().getName()).append("\n");
+        avengers.domain.model.Item item = itemOpt.get();
+        ctx.player().addItemToInventory(item.getId());
+        loot.append("  ✓ ")
+            .append(item.getName())
+            .append(" (")
+            .append(item.getCategory())
+            .append(") added to inventory\n");
       } else {
-        loot.append("  - ").append(itemIdOrName).append("\n");
+        // Fallback if item not found in world data
+        ctx.player().addItemToInventory(itemIdOrName);
+        loot.append("  ✓ ").append(itemIdOrName).append(" added to inventory\n");
       }
     }
 

@@ -34,14 +34,14 @@ public final class Player extends Character {
    * @param startingRoomId The ID of the starting room for the player.
    */
   public Player(String name, String startingRoomId) {
-    super(name, 100);
+    super(name, 10000);
     this.id = UUID.randomUUID();
     this.roomId = startingRoomId;
     this.allies = new ArrayList<String>();
     this.inventoryItems = new ArrayList<String>();
     this.puzzlesSolved = new ArrayList<String>();
     this.roomsVisited = new ArrayList<String>();
-    increaseBaseAttack(10);
+    increaseBaseAttack(10000);
     increaseBaseDefense(0);
   }
 
@@ -243,6 +243,47 @@ public final class Player extends Character {
   }
 
   /**
+   * Calculates passive bonuses from items in inventory that provide effects without being equipped.
+   * This includes artifacts like IT-12 (Demon King's Crown) that boost stats passively.
+   *
+   * @param world the game world containing item definitions
+   * @return StatBonus object containing all passive inventory bonuses
+   */
+  public StatBonus calculatePassiveInventoryBonuses(World world) {
+    Map<String, Integer> totalBonuses = new HashMap<>();
+    Map<String, Double> totalPercentageBonuses = new HashMap<>();
+
+    for (String itemId : inventoryItems) {
+      if (itemId != null) {
+        world
+            .findItem(itemId)
+            .ifPresent(
+                item -> {
+                  // Only artifacts and key items provide passive bonuses while in inventory
+                  String category = item.getCategory();
+                  if ((category.equalsIgnoreCase("Artifact")
+                          || category.equalsIgnoreCase("Key Item"))
+                      && item.hasEffect()) {
+                    StatBonus itemBonus = StatBonus.parseEffect(item.getEffect());
+                    // Combine flat bonuses
+                    itemBonus
+                        .getAllBonuses()
+                        .forEach((stat, bonus) -> totalBonuses.merge(stat, bonus, Integer::sum));
+                    // Combine percentage bonuses
+                    itemBonus
+                        .getAllPercentageBonuses()
+                        .forEach(
+                            (stat, bonus) ->
+                                totalPercentageBonuses.merge(stat, bonus, Double::sum));
+                  }
+                });
+      }
+    }
+
+    return new StatBonus(totalBonuses, totalPercentageBonuses);
+  }
+
+  /**
    * Gets the total attack including base attack and equipment bonuses.
    *
    * @param world the game world to look up equipment effects
@@ -250,12 +291,17 @@ public final class Player extends Character {
    */
   public int getTotalAttack(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalAttack = getBaseAttack() + equipmentBonus.getAttackBonus();
+    StatBonus passiveBonus = calculatePassiveInventoryBonuses(world);
 
-    // Apply percentage bonuses
+    int totalAttack =
+        getBaseAttack() + equipmentBonus.getAttackBonus() + passiveBonus.getAttackBonus();
+
+    // Apply percentage bonuses from both equipped and passive items
     double percentageBonus =
         equipmentBonus.getPercentageBonus("Attack")
-            + equipmentBonus.getPercentageBonus("all stats");
+            + equipmentBonus.getPercentageBonus("all stats")
+            + passiveBonus.getPercentageBonus("Attack")
+            + passiveBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalAttack = (int) Math.round(totalAttack * (1 + percentageBonus / 100.0));
     }
@@ -271,12 +317,17 @@ public final class Player extends Character {
    */
   public int getTotalDefense(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalDefense = getBaseDefense() + equipmentBonus.getDefenseBonus();
+    StatBonus passiveBonus = calculatePassiveInventoryBonuses(world);
 
-    // Apply percentage bonuses
+    int totalDefense =
+        getBaseDefense() + equipmentBonus.getDefenseBonus() + passiveBonus.getDefenseBonus();
+
+    // Apply percentage bonuses from both equipped and passive items
     double percentageBonus =
         equipmentBonus.getPercentageBonus("Defense")
-            + equipmentBonus.getPercentageBonus("all stats");
+            + equipmentBonus.getPercentageBonus("all stats")
+            + passiveBonus.getPercentageBonus("Defense")
+            + passiveBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalDefense = (int) Math.round(totalDefense * (1 + percentageBonus / 100.0));
     }
@@ -292,13 +343,19 @@ public final class Player extends Character {
    */
   public int getTotalMaxHealth(World world) {
     StatBonus equipmentBonus = calculateEquipmentBonuses(world);
-    int totalMaxHealth = getMaxHealth() + equipmentBonus.getHealthBonus();
+    StatBonus passiveBonus = calculatePassiveInventoryBonuses(world);
 
-    // Apply percentage bonuses
+    int totalMaxHealth =
+        getMaxHealth() + equipmentBonus.getHealthBonus() + passiveBonus.getHealthBonus();
+
+    // Apply percentage bonuses from both equipped and passive items
     double percentageBonus =
         equipmentBonus.getPercentageBonus("HP")
             + equipmentBonus.getPercentageBonus("Health")
-            + equipmentBonus.getPercentageBonus("all stats");
+            + equipmentBonus.getPercentageBonus("all stats")
+            + passiveBonus.getPercentageBonus("HP")
+            + passiveBonus.getPercentageBonus("Health")
+            + passiveBonus.getPercentageBonus("all stats");
     if (percentageBonus != 0) {
       totalMaxHealth = (int) Math.round(totalMaxHealth * (1 + percentageBonus / 100.0));
     }

@@ -12,7 +12,7 @@
         "Fast Bite (quick consecutive attacks)"
       ],
       "itemDrops": [
-        "Minor Healing Potion"
+        "IT-01"
       ]
     },
     {
@@ -40,7 +40,7 @@
         "Berserk Rage (+10 damage when HP < 100)"
       ],
       "itemDrops": [
-        "Orc Axe"
+        "IT-03"
       ]
     },
     {
@@ -55,8 +55,8 @@
         "War Cry (reduces player defense by 20%)"
       ],
       "itemDrops": [
-        "High Orc Club",
-        "Steel Plate Mail"
+        "IT-04",
+        "IT-22"
       ]
     },
     {
@@ -71,7 +71,7 @@
         "Venom Bite (poison damage over 3 turns)"
       ],
       "itemDrops": [
-        "Kasaka's Venom Fang (dagger weapon)"
+        "IT-05"
       ]
     },
     {
@@ -87,7 +87,7 @@
         "Lava Geyser (AoE damage)"
       ],
       "itemDrops": [
-        "Fire Sigil"
+        "IT-06"
       ]
     },
     {
@@ -103,7 +103,7 @@
         "Clone Summon (creates water illusions)"
       ],
       "itemDrops": [
-        "Water Sigil"
+        "IT-07"
       ]
     },
     {
@@ -119,7 +119,7 @@
         "Boulder Crash"
       ],
       "itemDrops": [
-        "Earth Sigil"
+        "IT-08"
       ]
     },
     {
@@ -135,7 +135,7 @@
         "Lightning Strike (high burst damage)"
       ],
       "itemDrops": [
-        "Air Sigil"
+        "IT-09"
       ]
     },
     {
@@ -150,7 +150,7 @@
         "Triple Bite (3 consecutive attacks in one turn)"
       ],
       "itemDrops": [
-        "Cerberus Fang"
+        "IT-10"
       ]
     },
     {
@@ -165,7 +165,7 @@
         "Shadow Slash (high crit chance)"
       ],
       "itemDrops": [
-        "Baruka's Twin Blades"
+        "IT-11"
       ]
     },
     {
@@ -181,7 +181,7 @@
         "Dark Roar"
       ],
       "itemDrops": [
-        "Demon King's Crown"
+        "IT-12"
       ]
     },
     {
@@ -197,7 +197,7 @@
         "Summon Skeletons (adds minions)"
       ],
       "itemDrops": [
-        "Lich's Staff"
+        "IT-13"
       ]
     },
     {
@@ -212,7 +212,7 @@
         "Reality Warp (randomized debuffs, illusions)"
       ],
       "itemDrops": [
-        "Architect's Core"
+        "IT-14"
       ]
     },
     {
@@ -228,8 +228,8 @@
         "Poison Claw (HP degeneration over time)"
       ],
       "itemDrops": [
-        "Ant King's Carapace",
-        "Dragonbone Armor"
+        "IT-15",
+        "IT-23"
       ]
     },
     {
@@ -245,7 +245,7 @@
         "Frost Aura (lingering freeze effect)"
       ],
       "itemDrops": [
-        "Frost Sigil"
+        "IT-16"
       ]
     },
     {
@@ -287,7 +287,7 @@
         "Energy Beam (piercing attack)"
       ],
       "itemDrops": [
-        "Architect's Relic"
+        "IT-14"
       ]
     },
     {
@@ -304,9 +304,9 @@
         "Shadow Dominion (summons shadows)"
       ],
       "itemDrops": [
-        "Dragon's Fang Sword",
-        "Shadow Crystal",
-        "Shadow Monarch's Armor (optional)"
+        "IT-17",
+        "IT-18",
+        "IT-24"
       ]
     }
   ]
