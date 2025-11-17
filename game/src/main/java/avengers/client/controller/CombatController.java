@@ -25,7 +25,7 @@ public class CombatController implements CommandController {
 
   @Override
   public boolean supports(Verb verb) {
-    return verb == Verb.ATTACK || verb == Verb.DEFEND || verb == Verb.IGNORE;
+    return verb == Verb.ATTACK || verb == Verb.DEFEND || verb == Verb.IGNORE || verb == Verb.SUMMON;
   }
 
   @Override
@@ -49,6 +49,7 @@ public class CombatController implements CommandController {
       case ATTACK -> handleAttack(cmd, ctx);
       case DEFEND -> combatService.defend(ctx);
       case IGNORE -> handleIgnore(cmd, ctx);
+      case SUMMON -> combatService.summonAllies(ctx);
       default -> CommandResult.fail("Unsupported combat command: " + cmd.verb());
     };
   }

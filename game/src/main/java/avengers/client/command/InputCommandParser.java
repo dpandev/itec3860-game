@@ -31,7 +31,8 @@ public class InputCommandParser implements CommandParser {
 
   // Verbs that don't require any target
   private static final Set<Verb> NO_TARGET_VERBS =
-      Set.of(Verb.HELP, Verb.MAP, Verb.EXPLORE, Verb.INVENTORY, Verb.QUIT, Verb.DEFEND);
+      Set.of(
+          Verb.HELP, Verb.MAP, Verb.EXPLORE, Verb.INVENTORY, Verb.QUIT, Verb.DEFEND, Verb.SUMMON);
 
   /** Construct an InputCommandParser with predefined verbs and direction synonyms. */
   public InputCommandParser() {
@@ -157,6 +158,7 @@ public class InputCommandParser implements CommandParser {
     verbMap.put("attack", Verb.ATTACK);
     verbMap.put("defend", Verb.DEFEND);
     verbMap.put("ignore", Verb.IGNORE);
+    verbMap.put("summon", Verb.SUMMON);
 
     // System verbs
     verbMap.put("help", Verb.HELP);

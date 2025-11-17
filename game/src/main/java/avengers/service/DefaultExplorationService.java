@@ -159,6 +159,14 @@ public class DefaultExplorationService implements ExplorationService {
       }
     }
 
+    // Display allies
+    List<String> allies = player.getAllies();
+    if (!allies.isEmpty()) {
+      stats.append("\nAllies (Shadow Army):\n");
+      stats.append(String.format("  %d shadow(s) under your command\n", allies.size()));
+      stats.append("  Use 'summon' in combat to call upon them\n");
+    }
+
     return stats.toString();
   }
 

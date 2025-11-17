@@ -270,6 +270,74 @@ public class DefaultCombatService implements CombatService {
   }
 
   @Override
+  public CommandResult summonAllies(GameContext ctx) {
+    if (!ctx.isInCombat()) {
+      return CommandResult.fail("You can only summon allies during combat!");
+    }
+
+    Player player = ctx.player();
+
+    // Check if player has allies
+    if (player.getAllyCount() == 0) {
+      return CommandResult.fail(
+          "You have no allies to summon! Complete the Shadow Army puzzle (PUZ-08) to gain shadow allies.");
+    }
+
+    World world = ctx.world();
+    Optional<Monster> monsterOpt = world.findMonster(ctx.getCombatMonsterId());
+    if (monsterOpt.isEmpty()) {
+      return CommandResult.fail("No monster in combat!");
+    }
+
+    Monster monster = monsterOpt.get();
+
+    // Calculate ally damage (each ally does 50 base damage + 10% of player's attack)
+    int baseAllyDamage = 50;
+    int playerAttackBonus = (int) (player.getTotalAttack(world) * 0.10);
+    int damagePerAlly = baseAllyDamage + playerAttackBonus;
+    int totalAllyDamage = damagePerAlly * player.getAllyCount();
+
+    // Apply damage to monster
+    monster.takeDamage(totalAllyDamage);
+
+    StringBuilder result = new StringBuilder();
+    result.append("You summon your Shadow Army!\n\n");
+    result.append(String.format("%d shadow(s) emerge from the darkness!\n", player.getAllyCount()));
+    result.append(
+        String.format(
+            "They strike the %s for %d total damage!\n", monster.getName(), totalAllyDamage));
+
+    // Check if monster is defeated
+    if (!monster.isAlive()) {
+      result.append("\nThe ").append(monster.getName()).append(" has been defeated!\n");
+
+      // Mark monster as defeated
+      player.addDefeatedMonster(monster.getId());
+
+      // Handle loot
+      String lootMsg = handleLoot(ctx, monster.getId());
+      if (!lootMsg.isBlank()) {
+        result.append(lootMsg);
+      }
+
+      // Remove monster from room
+      Optional<Room> roomOpt = world.getRoomById(player.getRoomId());
+      roomOpt.ifPresent(room -> room.removeMonster(monster.getId()));
+
+      // End combat
+      ctx.endCombat();
+
+      return CommandResult.success(result.toString());
+    }
+
+    // Monster counter-attacks
+    CommandResult monsterResult = monsterAttack(ctx);
+    result.append("\n").append(monsterResult.message());
+
+    return CommandResult.success(result.toString());
+  }
+
+  @Override
   public String handleLoot(GameContext ctx, String monsterId) {
     World world = ctx.world();
     Optional<Monster> monsterOpt = world.findMonster(monsterId);

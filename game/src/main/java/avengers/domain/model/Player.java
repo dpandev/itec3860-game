@@ -115,6 +115,46 @@ public final class Player extends Character {
   }
 
   /**
+   * Adds an ally to the player's ally list.
+   *
+   * @param allyId The ID of the ally to add.
+   */
+  public void addAlly(String allyId) {
+    if (!allies.contains(allyId)) {
+      allies.add(allyId);
+    }
+  }
+
+  /**
+   * Removes an ally from the player's ally list.
+   *
+   * @param allyId The ID of the ally to remove.
+   * @return true if the ally was removed, false otherwise.
+   */
+  public boolean removeAlly(String allyId) {
+    return allies.remove(allyId);
+  }
+
+  /**
+   * Checks if the player has a specific ally.
+   *
+   * @param allyId The ID of the ally to check.
+   * @return true if the ally is in the list, false otherwise.
+   */
+  public boolean hasAlly(String allyId) {
+    return allies.contains(allyId);
+  }
+
+  /**
+   * Gets the number of allies the player has.
+   *
+   * @return The count of allies.
+   */
+  public int getAllyCount() {
+    return allies.size();
+  }
+
+  /**
    * Gets the list of item IDs in the player's inventory.
    *
    * @return A list of item IDs.

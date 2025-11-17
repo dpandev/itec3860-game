@@ -186,7 +186,19 @@ public class DefaultInteractionService implements InteractionService {
 
       // Handle reward if present
       StringBuilder rewardMessage = new StringBuilder();
-      if (puzzle.getReward() != null && !puzzle.getReward().isBlank()) {
+
+      // Special handling for PUZ-08: Grant shadow allies
+      if (puzzle.getId().equals("PUZ-08")) {
+        int numberOfShadows = 3; // Grant 3 shadow allies
+        for (int i = 0; i < numberOfShadows; i++) {
+          ctx.player().addAlly("SHADOW-" + (i + 1));
+        }
+        rewardMessage.append("\n\n=== SHADOW ARMY SUMMONED ===\n");
+        rewardMessage.append(numberOfShadows).append(" shadows rise from the fallen souls!\n");
+        rewardMessage.append("They pledge their loyalty to you.\n\n");
+        rewardMessage.append("You can now use the 'summon' command during combat\n");
+        rewardMessage.append("to call upon your Shadow Army to attack enemies!");
+      } else if (puzzle.getReward() != null && !puzzle.getReward().isBlank()) {
         String reward = puzzle.getReward();
 
         // Extract and add items to inventory

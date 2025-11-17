@@ -49,6 +49,14 @@ public interface CombatService {
   CommandResult ignoreMonster(GameContext ctx, String monsterName);
 
   /**
+   * Summons allies to attack in combat.
+   *
+   * @param ctx the game context
+   * @return CommandResult with summon results
+   */
+  CommandResult summonAllies(GameContext ctx);
+
+  /**
    * Handles loot distribution after monster death.
    *
    * @param ctx the game context

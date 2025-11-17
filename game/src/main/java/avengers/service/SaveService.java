@@ -107,6 +107,10 @@ public final class SaveService {
     player.setBaseAttack(data.baseAttack());
     player.setBaseDefense(data.baseDefense());
 
+    // restore allies
+    player.getAllies().clear();
+    player.getAllies().addAll(data.allies());
+
     // restore puzzles solved
     player.getPuzzlesSolved().clear();
     player.getPuzzlesSolved().addAll(data.puzzlesSolved());
@@ -118,6 +122,15 @@ public final class SaveService {
     // restore defeated monsters
     player.getDefeatedMonsters().clear();
     player.getDefeatedMonsters().addAll(data.defeatedMonsters());
+
+    // MIGRATION FIX: Grant allies retroactively if player solved PUZ-08 but has no allies
+    // This handles saves created before the ally system was implemented
+    if (data.puzzlesSolved().contains("PUZ-08") && data.allies().isEmpty()) {
+      // Grant 3 shadow allies retroactively
+      for (int i = 0; i < 3; i++) {
+        player.addAlly("SHADOW-" + (i + 1));
+      }
+    }
 
     return CommandResult.success(
         "Game loaded successfully. You are now in room " + data.roomId() + ".");
