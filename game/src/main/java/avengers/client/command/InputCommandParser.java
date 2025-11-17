@@ -158,6 +158,7 @@ public class InputCommandParser implements CommandParser {
     verbMap.put("attack", Verb.ATTACK);
     verbMap.put("defend", Verb.DEFEND);
     verbMap.put("ignore", Verb.IGNORE);
+    verbMap.put("run", Verb.IGNORE); // Synonym for ignore - run away from monsters
     verbMap.put("summon", Verb.SUMMON);
 
     // System verbs
