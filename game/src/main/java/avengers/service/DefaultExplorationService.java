@@ -6,7 +6,9 @@ import avengers.domain.model.Room;
 import avengers.domain.model.World;
 import avengers.domain.utils.CommandResult;
 import avengers.domain.utils.GameContext;
+import avengers.domain.utils.StatBonus;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -60,11 +62,30 @@ public class DefaultExplorationService implements ExplorationService {
     int baseAttack = player.getBaseAttack();
     int totalAttack = player.getTotalAttack(world);
     int attackBonus = totalAttack - baseAttack;
+
+    StatBonus equipmentBonus = player.calculateEquipmentBonuses(world);
+    StatBonus passiveBonus = player.calculatePassiveInventoryBonuses(world);
+
     if (attackBonus > 0) {
-      stats.append(
-          String.format(
-              "Attack: %d (+%d from equipment) = %d total\n",
-              baseAttack, attackBonus, totalAttack));
+      int equipAttack = equipmentBonus.getAttackBonus();
+      int passiveAttack = passiveBonus.getAttackBonus();
+
+      if (equipAttack > 0 && passiveAttack > 0) {
+        stats.append(
+            String.format(
+                "Attack: %d (+%d equipment, +%d passive) = %d total\n",
+                baseAttack, equipAttack, passiveAttack, totalAttack));
+      } else if (equipAttack > 0) {
+        stats.append(
+            String.format(
+                "Attack: %d (+%d from equipment) = %d total\n",
+                baseAttack, attackBonus, totalAttack));
+      } else {
+        stats.append(
+            String.format(
+                "Attack: %d (+%d from passive) = %d total\n",
+                baseAttack, attackBonus, totalAttack));
+      }
     } else {
       stats.append(String.format("Attack: %d\n", baseAttack));
     }
@@ -73,11 +94,27 @@ public class DefaultExplorationService implements ExplorationService {
     int baseDefense = player.getBaseDefense();
     int totalDefense = player.getTotalDefense(world);
     int defenseBonus = totalDefense - baseDefense;
+
     if (defenseBonus > 0) {
-      stats.append(
-          String.format(
-              "Defense: %d (+%d from equipment) = %d total\n",
-              baseDefense, defenseBonus, totalDefense));
+      int equipDefense = equipmentBonus.getDefenseBonus();
+      int passiveDefense = passiveBonus.getDefenseBonus();
+
+      if (equipDefense > 0 && passiveDefense > 0) {
+        stats.append(
+            String.format(
+                "Defense: %d (+%d equipment, +%d passive) = %d total\n",
+                baseDefense, equipDefense, passiveDefense, totalDefense));
+      } else if (equipDefense > 0) {
+        stats.append(
+            String.format(
+                "Defense: %d (+%d from equipment) = %d total\n",
+                baseDefense, defenseBonus, totalDefense));
+      } else {
+        stats.append(
+            String.format(
+                "Defense: %d (+%d from passive) = %d total\n",
+                baseDefense, defenseBonus, totalDefense));
+      }
     } else {
       stats.append(String.format("Defense: %d\n", baseDefense));
     }
@@ -103,6 +140,22 @@ public class DefaultExplorationService implements ExplorationService {
 
     if (!hasEquippedItems) {
       stats.append("  No items equipped\n");
+    }
+
+    // Display activated artifacts
+    List<String> activatedArtifacts = player.getActivatedArtifacts();
+    if (!activatedArtifacts.isEmpty()) {
+      stats.append("\nActivated Artifacts (Passive Bonuses):\n");
+      for (String artifactId : activatedArtifacts) {
+        Item artifact = world.findItem(artifactId).orElse(null);
+        if (artifact != null) {
+          stats.append(String.format("- %s", artifact.getName()));
+          if (artifact.hasEffect()) {
+            stats.append(String.format(" [%s]", artifact.getEffect()));
+          }
+          stats.append("\n");
+        }
+      }
     }
 
     return stats.toString();

@@ -26,6 +26,7 @@ public class InputCommandParser implements CommandParser {
           Verb.UNEQUIP,
           Verb.ATTACK,
           Verb.IGNORE,
+          Verb.ACTIVATE,
           Verb.SOLVE);
 
   // Verbs that don't require any target
@@ -131,6 +132,7 @@ public class InputCommandParser implements CommandParser {
     verbMap.put("equip", Verb.EQUIP);
     verbMap.put("unequip", Verb.UNEQUIP);
     verbMap.put("use", Verb.USE);
+    verbMap.put("activate", Verb.ACTIVATE);
 
     // Interaction verbs
     verbMap.put("inspect", Verb.INSPECT);
@@ -138,7 +140,6 @@ public class InputCommandParser implements CommandParser {
     verbMap.put("hint", Verb.HINT);
 
     // Puzzle-specific action verbs (all map to SOLVE)
-    verbMap.put("activate", Verb.SOLVE);
     verbMap.put("kneel", Verb.SOLVE);
     verbMap.put("jump", Verb.SOLVE);
     verbMap.put("strike", Verb.SOLVE);
