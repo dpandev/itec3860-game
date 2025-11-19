@@ -1,8 +1,5 @@
 # Solo Leveling - Text-Based Adventure Game
 
-## UML Diagram
-![UML Diagram](docs/)
-
 ---
 
 ### Project Structure
@@ -12,11 +9,14 @@ game (parent module)
 │   ├── model     - Domain model classes
 │   └── util      - Utility classes and helpers
 ├── service       - Business logic and application services
-└── client        - User interface and presentation layer
-    ├── command   - Command pattern implementations
-    ├── controller - Controllers for application flow
-    ├── runtime   - Runtime and game loop
-    └── view      - UI/View components
+│   ├── spi       - Service Provider Interfaces (Filesystem, Save/Load, etc.)
+│   └── world     - World management and game state
+├── client        - User interface and presentation layer
+│   ├── command   - Command parsing and handling
+│   ├── controller - Controllers for application flow
+│   ├── runtime   - Runtime and game loop
+│   └── view      - UI/View components
+└── resources     - Game data files (rooms, items, monsters, etc.)
 ```
 
 ### Module Dependencies
@@ -29,6 +29,7 @@ game (parent module)
 
 ## Getting Started
 
+To quickly set up the repo on your local machine for development, follow the steps below.
 
 ### Mac OS / Linux
 1) Install JDK 21 (Temurin recommended). `java -version` should show 21.x
@@ -115,7 +116,140 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
 
 ---
 
-## Running and Testing
+## How to Play the Game
+
+### Running the Game
+
+**Mac OS / Linux:**
+```bash
+./gradlew run
+```
+
+**Windows:**
+```cmd
+.\gradlew.bat run
+```
+
+The game will launch with a main menu where you can:
+- **[1] Start Game** - Begin a new adventure
+- **[2] Load Game** - Continue from a saved game
+- **[3] Help** - View in-game help and commands
+- **[4] Exit** - Quit the game
+
+### Running the JAR File
+Alternatively, you can run the game using the generated JAR file located in `build/libs/`:
+
+```bash
+./gradlew clean build
+```
+Then run:
+```bash
+java -jar build/libs/game-<version>.jar
+```
+
+### Game Features
+
+- **Exploration**: Navigate through dungeons, discover rooms, and uncover secrets
+- **Combat**: Battle monsters with attack, defend, and summon commands
+- **Puzzles**: Solve various puzzles to unlock rewards and progress
+- **Inventory**: Manage items, equipment, and artifacts
+- **Equipment**: Equip weapons, armor, and artifacts to boost your stats
+- **Shadow Army**: Recruit shadow allies and summon them in combat
+- **Auto-Save**: Game automatically saves every 3 minutes
+- **Map System**: View explored areas and navigate dungeons
+- **Multiple Saves**: Up to 10 save slots
+
+---
+
+## Complete Command Reference
+
+### Movement Commands
+| Command | Description | Example |
+|---------|-------------|---------|
+| `go <direction>` | Move in a direction (north/south/east/west/up/down) | `go north` |
+| `explore` | Look around the current room | `explore` |
+| `map` | View nearby explored areas | `map` |
+| `map full` | View complete exploration map with room directory | `map full` |
+
+**Direction Shortcuts:**
+- `n`, `s`, `e`, `w`, `u`, `d` - Quick shortcuts for directions
+
+---
+
+### Combat Commands
+| Command | Description | Example |
+|---------|-------------|---------|
+| `attack <monster>` | Engage a monster in combat | `attack iron-fanged lycan` |
+| `defend` | Block incoming attack (reduces damage) | `defend` |
+| `summon` | Call upon Shadow Army to attack (if you have allies) | `summon` |
+| `ignore <monster>` | Avoid fighting a creature | `ignore high orc chief` |
+| `run <monster>` | Run away from a creature (same as ignore) | `run gravemaw` |
+
+**Combat Tips:**
+- Summon deals damage based on: `(50 + player_attack × 0.10) × ally_count`
+- Defend reduces incoming damage significantly
+- Use ignore/run to avoid difficult fights
+
+---
+
+### Inventory Commands
+| Command | Description | Example |
+|---------|-------------|---------|
+| `inventory` | View your items and equipment | `inventory` |
+| `pickup <item>` | Take an item from the room | `pickup frost sigil` |
+| `drop <item>` | Drop an item in current room | `drop minor healing potion` |
+| `use <item>` | Use a consumable item | `use minor healing potion` |
+| `inspect <target>` | Examine an item or monster | `inspect demon king's crown` |
+| `equip <item>` | Equip weapon/armor/artifact | `equip lich's staff` |
+| `unequip <slot>` | Remove equipped item (weapon/armor/artifact) | `unequip weapon` |
+| `activate <artifact>` | Activate an artifact's passive power | `activate demon king's crown` |
+
+**Inventory Tips:**
+- You can equip 1 weapon, 1 armor, and 1 artifact at a time
+- Artifacts must be activated to grant passive bonuses
+- Consumables restore health or provide temporary effects
+
+---
+
+### Puzzle Commands
+| Command | Description | Example |
+|---------|-------------|---------|
+| `solve <answer>` | Answer an active puzzle | `solve puzzle` |
+| `hint` | Get a hint for current puzzle | `hint` |
+| `ignore` | Skip puzzle (no rewards) | `ignore` |
+
+**Puzzle-Specific Commands** (use when prompted):
+- `kneel statue`, `step rune`, `activate pillar`, `say arise`, etc.
+- `embrace shadows` / `resist shadows` (for destiny choice)
+- `input code` (for code-based puzzles)
+
+**Puzzle Tips:**
+- Some puzzles require specific items in your inventory
+- Failed attempts may result in instant death or lockout
+- Ignoring a puzzle lets you bypass it but you get no rewards
+- You can return to ignored puzzles later
+
+---
+
+### System Commands
+| Command | Description | Example |
+|---------|-------------|---------|
+| `help` | Show available commands | `help` |
+| `stats` | View character stats, equipment, allies | `stats` |
+| `save` | Save your progress | `save` |
+| `load` | View available save files | `load` |
+| `quit` | Save and exit the game | `quit` |
+
+**System Tips:**
+- Game auto-saves every 3 minutes
+- Maximum of 10 save slots
+- Save files are stored in `./saves/` directory
+- Use main menu to load different save files
+
+---
+
+## Testing
+
 **TODO:** *Testing strategy/implementation TBD, this will be updated.*
 
 - Build + tests + style:
@@ -130,8 +264,6 @@ For Javadoc comments in code, refer to [Google Checkstyle Guide: Javadoc](https:
     `./gradlew test --tests "com.example.MyTestClass"`
 - Run specific test method:
     `./gradlew test --tests "com.example.MyTestClass.myTestMethod"`
-- Run the game:
-    `./gradlew run`
 
 ---
 

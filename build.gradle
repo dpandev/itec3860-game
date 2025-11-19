@@ -30,5 +30,39 @@ test {
 }
 
 application {
-    mainClass = 'avengers.core.Game'
+    mainClass.set('avengers.client.runtime.ClientApp')
 }
+
+// Create executable JAR with all dependencies
+tasks.register('fatJar', Jar) {
+    archiveBaseName = 'solo-leveling-game'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes(
+            'Main-Class': 'avengers.client.runtime.ClientApp',
+            'Implementation-Title': 'Solo Leveling - Shadow Quest',
+            'Implementation-Version': project.version
+        )
+    }
+
+    // Include all runtime dependencies and compiled classes
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    with jar
+}
+
+// Make distZip and distTar include the fat JAR
+distributions {
+    main {
+        contents {
+            from(fatJar) {
+                into 'lib'
+            }
+        }
+    }
+}
+

@@ -23,3 +23,5 @@ game/test-saves
 game/src/test
 
 saves/*
+
+local-notes
