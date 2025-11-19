@@ -1,8 +1,5 @@
 # Solo Leveling - Text-Based Adventure Game
 
-## UML Diagram
-![UML Diagram](docs/)
-
 ---
 
 ### Project Structure
@@ -12,11 +9,14 @@ game (parent module)
 │   ├── model     - Domain model classes
 │   └── util      - Utility classes and helpers
 ├── service       - Business logic and application services
-└── client        - User interface and presentation layer
-    ├── command   - Command pattern implementations
-    ├── controller - Controllers for application flow
-    ├── runtime   - Runtime and game loop
-    └── view      - UI/View components
+│   ├── spi       - Service Provider Interfaces (Filesystem, Save/Load, etc.)
+│   └── world     - World management and game state
+├── client        - User interface and presentation layer
+│   ├── command   - Command parsing and handling
+│   ├── controller - Controllers for application flow
+│   ├── runtime   - Runtime and game loop
+│   └── view      - UI/View components
+└── resources     - Game data files (rooms, items, monsters, etc.)
 ```
 
 ### Module Dependencies
@@ -29,6 +29,7 @@ game (parent module)
 
 ## Getting Started
 
+To quickly set up the repo on your local machine for development, follow the steps below.
 
 ### Mac OS / Linux
 1) Install JDK 21 (Temurin recommended). `java -version` should show 21.x
@@ -134,6 +135,17 @@ The game will launch with a main menu where you can:
 - **[2] Load Game** - Continue from a saved game
 - **[3] Help** - View in-game help and commands
 - **[4] Exit** - Quit the game
+
+### Running the JAR File
+Alternatively, you can run the game using the generated JAR file located in `build/libs/`:
+
+```bash
+./gradlew clean build
+```
+Then run:
+```bash
+java -jar build/libs/game-<version>.jar
+```
 
 ### Game Features
 
